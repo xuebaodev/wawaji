@@ -48,9 +48,9 @@ java:则直接用eclipse 打开工程SimpleServer 点运行即可。
 
 打开你的手机刚安装的apk:SmartPlayerDemo。点击设定按钮，进入设定界面，连接应用服务器IP地址，输入应用服务器的IP，端口7771.点击OK。退出并重启app。
 应该会看到一个娃娃机的列表。点击进去就可以开始操作了。
-<img src="http://chuantu.biz/t6/184/1514019793x-1404793385.png" alt="客户端运行示意图" />
+<img src="http://chuantu.biz/t6/184/1514020688x-1404793385.png" alt="客户端运行示意图" />
 <br>
-<img src="http://chuantu.biz/t6/184/1514019817x-1404793385.png" alt="客户端运行示意图2" />
+<img src="http://chuantu.biz/t6/184/1514020706x-1404793385.png" alt="客户端运行示意图2" />
 
 
 linux版本的服务器及apk步骤有所不同。但都同样需要配置参数。
@@ -110,7 +110,7 @@ https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP
 <br>**更多详情请联系QQ：147497411 欢迎直接上门详询。**
 <br>
 <br>
-<img src="http://chuantu.biz/t6/184/1514019817x-1404793385.png" alt="二维码" />
+<img src="http://chuantu.biz/t6/184/1514020722x-1404793385.jpg" alt="二维码" />
 
 
 
