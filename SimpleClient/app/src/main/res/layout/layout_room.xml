@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:layout_span="1"
+    android:id="@+id/layout_rel"
+    >
+
+    <RelativeLayout
+        android:id="@+id/lay_internal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="0dp"
+        android:background="#FFF"
+        >
+        <ImageView
+            android:id="@+id/imgRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/doll"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView android:id="@+id/txtRoomTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:textColor="#000"
+            android:textSize="12sp"
+            android:text="雪暴测试间"/>
+
+        <ImageView
+            android:id="@+id/imgRoomState"
+            android:src="@drawable/st_free"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView android:id="@+id/txtRoomLeft"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="#646464"
+            android:textSize="12sp"
+            android:text="1000人在线"/>
+
+        <TextView android:id="@+id/txtRoomRight"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#646464"
+            android:textSize="12sp"
+            android:text="机器数"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

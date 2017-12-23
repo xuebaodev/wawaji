@@ -1,0 +1,145 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.daniulive.smartplayer.SmartPlayer"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true">
+
+    <!-- 顶部的房间名和关闭按钮 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textSize="12sp"
+            android:textColor="@android:color/black" />
+
+        <ImageView
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_toLeftOf="@+id/btnClose"
+            android:scaleType="center"
+            android:src="@drawable/icon_settings"
+            android:onClick="onClickSetting" />
+
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="center"
+            android:src="@drawable/btn_close"
+            android:onClick="onClickClose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/grid_video_view_container1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="120dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageButton
+            android:id="@+id/btn_changeCam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/change_camera_normal"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/player_container1"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/btn_kaiju"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/start_grasp_doll_normal"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="100dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/operation_up_normal"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_marginLeft="100dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/operation_down_normal"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/operation_left_normal"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="150dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/operation_right_normal"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="250dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/btn_test"
+            android:onClick="RunTest"
+            android:visibility="invisible"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_enter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="250dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/down_grasp_normal"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

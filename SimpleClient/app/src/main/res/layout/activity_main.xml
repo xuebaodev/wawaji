@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:keepScreenOn="true"
+    android:fitsSystemWindows="true"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+        <ImageView android:id="@+id/img"
+            android:src="@drawable/titlebar_bg"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"/>
+        <ImageButton
+            android:id="@+id/id_my_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/my_icon"
+            />
+
+        <ImageView
+            android:id="@+id/id_btn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_settings_white_24dp"
+            android:onClick="onClickSetting"
+            />
+
+        <TextView
+            android:id="@+id/id_cur_title"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="雪暴娃娃机测试程序"
+            android:textColor="#FFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/room_scr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        >
+
+        <TableLayout
+            android:id="@+id/room_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TableLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/device_scr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical"
+        android:visibility="gone">
+
+        <TableLayout
+            android:id="@+id/device_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TableLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/place_scr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical">
+
+        <TableLayout
+            android:id="@+id/place_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TableLayout>
+    </ScrollView>
+
+</LinearLayout>
