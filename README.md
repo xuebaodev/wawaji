@@ -1,4 +1,4 @@
-Ñ©±©ÍøÂçÍŞÍŞ»ú°²×¿°æÅäÌ×²âÊÔ¹¤³ÌÔ´Âë
+**Ñ©±©ÍøÂçÍŞÍŞ»ú°²×¿°æ**ÅäÌ×²âÊÔ¹¤³ÌÔ´Âë¼°ÅäÖÃ¹¤¾ß
 
 Ñ©±©ÍøÂç¿Æ¼¼ÊÇÒ»¼ÒÌá¹©ÍøÂçÍŞÍŞ»úÊµÌå»úÆ÷²¢Ìá¹©Ê¹ÓÃ¸Ã»úÆ÷¿ª·¢ÍøÂçÍŞÍŞ»úappÏà¹Ø¼¼ÊõÖ§³ÖµÄ¹«Ë¾¡£
 ÎÒÃÇÒÔÂô»úÆ÷ÎªÖ÷£¬¸½´øÌá¹©ÈçºÎ¿ª·¢£¬²¿ÊğµÄÒ»Ğ©¼òµ¥¼¼ÊõÖ§³Ö¡£·½±ãÄú¹ºÂò»úÆ÷ºó£¬ÄÜ¹»ÖªµÀÈçºÎ¿ª·¢²¢ÔËĞĞ×Ô¼ºµÄÍøÂçÍŞÍŞ»úÏîÄ¿¡£
@@ -20,7 +20,7 @@
 
 Ê×ÏÈ£¬Äú±ØĞëÓĞÒ»Ì¨Ñ©±©¹«Ë¾µÄ°²×¿°æÍøÂçÍŞÍŞ»ú£¬²¢¿ª»úÉÏµç¡£
 
-Æä´Î£¬½«prebuiltÎÄ¼ş¼ĞÖĞµÄC-simpleClient.apk»ò JAVA-simpleClient.apk°²×°µ½ÄúµÄÊÖ»úÉÏ¡£ÕâÈ¡¾öÓÚÄãµÄ¼¼ÊõÈËÔ±ÊÇ·ñ»á±àÒëÔËĞĞc»òjava³ÌĞò¡£
+Æä´Î£¬½«prebuiltÎÄ¼ş¼ĞÖĞµÄsimpleClient-C.apk»ò simpleClient-JAVA.apk°²×°µ½ÄúµÄÊÖ»úÉÏ¡£ÕâÈ¡¾öÓÚÄãµÄ¼¼ÊõÈËÔ±ÊÇ·ñ»á±àÒëÔËĞĞc»òjava³ÌĞò¡£
 È·±£ÄúÊÖ»úµÄÏµÍ³ÊÇ°²×¿5.0ÒÔÉÏ¡£¸üµÍ°æ±¾²»±£Ö¤ÔËĞĞ³É¹¦¡£--»òÕß£¬Äú¿ÉÒÔ´ÓsimpleClient¹¤³ÌÖĞ×ÔĞĞ±àÒë³öÒ»¸öapk³öÀ´¡£Çë½«¸ÃÊÖ»úÍ¨¹ıwifiÁ¬ÈëÍŞÍŞ»úËùÔÚµÄÒ»¸ö¾ÖÓòÍø¡£
 
 È»ºó£¬Äú±ØĞëÓĞÒ»Ì¨µçÄÔÓëÍŞÍŞ»ú¹²ÓÃÒ»¸ö¾ÖÓòÍø(Ö»ÊÇÎªÁË¿ìËÙ¿´Ğ§¹û)¡£ÔËĞĞc°æ±¾µÄ·şÎñÆ÷½«ĞèÒªÒ»¸ölinuxÏµÍ³¡£java°æ±¾µÄ¿ÉÒÔÎŞËùÎ½¡£
@@ -35,7 +35,8 @@ java.ÔòÖ±½ÓÓÃeclipse ´ò¿ª¹¤³ÌSimpleServer µãÔËĞĞ¼´¿É¡£
 ÕâÊ±ºò£¬Ó¦ÓÃ·şÎñÆ÷¾ÍÒÑ¾­×¼±¸¾ÍĞ÷¡£ÇëÄúµÄ¼¼ÊõÈËÔ±×ÔĞĞÍ¨¹ı³£¹æÊÖ¶Î»ñÈ¡µ½´Ë·şÎñÆ÷ËùÔÚµÄµçÄÔµÄIPµØÖ·¡£È»ºó£¬Éè¶¨ÍøÂçÍŞÍŞ»úËùÁ¬½ÓµÄÓ¦ÓÃ·şÎñÆ÷IPµØÖ·¶Ë¿ÚÉè¶¨Îª7770¡£ ÈçºÎÉè¶¨£¿Ç°ÃæÒÑËµÁË£¬Äã¿ÉÒÔ½ÓÊó±ê»òÏÔÊ¾Æ÷µ½°²×¿°æÉÏÖ±½ÓÊäÈë¡£Ò²¿ÉÒÔÍ¨¹ıprebuildÀïµÄ¾ÖÓòÍøÅäÖÃ¹¤¾ß
 ÕâÊ±ºò£¬¿´µ½Ó¦ÓÃ·şÎñÆ÷ÓĞ½ÓÊÕµ½ÍøÂçÍŞÍŞ»úĞÄÌø£¬ËµÃ÷ÍŞÍŞ»úÒÑ×¼±¸¾ÍĞ÷¡£
 
-´ò¿ªÄãµÄÊÖ»ú¸Õ°²×°µÄapk¡£µã»÷Éè¶¨°´Å¥£¬½øÈëÉè¶¨½çÃæ£¬Á¬½ÓÓ¦ÓÃ·şÎñÆ÷IPµØÖ·£¬ÊäÈëÓ¦ÓÃ·şÎñÆ÷µÄIP£¬¶Ë¿Ú7771.µã»÷OK¡£ÍË³ö²¢ÖØÆôapp¡£Ó¦¸Ã»á¿´µ½Ò»¸öÍŞÍŞ»úµÄÁĞ±í¡£µã»÷½øÈ¥¾Í¿ÉÒÔ¿ªÊ¼²Ù×÷ÁË¡£
+´ò¿ªÄãµÄÊÖ»ú¸Õ°²×°µÄapk¡£µã»÷Éè¶¨°´Å¥£¬½øÈëÉè¶¨½çÃæ£¬Á¬½ÓÓ¦ÓÃ·şÎñÆ÷IPµØÖ·£¬ÊäÈëÓ¦ÓÃ·şÎñÆ÷µÄIP£¬¶Ë¿Ú7771.µã»÷OK¡£ÍË³ö²¢ÖØÆôapp¡£
+Ó¦¸Ã»á¿´µ½Ò»¸öÍŞÍŞ»úµÄÁĞ±í¡£µã»÷½øÈ¥¾Í¿ÉÒÔ¿ªÊ¼²Ù×÷ÁË¡£
 linux°æ±¾µÄ·şÎñÆ÷¼°apkÓĞËù²»Í¬¡£µ«¶¼Í¬ÑùĞèÒªÅäÖÃ²ÎÊı¡£
 
 2.ÍŞÍŞ»úÊÇ¶¯ÁË£¬ÎªÊ²Ã´¿´²»µ½ÊÓÆµ£¿
@@ -71,8 +72,8 @@ document.docx	ÍøÂçÍŞÍŞ»úÏà¹ØµÄÃüÁî¡£ ÀıÈç£¬°´ÏÂ×óÓÒÒÆ¶¯²Ù×÷ÊÇ·¢Ê²Ã´ÃüÁî£¿ÏÂ×¥ÊÇÊ
 
 
 =================english============
-1.APP Main Code Location 
-SmartPlayer\SmartPlayer\app\src\main\java\com\daniulive\smartplayer¡£from line 396
+1.SimpleClient Main Code Location 
+SimpleClient\app\src\main\java\com\daniulive\smartplayer¡£from line 396
 socket send class is SendThread.java
 
 to build app)
@@ -81,13 +82,13 @@ Android SDK 25 is required.--this is decide by you.lower or higher is not care. 
 Gradle 3.3
 
 
-server_xb.c is a simple translate server running on linux like linuxmint and ubuntu.
+SimpleServer.c is a simple translate server running on linux like linuxmint and ubuntu.
 
 to build server)
-g++ -std=c++11 -pthread ./server_xb.c -o server_xb
+g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
 
 run
-./server_xb
+./SimpleServer
 
 
 how to control the doll machine from the app?
