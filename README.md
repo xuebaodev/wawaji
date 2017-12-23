@@ -16,12 +16,15 @@
 
 ÒÔÏÂ½«ÏêÏ¸ËµÃ÷Ñ©±©¹«Ë¾ÍøÂçÍÞÍÞ»ú¾ÖÓòÍø¿ìËÙ´î½¨¼°²âÊÔÔËÐÐ¡£¼°Ô´ÂëÈçºÎÊ¹ÓÃºÍ¶þ´Î¿ª·¢ËùÐèÒªµã¡£
 
-1.ÎÒÏëÒª¿ìËÙ¿´µ½Ð§¹û£¡ÈçºÎ¿ìËÙµÄÊµÏÖÍøÂçÍÞÍÞ»úµÄÕûÌ×Á÷³Ì´î½¨£¿===¾ÖÓòÍø½öÎªÁË¿ìËÙ¿´Ð§¹ûÐèÒª¡£²¿Êð¹«Íø½«ÐèÒªÄúµÄ¼¼ÊõÈËÔ±×ÔÐÐ¹ºÂò°²×°¡£Ô­ÀíµÈÍ¬¾ÖÓòÍø¡£
+**ÎÒÏëÒª¿ìËÙ¿´µ½Ð§¹û£¡ÈçºÎ¿ìËÙµÄÊµÏÖÍøÂçÍÞÍÞ»úµÄÕûÌ×Á÷³Ì´î½¨£¿**
+<br>¾ÖÓòÍø½öÎªÁË¿ìËÙ¿´Ð§¹ûÐèÒª¡£²¿Êð¹«Íø½«ÐèÒªÄúµÄ¼¼ÊõÈËÔ±×ÔÐÐ¹ºÂò¹«Íø·þÎñ°²×°²¿ÊðÓ¦ÓÃ·þÎñÆ÷¼°Á÷Ã½Ìå·þÎñÆ÷¡£
+<br>µ«ÆäÔ­ÀíµÈÍ¬¾ÖÓòÍø¡£Ö»ÊÇ¸÷¸ö¿Í»§¶ËµÄÁ¬½ÓipµØÖ·¸Ä³É¸Ã·þÎñÆ÷ËùÔÚµÄIPµØÖ·»òÓòÃû¼´¿É¡£
+<br>**µ±¿ìËÙ´î½¨¾ÖÓòÍøÁ÷³ÌÊ±£¬Îñ±ØÈ·±£ÊÖ»ú¿Í»§¶Ë¡¢·þÎñÆ÷¡¢ÍÞÍÞ»ú¶¼ÔÚÒ»¸öÍø¶Î£¬ÒÔ±ãÓÚËûÃÇÄÜ¹»»¥Ïà·ÃÎÊ¡£**
 
 Ê×ÏÈ£¬Äú±ØÐëÓÐÒ»Ì¨Ñ©±©¹«Ë¾µÄ°²×¿°æÍøÂçÍÞÍÞ»ú£¬²¢¿ª»úÉÏµç¡£
 
 Æä´Î£¬½«prebuiltÎÄ¼þ¼ÐÖÐµÄsimpleClient-C.apk»ò simpleClient-JAVA.apk°²×°µ½ÄúµÄÊÖ»úÉÏ¡£ÕâÈ¡¾öÓÚÄãµÄ¼¼ÊõÈËÔ±ÊÇ·ñ»á±àÒëÔËÐÐc»òjava³ÌÐò¡£
-È·±£ÄúÊÖ»úµÄÏµÍ³ÊÇ°²×¿5.0ÒÔÉÏ¡£¸üµÍ°æ±¾²»±£Ö¤ÔËÐÐ³É¹¦¡£--»òÕß£¬Äú¿ÉÒÔ´ÓsimpleClient¹¤³ÌÖÐ×ÔÐÐ±àÒë³öÒ»¸öapk³öÀ´¡£Çë½«¸ÃÊÖ»úÍ¨¹ýwifiÁ¬ÈëÍÞÍÞ»úËùÔÚµÄÒ»¸ö¾ÖÓòÍø¡£
+<br>È·±£ÄúÊÖ»úµÄÏµÍ³ÊÇ°²×¿5.0ÒÔÉÏ¡£¸üµÍ°æ±¾²»±£Ö¤ÔËÐÐ³É¹¦¡£--»òÕß£¬Äú¿ÉÒÔ´ÓsimpleClient¹¤³ÌÖÐ×ÔÐÐ±àÒë³öÒ»¸öapk³öÀ´¡£Çë½«¸ÃÊÖ»úÍ¨¹ýwifiÁ¬ÈëÍÞÍÞ»úËùÔÚµÄÒ»¸ö¾ÖÓòÍø¡£
 
 È»ºó£¬Äú±ØÐëÓÐÒ»Ì¨µçÄÔÓëÍÞÍÞ»ú¹²ÓÃÒ»¸ö¾ÖÓòÍø(Ö»ÊÇÎªÁË¿ìËÙ¿´Ð§¹û)¡£ÔËÐÐc°æ±¾µÄ·þÎñÆ÷½«ÐèÒªÒ»¸ölinuxÏµÍ³¡£java°æ±¾µÄ¿ÉÒÔÎÞËùÎ½¡£
 linux£º
@@ -30,18 +33,18 @@ g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
 run
 ./SimpleServer
 
-java.ÔòÖ±½ÓÓÃeclipse ´ò¿ª¹¤³ÌSimpleServer µãÔËÐÐ¼´¿É¡£
+java:ÔòÖ±½ÓÓÃeclipse ´ò¿ª¹¤³ÌSimpleServer µãÔËÐÐ¼´¿É¡£
 
-ÕâÊ±ºò£¬Ó¦ÓÃ·þÎñÆ÷¾ÍÒÑ¾­×¼±¸¾ÍÐ÷¡£ÇëÄúµÄ¼¼ÊõÈËÔ±×ÔÐÐÍ¨¹ý³£¹æÊÖ¶Î»ñÈ¡µ½´Ë·þÎñÆ÷ËùÔÚµÄµçÄÔµÄIPµØÖ·¡£È»ºó£¬Éè¶¨ÍøÂçÍÞÍÞ»úËùÁ¬½ÓµÄÓ¦ÓÃ·þÎñÆ÷IPµØÖ·¶Ë¿ÚÉè¶¨Îª7770¡£ ÈçºÎÉè¶¨£¿Ç°ÃæÒÑËµÁË£¬Äã¿ÉÒÔ½ÓÊó±ê»òÏÔÊ¾Æ÷µ½°²×¿°æÉÏÖ±½ÓÊäÈë¡£Ò²¿ÉÒÔÍ¨¹ýprebuildÀïµÄ¾ÖÓòÍøÅäÖÃ¹¤¾ß
-ÕâÊ±ºò£¬¿´µ½Ó¦ÓÃ·þÎñÆ÷ÓÐ½ÓÊÕµ½ÍøÂçÍÞÍÞ»úÐÄÌø£¬ËµÃ÷ÍÞÍÞ»úÒÑ×¼±¸¾ÍÐ÷¡£
+ÕâÊ±ºò£¬Ó¦ÓÃ·þÎñÆ÷¾ÍÒÑ¾­×¼±¸¾ÍÐ÷¡£ÇëÄúµÄ¼¼ÊõÈËÔ±×ÔÐÐÍ¨¹ý³£¹æÊÖ¶Î(ipconfig ifconfig)»ñÈ¡µ½´Ë·þÎñÆ÷ËùÔÚµÄµçÄÔµÄIPµØÖ·¡£È»ºó£¬Éè¶¨ÍøÂçÍÞÍÞ»úËùÁ¬½ÓµÄÓ¦ÓÃ·þÎñÆ÷IPµØÖ·¶Ë¿ÚÉè¶¨Îª7770¡£ 
+<br>ÈçºÎÉè¶¨£¿Ç°ÃæÒÑËµÁË£¬Äã¿ÉÒÔ½ÓÊó±ê»òÏÔÊ¾Æ÷µ½°²×¿°æÉÏÖ±½ÓÊäÈë¡£Ò²¿ÉÒÔÍ¨¹ýprebuildÀïµÄ¾ÖÓòÍøÅäÖÃ¹¤¾ß
+<br>ÕâÊ±ºò£¬¿´µ½Ó¦ÓÃ·þÎñÆ÷ÓÐ½ÓÊÕµ½ÍøÂçÍÞÍÞ»úÐÄÌø£¬ËµÃ÷ÍÞÍÞ»úÒÑ×¼±¸¾ÍÐ÷¡£
 
-´ò¿ªÄãµÄÊÖ»ú¸Õ°²×°µÄapk¡£µã»÷Éè¶¨°´Å¥£¬½øÈëÉè¶¨½çÃæ£¬Á¬½ÓÓ¦ÓÃ·þÎñÆ÷IPµØÖ·£¬ÊäÈëÓ¦ÓÃ·þÎñÆ÷µÄIP£¬¶Ë¿Ú7771.µã»÷OK¡£ÍË³ö²¢ÖØÆôapp¡£
+´ò¿ªÄãµÄÊÖ»ú¸Õ°²×°µÄapk:SmartPlayerDemo¡£µã»÷Éè¶¨°´Å¥£¬½øÈëÉè¶¨½çÃæ£¬Á¬½ÓÓ¦ÓÃ·þÎñÆ÷IPµØÖ·£¬ÊäÈëÓ¦ÓÃ·þÎñÆ÷µÄIP£¬¶Ë¿Ú7771.µã»÷OK¡£ÍË³ö²¢ÖØÆôapp¡£
 Ó¦¸Ã»á¿´µ½Ò»¸öÍÞÍÞ»úµÄÁÐ±í¡£µã»÷½øÈ¥¾Í¿ÉÒÔ¿ªÊ¼²Ù×÷ÁË¡£
-linux°æ±¾µÄ·þÎñÆ÷¼°apkÓÐËù²»Í¬¡£µ«¶¼Í¬ÑùÐèÒªÅäÖÃ²ÎÊý¡£
+linux°æ±¾µÄ·þÎñÆ÷¼°apk²½ÖèÓÐËù²»Í¬¡£µ«¶¼Í¬ÑùÐèÒªÅäÖÃ²ÎÊý¡£
 
 2.ÍÞÍÞ»úÊÇ¶¯ÁË£¬ÎªÊ²Ã´¿´²»µ½ÊÓÆµ£¿
-
-ÒòÎªÄúµÄÍÞÍÞ»úÐèÒªÅäÖÃÍÆÁ÷µØÖ·¡£ ÄúÐèÒªÄúµÄ¼¼ÊõÈËÔ±²¿ÊðÒ»¸öÁ÷Ã½Ìå·þÎñÆ÷£¬²¢ÉèÖÃÍÆÁ÷²ÎÊýÎªÄúµÄÁ÷Ã½Ìå·þÎñÆ÷ËùÐèÒªµÄ¸ñÊ½¡£²»¹ÜÊÇ¹«Íø»¹ÊÇ¾ÖÓòÍø¡£Èç¹ûÊÇÍÆÁ÷µ½¾ÖÓòÍø£¬Ôò±ØÐë±£Ö¤ ÍÞÍÞ»ú ÊÖ»ú Ó¦ÓÃ·þÎñÆ÷ Á÷Ã½Ìå·þÎñÆ÷¶¼ÊÇÒ»¸ö¾ÖÓòÍø¡£
+<br>ÒòÎªÄúµÄÍÞÍÞ»úÐèÒªÅäÖÃÍÆÁ÷µØÖ·¡£ ÄúÐèÒªÄúµÄ¼¼ÊõÈËÔ±²¿ÊðÒ»¸öÁ÷Ã½Ìå·þÎñÆ÷£¬²¢ÉèÖÃÍÆÁ÷²ÎÊýÎªÄúµÄÁ÷Ã½Ìå·þÎñÆ÷ËùÐèÒªµÄ¸ñÊ½¡£²»¹ÜÊÇ¹«Íø»¹ÊÇ¾ÖÓòÍø¡£Èç¹ûÊÇÍÆÁ÷µ½¾ÖÓòÍø£¬Ôò±ØÐë±£Ö¤ ÍÞÍÞ»ú ÊÖ»ú Ó¦ÓÃ·þÎñÆ÷ Á÷Ã½Ìå·þÎñÆ÷¶¼ÊÇÒ»¸ö¾ÖÓòÍø¡£
 
 
 ¹¤³ÌÎÄ¼þËµÃ÷
@@ -72,12 +75,13 @@ linux°æ±¾µÄ·þÎñÆ÷¼°apkÓÐËù²»Í¬¡£µ«¶¼Í¬ÑùÐèÒªÅäÖÃ²ÎÊý¡£
 <br>Ä¿Ç°Ã»×öÓÃ»§ÈÏÖ¤£¬Òò´Ë¶à¸öÓÃ»§Í¬Ê±ÐÞ¸ÄÒ»¸öÍÞÍÞ»úµÄÅäÖÃÊ±£¬Ö»ÓÐ×îºóÒ»¸öÅäÖÃÕßµÄÃüÁî»áÉúÐ§¡£
 
 
-SimpleServer.c	¼òµ¥Ó¦ÓÃ·þÎñÆ÷c°æ±¾µÄÔ´Âë¡£¸ÃÔ´ÂëÅäÌ×¿Í»§¶ËSimpleClient-C.apkÊ¹ÓÃ
+- [x] [**SimpleServer.c**]	¼òµ¥Ó¦ÓÃ·þÎñÆ÷c°æ±¾µÄÔ´Âë¡£¸ÃÔ´ÂëÅäÌ×¿Í»§¶ËSimpleClient-C.apkÊ¹ÓÃ
 
-document.docx	ÍøÂçÍÞÍÞ»úÏà¹ØµÄÃüÁî¡£ ÀýÈç£¬°´ÏÂ×óÓÒÒÆ¶¯²Ù×÷ÊÇ·¢Ê²Ã´ÃüÁî£¿ÏÂ×¥ÊÇÊ²Ã´ÃüÁî£¿±¨¹ÊÕÏÊ±ÊÇÊ²Ã´ÃüÁî£¿·½±ãÄúµÄ³ÌÐòÔ±ÔÚ²»Ê¹ÓÃÒÔÉÏ·¶ÀýµÄÊ±ºò£¬×ÔÐÐ·¢ËÍÃüÁîÊ¹ÍÞÍÞ»ú¿ÉÒÔ²Ù×÷¡£
+- [x] [**document.docx**]	ÍøÂçÍÞÍÞ»úÏà¹ØµÄÃüÁîÎÄµµ¡£ ÀýÈç£¬°´ÏÂ×óÓÒÒÆ¶¯²Ù×÷ÊÇ·¢Ê²Ã´ÃüÁî£¿ÏÂ×¥ÊÇÊ²Ã´ÃüÁî£¿±¨¹ÊÕÏÊ±ÊÇÊ²Ã´ÃüÁî£¿·½±ãÄúµÄ³ÌÐòÔ±ÔÚ²»Ê¹ÓÃÒÔÉÏ·¶ÀýµÄÊ±ºò£¬×ÔÐÐ·¢ËÍÃüÁîÊ¹ÍÞÍÞ»ú¿ÉÒÔ²Ù×÷¡£
 
-¿ª·ÅµÄÔ´Âë¹¤³Ì¿ÉÒÔÃâ·ÑÊ¹ÓÃ£¬ÐÞ¸Ä¼°¶þ´Î¿ª·¢¡£Ñ©±©¹«Ë¾¶Ô´ËÔ´Âë²»Ö´ÐÐ¼¼ÊõÖ§³Ö¡£
-<br>µ«»á¸ù¾Ý×ÜÌåµÄ¿Í»§·´À¡ÍêÉÆ×¢ÊÍ¼°Ê¹ÓÃËµÃ÷¡£Èç¹ûÓÐÇ±ÔÚµÄbugÒ²»¶Ó­·´À¡¡£
+¿ª·ÅµÄÔ´Âë¹¤³Ì¿ÉÒÔÃâ·ÑÊ¹ÓÃ£¬ÐÞ¸Ä¼°¶þ´Î¿ª·¢¡£Ñ©±©¹«Ë¾¶Ô´ËÔ´Âë²»Ìá¹©¼¼ÊõÖ§³Ö¡£
+<br>Èç¹ûÔÚ²Ù×÷ÍÞÍÞ»úÒÆ¶¯ÏÂ×¥¿ª¾ÖµÄ»ù±¾ÃüÁî¶Ô½ÓÉÏÈÔ´æÔÚÀ§ÄÑ,»¶Ó­Ö±½ÓÇ°À´ÒªÇó¼¼ÊõÖ¸µ¼.
+<br>Èç¹ûÓÐÇ±ÔÚµÄbugÒ²»¶Ó­·´À¡¡£
 
 °²×¿°åË¢»ú¹¤¾ß¼°¹Ì¼þ£¨ÍÆ¼öÊ¹ÓÃ4.4£©
 <br>Á´½Ó£ºhttps://pan.baidu.com/s/1mi3ltKs ÃÜÂë£ºwu39
@@ -86,7 +90,11 @@ document.docx	ÍøÂçÍÞÍÞ»úÏà¹ØµÄÃüÁî¡£ ÀýÈç£¬°´ÏÂ×óÓÒÒÆ¶¯²Ù×÷ÊÇ·¢Ê²Ã´ÃüÁî£¿ÏÂ×¥ÊÇÊ
 <br>Á´½Ó£ºhttps://pan.baidu.com/s/1jIpHpMA ÃÜÂë£º5y3l
 
 
-<br>¸ü¶àÏêÇéÇëÁªÏµQQ£º147497411 »òÖ±½ÓÉÏÃÅÁË½â¡£
+<br>**¸ü¶àÏêÇéÇëÁªÏµQQ£º147497411 »¶Ó­Ö±½ÓÉÏÃÅÏêÑ¯¡£**
+
+
+SRSÁ÷Ã½Ìå·þÎñÆ÷´î½¨Ö¸Òý
+https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP
 
 
 =================english============
