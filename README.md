@@ -41,11 +41,21 @@ java:则直接用eclipse 打开工程SimpleServer 点运行即可。
 <br>如何设定？前面已说了，你可以接鼠标或显示器到安卓版上直接输入。也可以通过prebuild里的局域网配置工具
 <br>这时候，看到应用服务器有接收到网络娃娃机心跳，说明娃娃机已准备就绪。
 
+正常工作如图
+<img src="http://chuantu.biz/t6/184/1514019686x-1566638157.png" alt="服务器运行示意图" />
+
+
+
 打开你的手机刚安装的apk:SmartPlayerDemo。点击设定按钮，进入设定界面，连接应用服务器IP地址，输入应用服务器的IP，端口7771.点击OK。退出并重启app。
 应该会看到一个娃娃机的列表。点击进去就可以开始操作了。
+<img src="http://chuantu.biz/t6/184/1514019793x-1404793385.png" alt="客户端运行示意图" />
+<br>
+<img src="http://chuantu.biz/t6/184/1514019817x-1404793385.png" alt="客户端运行示意图2" />
+
+
 linux版本的服务器及apk步骤有所不同。但都同样需要配置参数。
 
-2.娃娃机是动了，为什么看不到视频？
+娃娃机是动了，为什么看不到视频？
 <br>因为您的娃娃机需要配置推流地址。 您需要您的技术人员部署一个流媒体服务器，并设置推流参数为您的流媒体服务器所需要的格式。不管是公网还是局域网。如果是推流到局域网，则必须保证 娃娃机 手机 应用服务器 流媒体服务器都是一个局域网。
 
 
@@ -92,64 +102,70 @@ linux版本的服务器及apk步骤有所不同。但都同样需要配置参数。
 <br>链接：https://pan.baidu.com/s/1jIpHpMA 密码：5y3l
 
 
-<br>**更多详情请联系QQ：147497411 欢迎直接上门详询。**
-
-
 SRS流媒体服务器搭建指引
 https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP
 
+## 更多信息 ##
 
-=================english============
-1.SimpleClient Main Code Location 
-SimpleClient\app\src\main\java\com\daniulive\smartplayer。from line 396
-socket send class is SendThread.java
-
-to build app)
-Android Studio 2.3 or higher
-Android SDK 25 is required.--this is decide by you.lower or higher is not care. change the build.gradle by yourself. 
-Gradle 3.3
+<br>**更多详情请联系QQ：147497411 欢迎直接上门详询。**
+<br>
+<br>
+<img src="http://chuantu.biz/t6/184/1514019817x-1404793385.png" alt="二维码" />
 
 
-SimpleServer.c is a simple translate server running on linux like linuxmint and ubuntu.
 
-to build server)
+
+=====================Code Explain============
+<br>1.SimpleClient Main Code Location 
+<br>SimpleClient\app\src\main\java\com\daniulive\smartplayer。from line 396
+<br>socket send class is SendThread.java
+
+<br>to build app)
+<br>Android Studio 2.3 or higher
+<br>Android SDK 25 is required.--this is decide by you.lower or higher is not care. change the build.gradle by yourself. 
+<br>Gradle 3.3
+
+
+<br>SimpleServer.c is a simple translate server running on linux like linuxmint and ubuntu.
+
+<br>to build server SimpleServer.c)
 g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
 
-run
-./SimpleServer
+<br>run
+<br>./SimpleServer
 
 
 how to control the doll machine from the app?
-1.build the app. then run it in your android phone. Android 5.0 or higher. 4.4 is aslo ok. 
+<br>1.build the app. then run it in your android phone. Android 5.0 or higher.  
 
-2.build ther server and run it.(this server is running on Internet, otherwise your app mobile must be in the same network LAN with this server.)
------in terminal :ifconfig to get your server ip.
+<br>2.build ther server and run it.(this server is running on Internet, otherwise your app mobile must be in the same network LAN with this server.)
+<br>-----in terminal :ifconfig to get your server ip.
 
-3.open your app installed in step 1.Click the black tool icon. Input the server ip and port (default 1090)in the step 2.Press OK.
+<br>3.open your app installed in step 1.Click the black tool icon. Input the server ip and port (default 1090)in the step 2.Press OK.
 
-4.configure the doll machine to connect to server port 1080, and the ip in step 2. When success, you will see the heart beat info from the doll machine.---this is call room.
-(How to configure the doll machine's ip?See other document or ask the tech support people to do this)
+<br>4.configure the doll machine to connect to server port 1080, and the ip in step 2. When success, you will see the heart beat info from the doll machine.---this is call room.
+<br>(How to configure the doll machine's ip?See other document or ask the tech support people to do this)
 
-5.you can start play by click green button.
+<br>5.you can start play by click green button.
 
 
-===================question========================
-1.Can't see heart beat from the doll machine?
-
-Make sure your doll machine's ip is connect to your server. That would happend when the ip is conflict, if your configure is absolutly right.(Make sure the LAN line is connect to the route too!)
-
-2.I can see the headbeat from the doll machine ,but ,when click start game ,nothing happend?
-
-Check the server output info.It will display something when your app is successed connect to the server.
+<br>===================question========================
+<br>1.Can't see heart beat from the doll machine?
+<br>
+<br>Make sure your doll machine's ip is connect to your server. That would happend when the ip is conflict, if your configure is absolutly right.(Make sure the LAN line is connect to the route too!)
+<br>
+<br>2.I can see the headbeat from the doll machine ,but ,when click start game ,nothing happend?
+<br>
+<br>Check the server output info.It will display something when your app is successed connect to the server.
 When you see your operation data is print out in the server screen from the app, that app is ok.It may be doll machine's fault.
 However ,when the doll is manage to connect to the sever ,you can aslo see the debug info from the server too.
-
-3.The video stream is black.
-
-Hmmm.....Make sure your camera stream is push to the stream server(on Internet or same LAN with app) and your app is input the right stream url.Require restart app after change the video url.
-(How to setup a stream server? https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP here is an opensource server Called SRS. Just google it!)
-
-4.OK,now everything works. but the video is in highly delay?
-
-Well, you should find quicker solution by yourself. We are using https://github.com/daniulive/SmarterStreaming for a test. 
-And if you like this, contract them by yourself.By the way ,Your app's name should be SmartPlayerSDKDemo when using their free version.
+<br>
+<br>3.The video stream is black.
+<br>
+<br>Hmmm.....Make sure your camera stream is push to the stream server(on Internet or same LAN with app) and your app is input the right stream url.Require restart app after change the video url.
+<br>(How to setup a stream server? https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP here is an opensource server Called SRS. Just google it!)
+<br>
+<br>4.OK,now everything works. but the video is in highly delay?
+<br>
+<br>Well, you should find quicker solution by yourself. We are using https://github.com/daniulive/SmarterStreaming for a test. 
+<br>And if you like this, contract them by yourself.By the way ,Your app's name should be SmartPlayerSDKDemo when using their free version.
