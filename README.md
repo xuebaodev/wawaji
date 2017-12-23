@@ -46,7 +46,7 @@ linux°æ±¾µÄ·þÎñÆ÷¼°apkÓÐËù²»Í¬¡£µ«¶¼Í¬ÑùÐèÒªÅäÖÃ²ÎÊý¡£
 
 ¹¤³ÌÎÄ¼þËµÃ÷
 
-prebuild	°üº¬ÁË¾ÖÓòÍøÅäÖÃ¹¤¾ß ¹«ÍøÅäÖÃ¹¤¾ß Ô¤Éú³ÉµÄ°²×¿¼òµ¥²Ù×÷¿Í»§¶Ë£¬²¢°üº¬×îÐÂµÄ°²×¿ÍÆÁ÷³ÌÐò¡£
+- [x] [**prebuild**]	°üº¬ÁË¾ÖÓòÍøÅäÖÃ¹¤¾ß ¹«ÍøÅäÖÃ¹¤¾ß Ô¤Éú³ÉµÄ°²×¿¼òµ¥²Ù×÷¿Í»§¶Ë£¬²¢°üº¬×îÐÂµÄ°²×¿ÍÆÁ÷³ÌÐò¡£
 
   simpleClient-C.apk ÅäºÏc°æ±¾·þÎñÔËÐÐµÄ¿Í»§¶Ë
 
@@ -59,29 +59,34 @@ prebuild	°üº¬ÁË¾ÖÓòÍøÅäÖÃ¹¤¾ß ¹«ÍøÅäÖÃ¹¤¾ß Ô¤Éú³ÉµÄ°²×¿¼òµ¥²Ù×÷¿Í»§¶Ë£¬²¢°üº¬×îÐ
   androidÍâÍøµ÷²Î¹¤¾ß   
 
 
-SimpleClient	¼òµ¥²Ù×÷¿Í»§¶Ë-°²×¿°æµÄÔ´Âë¡£Äú¿ÉÒÔÍ¨¹ý´ËÔ´Âë¸üºÃµÄÊìÏ¤ÍÞÍÞ»úµÄ²Ù×÷ÃüÁî¡£»òÖ±½ÓÔÚ´Ë»ù´¡ÉÏ¿ª·¢³öÄúÌØÓÐµÄÍøÂçÍÞÍÞ»úapp
+- [x] [**SimpleClient**] ¼òµ¥²Ù×÷¿Í»§¶Ë-°²×¿°æµÄÔ´Âë¡£Äú¿ÉÒÔÍ¨¹ý´ËÔ´Âë¸üºÃµÄÊìÏ¤ÍÞÍÞ»úµÄ²Ù×÷ÃüÁî¡£
+<br>»òÖ±½ÓÔÚ´Ë»ù´¡ÉÏ¿ª·¢³öÄúÌØÓÐµÄÍøÂçÍÞÍÞ»úapp¡£
+<br>±¾¿Í»§¶ËÊÓÆµ²¥·ÅÊ¹ÓÃÁË** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">´óÅ£Ö±²¥SDK</a>**  **ÈçÒªÉÌÓÃÇë×Ô¼ºÁªÏµ£¬ÎÒÃÇ²»¸ºÔð°æÈ¨ÎÊÌâ**
 
-±¾¿Í»§¶ËÊÓÆµ²¥·ÅÊ¹ÓÃÁË** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">´óÅ£Ö±²¥SDK</a>**  **ÈçÒªÉÌÓÃÇë×Ô¼ºÁªÏµ£¬ÎÒÃÇ²»¸ºÔð°æÈ¨ÎÊÌâ**
+- [x] [**SimpleServer**]¼òµ¥Ó¦ÓÃ·þÎñÆ÷javaÔ´Âë¡£
+<br>°üº¬ÁËÓ¦ÓÃ·þÎñÆ÷»ù±¾µÄ¹¤×÷Á÷³Ì¡£±ÈÈçÁÐ¾Ù·¿¼äÁÐ±í£¬Íæ¼Ò½ø³ö£¬¿ªÊ¼ÍæµÄÃüÁîÖÐ×ªµ½ÍøÂçÍÞÍÞ»úµÄ»ù±¾Á÷³Ì¡£
+<br>Äú¿ÉÒÔ×ÔÐÐ¶þ´Î¿ª·¢ÊµÏÖÅÅ¶ÓÔ¤Ô¼£¬Ö§¸¶µÈµÈ¹¦ÄÜ¡£
+<br>Ó¦ÓÃ·þÎñÆ÷ £¨Ä¬ÈÏ¶Ë¿Ú  ¶ÔÓÚ°²×¿°åandroid-push.apkÊÇ7770£¬¶ÔÓÚÍæ¼ÒÊÖ»ú¿Í»§¶ËsimpleClient.apkÊÇ7771£©
+<br>ÅäÖÃ·þÎñÆ÷ £¨Ä¬ÈÏ¶Ë¿Ú ¶ÔÓÚ°²×¿°åandroid-push.apkÊÇ7776£¬¶ÔÓÚ¹«ÍøÅäÖÃ¹¤¾ßÊÇ7778£©
+<br>android-push.apkÆô¶¯ºó£¬»á×Ô¶¯×¢²áµ½ÅäÖÃ·þÎñÆ÷£¬ÍâÍøÅäÖÃ¹¤¾ß¿ÉÍ¨¹ýÅäÖÃ·þÎñÆ÷ÅäÖÃ°²×¿°å²ÎÊý
+<br>Ä¿Ç°Ã»×öÓÃ»§ÈÏÖ¤£¬Òò´Ë¶à¸öÓÃ»§Í¬Ê±ÐÞ¸ÄÒ»¸öÍÞÍÞ»úµÄÅäÖÃÊ±£¬Ö»ÓÐ×îºóÒ»¸öÅäÖÃÕßµÄÃüÁî»áÉúÐ§¡£
 
-SimpleServer	¼òµ¥Ó¦ÓÃ·þÎñÆ÷javaÔ´Âë¡£°üº¬ÁËÓ¦ÓÃ·þÎñÆ÷»ù±¾µÄ¹¤×÷Á÷³Ì¡£±ÈÈçÁÐ¾Ù·¿¼äÁÐ±í£¬Íæ¼Ò½ø³ö£¬¿ªÊ¼ÍæµÄÃüÁîÖÐ×ªµ½ÍøÂçÍÞÍÞ»úµÄ»ù±¾Á÷³Ì¡£Äú¿ÉÒÔ×ÔÐÐ¶þ´Î¿ª·¢ÊµÏÖÅÅ¶ÓÔ¤Ô¼£¬Ö§¸¶µÈµÈ¹¦ÄÜ¡£
 
-SimpleServer.c	¼òµ¥Ó¦ÓÃ·þÎñÆ÷c°æ±¾µÄÔ´Âë
+SimpleServer.c	¼òµ¥Ó¦ÓÃ·þÎñÆ÷c°æ±¾µÄÔ´Âë¡£¸ÃÔ´ÂëÅäÌ×¿Í»§¶ËSimpleClient-C.apkÊ¹ÓÃ
 
 document.docx	ÍøÂçÍÞÍÞ»úÏà¹ØµÄÃüÁî¡£ ÀýÈç£¬°´ÏÂ×óÓÒÒÆ¶¯²Ù×÷ÊÇ·¢Ê²Ã´ÃüÁî£¿ÏÂ×¥ÊÇÊ²Ã´ÃüÁî£¿±¨¹ÊÕÏÊ±ÊÇÊ²Ã´ÃüÁî£¿·½±ãÄúµÄ³ÌÐòÔ±ÔÚ²»Ê¹ÓÃÒÔÉÏ·¶ÀýµÄÊ±ºò£¬×ÔÐÐ·¢ËÍÃüÁîÊ¹ÍÞÍÞ»ú¿ÉÒÔ²Ù×÷¡£
 
-
+¿ª·ÅµÄÔ´Âë¹¤³Ì¿ÉÒÔÃâ·ÑÊ¹ÓÃ£¬ÐÞ¸Ä¼°¶þ´Î¿ª·¢¡£Ñ©±©¹«Ë¾¶Ô´ËÔ´Âë²»Ö´ÐÐ¼¼ÊõÖ§³Ö¡£
+<br>µ«»á¸ù¾Ý×ÜÌåµÄ¿Í»§·´À¡ÍêÉÆ×¢ÊÍ¼°Ê¹ÓÃËµÃ÷¡£Èç¹ûÓÐÇ±ÔÚµÄbugÒ²»¶Ó­·´À¡¡£
 
 °²×¿°åË¢»ú¹¤¾ß¼°¹Ì¼þ£¨ÍÆ¼öÊ¹ÓÃ4.4£©
-
-Á´½Ó£ºhttps://pan.baidu.com/s/1mi3ltKs ÃÜÂë£ºwu39
+<br>Á´½Ó£ºhttps://pan.baidu.com/s/1mi3ltKs ÃÜÂë£ºwu39
 
 ÆäËû×ÊÁÏ×Ü»ã£º
+<br>Á´½Ó£ºhttps://pan.baidu.com/s/1jIpHpMA ÃÜÂë£º5y3l
 
-Á´½Ó£ºhttps://pan.baidu.com/s/1jIpHpMA ÃÜÂë£º5y3l
 
-
-¸ü¶àÏêÇéÇëÁªÏµQQ£º147497411 »òÖ±½ÓÉÏÃÅÁË½â¡£
-
+<br>¸ü¶àÏêÇéÇëÁªÏµQQ£º147497411 »òÖ±½ÓÉÏÃÅÁË½â¡£
 
 
 =================english============
