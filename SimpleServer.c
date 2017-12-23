@@ -276,8 +276,8 @@ void Comm(ext func, int Port)
 		exit(1);
 	}
 
-	if (Port == 1080) g_doll_listen = servfd;
-	else if (Port == 1090) g_player_listen = servfd;
+	if (Port == 7770) g_doll_listen = servfd;
+	else if (Port == 7771) g_player_listen = servfd;
 
 	PrintTime();
 	printf("start listen at port: %d !\n", Port);
