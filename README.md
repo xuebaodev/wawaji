@@ -61,11 +61,24 @@ prebuild	°üº¬ÁË¾ÖÓòÍøÅäÖÃ¹¤¾ß ¹«ÍøÅäÖÃ¹¤¾ß Ô¤Éú³ÉµÄ°²×¿¼òµ¥²Ù×÷¿Í»§¶Ë£¬²¢°üº¬×îÐ
 
 SimpleClient	¼òµ¥²Ù×÷¿Í»§¶Ë-°²×¿°æµÄÔ´Âë¡£Äú¿ÉÒÔÍ¨¹ý´ËÔ´Âë¸üºÃµÄÊìÏ¤ÍÞÍÞ»úµÄ²Ù×÷ÃüÁî¡£»òÖ±½ÓÔÚ´Ë»ù´¡ÉÏ¿ª·¢³öÄúÌØÓÐµÄÍøÂçÍÞÍÞ»úapp
 
+±¾¿Í»§¶ËÊÓÆµ²¥·ÅÊ¹ÓÃÁË** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">´óÅ£Ö±²¥SDK</a>**  **ÈçÒªÉÌÓÃÇë×Ô¼ºÁªÏµ£¬ÎÒÃÇ²»¸ºÔð°æÈ¨ÎÊÌâ**
+
 SimpleServer	¼òµ¥Ó¦ÓÃ·þÎñÆ÷javaÔ´Âë¡£°üº¬ÁËÓ¦ÓÃ·þÎñÆ÷»ù±¾µÄ¹¤×÷Á÷³Ì¡£±ÈÈçÁÐ¾Ù·¿¼äÁÐ±í£¬Íæ¼Ò½ø³ö£¬¿ªÊ¼ÍæµÄÃüÁîÖÐ×ªµ½ÍøÂçÍÞÍÞ»úµÄ»ù±¾Á÷³Ì¡£Äú¿ÉÒÔ×ÔÐÐ¶þ´Î¿ª·¢ÊµÏÖÅÅ¶ÓÔ¤Ô¼£¬Ö§¸¶µÈµÈ¹¦ÄÜ¡£
 
 SimpleServer.c	¼òµ¥Ó¦ÓÃ·þÎñÆ÷c°æ±¾µÄÔ´Âë
 
 document.docx	ÍøÂçÍÞÍÞ»úÏà¹ØµÄÃüÁî¡£ ÀýÈç£¬°´ÏÂ×óÓÒÒÆ¶¯²Ù×÷ÊÇ·¢Ê²Ã´ÃüÁî£¿ÏÂ×¥ÊÇÊ²Ã´ÃüÁî£¿±¨¹ÊÕÏÊ±ÊÇÊ²Ã´ÃüÁî£¿·½±ãÄúµÄ³ÌÐòÔ±ÔÚ²»Ê¹ÓÃÒÔÉÏ·¶ÀýµÄÊ±ºò£¬×ÔÐÐ·¢ËÍÃüÁîÊ¹ÍÞÍÞ»ú¿ÉÒÔ²Ù×÷¡£
+
+
+
+°²×¿°åË¢»ú¹¤¾ß¼°¹Ì¼þ£¨ÍÆ¼öÊ¹ÓÃ4.4£©
+
+Á´½Ó£ºhttps://pan.baidu.com/s/1mi3ltKs ÃÜÂë£ºwu39
+
+ÆäËû×ÊÁÏ×Ü»ã£º
+
+Á´½Ó£ºhttps://pan.baidu.com/s/1jIpHpMA ÃÜÂë£º5y3l
+
 
 ¸ü¶àÏêÇéÇëÁªÏµQQ£º147497411 »òÖ±½ÓÉÏÃÅÁË½â¡£
 

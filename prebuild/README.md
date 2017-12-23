@@ -1,3 +1,8 @@
+配套工具使用说明
+如果缺少.net请先安装dotNetFx40_Full_x86_x64
+https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe
+
+
 20171221
 对外公开附加软件
 免费使用，但不包软件售后
@@ -30,14 +35,4 @@
 5.1监听端口，安卓板的应用启动后，
    会自动注册到配置服务器，外网配置工具可通过配置服务器配置安卓板参数
 5.2目前没做用户认证
-
-
-备注：
-安卓板刷机工具及固件（推荐使用4.4）
-链接：https://pan.baidu.com/s/1mi3ltKs 密码：wu39
-其他资料总汇：
-链接：https://pan.baidu.com/s/1jIpHpMA 密码：5y3l
-
-播放端使用了大牛的SDK
-如要商用请自己联系，我们不负责版权问题
 
