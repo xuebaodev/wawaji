@@ -35,11 +35,14 @@
 <br>--此APK提供标准RTMP双路视频推流，及处理娃娃机命令等操作。如选择自己的私有协议，则此步骤必须跳过。
 
 3.运行SimpleServer程序-即开启应用服务器，记录好服务器此时的IP。--如果您已熟知娃娃机的协议，可以忽略本例子代码自行开发您的应用服务器。
-<br>linux：
-<br>g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
-<br>
-<br>run
-<br>./SimpleServer
+
+```
+linux：
+g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
+
+run
+./SimpleServer
+```
 
 <br>java:则直接用eclipse 打开工程SimpleServer 点运行即可。
 
@@ -65,29 +68,24 @@
 
 常见问题：
 娃娃机是动了，为什么看不到视频？
-<br>因为您的娃娃机需要配置推流地址。 您需要您的技术人员部署一个流媒体服务器，并设置推流参数为您的流媒体服务器所需要的格式。
+<br>因为您的娃娃机需要配置推流地址。 您需要您的技术人员部署一个流媒体服务器，并设置推流参数为您的流媒体服务器所需要的格式。simpleClinet也需要设置相应的视频推流地址。
 
 
 工程文件说明
 
-- [x] [**prebuild**]	包含了局域网配置工具 公网配置工具 预生成的安卓简单操作客户端，并包含最新的安卓推流程序。
-
-  simpleClient-C.apk 配合c版本服务运行的客户端
-
-  simpleClient-JAVA.apk 配合java版本服务运行的客户端
-
-  android-push 最新版的安卓推流程序及安装脚本。
-
-  android局域网调参工具
-
-  android外网调参工具   
+* [**prebuild**] 包含了最新的安卓推流程序, 局域网配置工具 公网配置工具 预生成的安卓简单操作客户端.
+	* android-push 最新版的安卓推流程序及安装脚本。
+	* android局域网调参工具
+	* android外网调参工具   
+	* simpleClient-C.apk 配合c版本服务运行的客户端
+	* simpleClient-JAVA.apk 配合java版本服务运行的客户端
 
 
-- [x] [**SimpleClient**] 简单操作客户端-安卓版的源码。您可以通过此源码更好的熟悉娃娃机的操作命令。
+* [x] [**SimpleClient**] 简单操作客户端-安卓版的源码。您可以通过此源码更好的熟悉娃娃机的操作命令。
 <br>或直接在此基础上开发出您特有的网络娃娃机app。
 <br>本客户端视频播放使用了** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播SDK</a>**  **如要商用请自己联系，我们不负责版权问题**
 
-- [x] [**SimpleServer**]简单应用服务器java源码。
+* [x] [**SimpleServer**]简单应用服务器java源码。
 <br>包含了应用服务器基本的工作流程。比如列举房间列表，玩家进出，开始玩的命令中转到网络娃娃机的基本流程。
 <br>您可以自行二次开发实现排队预约，支付等等功能。
 <br>应用服务器 （默认端口  对于安卓板android-push.apk是7770，对于玩家手机客户端simpleClient.apk是7771）
@@ -96,9 +94,9 @@
 <br>目前没做用户认证，因此多个用户同时修改一个娃娃机的配置时，只有最后一个配置者的命令会生效。
 
 
-- [x] [**SimpleServer.c**]	简单应用服务器c版本的源码。该源码配套客户端SimpleClient-C.apk使用
+* [x] [**SimpleServer.c**]	简单应用服务器c版本的源码。该源码配套客户端SimpleClient-C.apk使用
 
-- [x] [**document.docx**]	网络娃娃机相关的命令文档。 例如，按下左右移动操作是发什么命令？下抓是什么命令？报故障时是什么命令？方便您的程序员在不使用以上范例的时候，自行发送命令使娃娃机可以操作。
+* [x] [**document.docx**]	网络娃娃机相关的命令文档。 例如，按下左右移动操作是发什么命令？下抓是什么命令？报故障时是什么命令？方便您的程序员在不使用以上范例的时候，自行发送命令使娃娃机可以操作。
 
 开放的源码工程可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持。
 <br>如果在操作娃娃机移动下抓开局的基本命令对接上仍存在困难,欢迎直接前来要求技术指导.
