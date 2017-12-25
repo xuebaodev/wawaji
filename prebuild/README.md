@@ -7,7 +7,7 @@ https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DA
 
 1.安卓板上运行的应用android-push.apk  (仅限雪暴娃娃机配套主板，安卓板固件请升级至1221版本或以上，安卓系统版本4.4)
 
-包含功能：
+包含功能：#本apk不提供源码#
 
 1.1通用RTMP的低延迟推流
 
