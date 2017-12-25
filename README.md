@@ -7,7 +7,7 @@
 
 <img src="http://chuantu.biz/t6/184/1514017000x-1566638157.png" alt="雪暴网络娃娃机安卓结构示意图" />
 
-1.首先购买雪暴网络娃娃机，内含安卓版推流操纵端。视频摄像头可自行购买。具体型号及要求可咨询我公司。
+1.首先购买雪暴网络娃娃机安卓版套装。
 然后根据要求安装好摄像头并摆好位置。连接网线。这时，如果网线已连接到公网，则该娃娃机已正常工作。
 
 2.配置娃娃机参数。可使用本工程自带的局域网，公网配置软件，或安卓版连接鼠标显示器自行配置推流地址，娃娃机名称 ，视频参数等属性。
@@ -141,9 +141,10 @@ how to control the doll machine from the app?
 <br>2.build ther server and run it.(this server is running on Internet, otherwise your app mobile must be in the same network LAN with this server.)
 <br>-----in terminal :ifconfig to get your server ip.
 
-<br>3.open your app installed in step 1.Click the black tool icon. Input the server ip and port (default 1090)in the step 2.Press OK.
+<br>3.open your app installed in step 1.Click the black tool icon. Input the server ip and port (default 7771)in the step 2.Press OK.
 
-<br>4.configure the doll machine to connect to server port 1080, and the ip in step 2. When success, you will see the heart beat info from the doll machine.---this is call room.
+<br>4.configure the doll machine to connect to server port 7770, and the ip in step 
+<br>2. When success, you will see the heart beat info from the doll machine.---this is call room.
 <br>(How to configure the doll machine's ip?See other document or ask the tech support people to do this)
 
 <br>5.you can start play by click green button.
