@@ -1,0 +1,8 @@
+
+public static ComPort mComPort;
+//´®¿Ú¶ÔÏó
+if (mComPort == null) {
+	mComPort = new ComPort(mHandler);
+}
+mComPort.Start();
+mComPort.SendData(msg_content, msg_content.length);
