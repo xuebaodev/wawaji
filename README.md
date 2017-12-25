@@ -119,7 +119,7 @@ https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP
 ## 更多信息 ##
 
 
-<br>如感兴趣欢迎来厂洽谈合作了解详情。联系人：李生 13926265855**
+<br>**如感兴趣欢迎来厂洽谈合作了解详情。联系人：李生 13926265855**
 
 微信连接
 https://mp.weixin.qq.com/s/UlOTFWT5IfIxEI3h_PaRNQ
