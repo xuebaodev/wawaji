@@ -238,7 +238,7 @@ public class ClientServer {
 
 							System.arraycopy(strRoomList.getBytes(), 0, msg_content, 9, strRoomList.getBytes().length);
 
-							System.out.println("room list len." + data_len);
+							System.out.println("room list reply:" + strRoomList);
 							out.write(msg_content, 0, msg_content.length);
 							out.flush();
 

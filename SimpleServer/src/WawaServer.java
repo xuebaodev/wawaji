@@ -351,8 +351,11 @@ public class WawaServer {
 						System.out.println("Checksum Data Failed. skip.");
 						continue;
 					}
+					
+					//System.out.println("cmd recv:" + total_data[7]);
+					
 
-					if (total_data[7] == 0x35) {//heart beat
+					if ((total_data[7]&0xff)== 0x35) {//heart beat
 						String strMAC = new String(total_data, 8, 12);
 						System.out.println("wawa heartbeat." + strMAC);
 						long now_tw = System.currentTimeMillis();
@@ -376,7 +379,23 @@ public class WawaServer {
 						} catch (IOException ioe) {
 
 						}
-					} else  {//translate msg to playing player. but you should check if any error happen.
+					}else if((total_data[7]&0xff)== 0xa0) //视频推流成功
+					{
+						String strMAC = new String(total_data, 8, 12);
+						if((total_data[20]&0xff)== 0x00 )
+							System.out.println("娃娃机:" + strMAC +"前置推流失败.");
+						else if((total_data[20]&0xff)== 0x01 )
+							System.out.println("娃娃机:" + strMAC +"前置推流成功.");
+						else if((total_data[20]&0xff)== 0x02 )
+							System.out.println("娃娃机:" + strMAC +"前置推流关闭.");
+						else if((total_data[20]&0xff)== 0x10 )
+							System.out.println("娃娃机:" + strMAC +"后置推流失败.");
+						else if((total_data[20]&0xff)== 0x11 )
+							System.out.println("娃娃机:" + strMAC +"后置推流成功.");
+						else if((total_data[20]&0xff)== 0x12 )
+							System.out.println("娃娃机:" + strMAC +"后置推流关闭.");
+					} 
+					else  {//translate msg to playing player. but you should check if any error happen.
 						
 						if( total_data[7] == 0x34 )//error happend..do your code.change machine state and etc.
 						{
