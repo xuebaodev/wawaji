@@ -586,12 +586,12 @@ public class SmartPlayer extends Activity {
 				else if(v.getId() == R.id.btn_up)
 				{
 					((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.operation_up_press));
-					dir =0;
+					dir =1;
 				}
 				else if(v.getId() == R.id.btn_down)
 				{
 					((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.operation_down_press));
-					dir = 1;
+					dir = 0;
 				}
 				else if(v.getId() == R.id.btn_left)
 				{
