@@ -168,6 +168,12 @@ public class ConfigClientServer {
 						pi.in_room_mac = strMAC;
 						SimpleApp.conf_server.TranlsateToWawaji(strMAC, total_data, pi.socket);
 					}
+					else if(strCMD.equals("update") ) 
+					{
+						String strMAC = jsonObject.getString("mac");
+						pi.in_room_mac = strMAC;
+						SimpleApp.conf_server.TranlsateToWawaji(strMAC, total_data, pi.socket);
+					}
 				} catch (Exception e) {
 					//e.printStackTrace();
 					System.out.println("Config client close.I close.");
