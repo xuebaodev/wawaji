@@ -247,21 +247,11 @@ public class CameraPublishActivity extends Activity
 		}
 		mComPort.Start();
 
-		//本地无目标服务器地址配置 先跟串口要
-		if( VideoConfig.instance.destHost.equals("") || VideoConfig.instance.GetAppPort()==0)
-		{
-			send_com_data(0x3c);
-		}else
-			ServerStopAndReconnect();
-
-		//连接配置服务器
-		ConfigServerStopAndReconnect();
-
 		initUI();
 
 		UpdateConfigToUI();
 
-		if(getLocalIpAddress().equals(""))
+		if(getLocalIpAddress().equals(""))//网卡尚未就绪IP地址没有获取
 		{
 			mHandler.sendEmptyMessage(1);
 		}
@@ -538,45 +528,6 @@ public class CameraPublishActivity extends Activity
 
 		btnStartPush = (Button)findViewById(R.id.button_start_push);
 		btnStartPush.setOnClickListener(new ButtonStartPushListener());
-	}
-
-	//初始化界面，加载配置 并开始推流
-	void InitUIAndAutoStart()
-	{
-		//检查本地配置是否存在。如不存在向串口获取应用服务器Ip地址。
-		if(VideoConfig.instance.destHost.equals(""))
-		{
-			byte msg_content[] = new byte[21];
-			msg_content[0] = (byte) 0xfe;
-			msg_content[1] = (byte) (0);
-			msg_content[2] = (byte) (0);
-			msg_content[3] = (byte) ~msg_content[0];
-			msg_content[4] = (byte) ~msg_content[1];
-			msg_content[5] = (byte) ~msg_content[2];
-			msg_content[6] = (byte) (msg_content.length);
-			msg_content[7] = (byte) 0x3e;
-			String strMAC = VideoConfig.instance.getMac();
-			System.arraycopy(strMAC.getBytes(), 0, msg_content, 8, strMAC.getBytes().length);
-			int total_c = 0;
-			for (int i = 6; i < msg_content.length - 1; i++) {
-				total_c += (msg_content[i] & 0xff);
-			}
-			msg_content[msg_content.length - 1] = (byte) (total_c % 100);
-			mComPort.SendData(msg_content, msg_content.length);
-		}
-
-		UpdateConfigToUI();
-
-		libPublisher = new SmartPublisherJniV2();
-
-		ComParamSet(true, true, true);//给串口发 MAC 本机IP 密码
-
-		//监听本地局域网端口
-		lis_server = new MyTCServer();
-		lis_server.init();
-
-		//开始推流
-		UIClickStartPush();
 	}
 
 	byte[] strIPtob(String sip)
@@ -1070,12 +1021,33 @@ public class CameraPublishActivity extends Activity
 					break;
 				case 2:
 					{
+						//本地无目标服务器地址配置 先跟串口要
+						if( VideoConfig.instance.destHost.equals("") || VideoConfig.instance.GetAppPort()==0)
+						{
+							send_com_data(0x3c);//跟串口要IP和端口 要到以后 如果合法 它会自己开始连接并心跳
+						}else
+							ServerStopAndReconnect();
+
+						//连接配置服务器
+						ConfigServerStopAndReconnect();
+
 						mHandler.sendEmptyMessageDelayed(3, 2000);
 					}
 					break;
 				case 3:
 				{
-					InitUIAndAutoStart();
+					UpdateConfigToUI();//有可能拿到了新的应用服务器端口地址。所以更新UI
+
+					libPublisher = new SmartPublisherJniV2();
+
+					ComParamSet(true, true, true);//给串口发 MAC 本机IP 密码
+
+					//监听本地局域网端口
+					lis_server = new MyTCServer();
+					lis_server.init();
+
+					//开始推流
+					UIClickStartPush();
 				}
 				break;
 				case 0://应用服务器连接成功--将地址保存到串口
@@ -1248,7 +1220,7 @@ public class CameraPublishActivity extends Activity
 
 							VideoConfig.instance.SaveConfig(getApplicationContext());
 						} else {
-								outputInfo("该地址非法。不推。");
+								outputInfo("该地址非法。不连接。");
 							}
 					}
 					else {
