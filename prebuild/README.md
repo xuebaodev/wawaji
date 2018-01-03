@@ -23,9 +23,13 @@ https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DA
 
 1.7断流重推
 
+2018.1.3 add
+
+1.8接受升级指令自动下载安装重启。
+
 <br>安装时，如果配置好adb运行环境。可运行android-push_install.bat脚本一键自动覆盖安装并升级。
 
-更多功能正在开发中。请留意更新并升级。欢迎反馈bug。
+请留意更新并升级。如发现bug，欢迎及时反馈。
 
 
 2.局域网配置工具
