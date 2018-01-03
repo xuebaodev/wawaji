@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\SDK_Daniulive\SmartPublisher-double1\app\src\main\assets"><file name="logo.png" path="D:\SDK_Daniulive\SmartPublisher-double1\app\src\main\assets\logo.png"/></source><source path="D:\SDK_Daniulive\SmartPublisher-double1\app\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\SDK_Daniulive\SmartPublisher-double1\app\src\release\assets"/></dataSet></merger>

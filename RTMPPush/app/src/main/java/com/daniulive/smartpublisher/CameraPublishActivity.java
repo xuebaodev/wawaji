@@ -213,96 +213,6 @@ public class CameraPublishActivity extends Activity
 		}
 	};
 
-	private Decrypt mDecrypt = null;
-	private static final String ALGORITHM_DESEDE = "DESede";
-	private static final String ALGORITHM_ECB = "DESede/ECB/NoPadding";
-	boolean CheckOK()
-	{
-		//校验开始
-		//用户ID号
-		byte[] customerId = new byte[8];
-		customerId[0] = (byte)0xda;
-		customerId[1] = (byte)0x04;
-		customerId[2] = (byte)0xea;
-		customerId[3] = (byte)0x89;
-		customerId[4] = (byte)0xFD;
-		customerId[5] = (byte)0x06;
-		customerId[6] = (byte)0x2d;
-		customerId[7] = (byte)0x2a;
-
-		//用户加密私钥
-		byte[] customerKey = new byte[8];
-		customerKey[0] = (byte)0xc8;
-		customerKey[1] = (byte)0xf6;
-		customerKey[2] = (byte)0x7f;
-		customerKey[3] = (byte)0x54;
-		customerKey[4] = (byte)0x8c;
-		customerKey[5] = (byte)0x27;
-		customerKey[6] = (byte)0x6b;
-		customerKey[7] = (byte)0x0a;
-
-		//生成随机数组
-		byte[] randomKey = new byte[8];
-		Random random = new Random();
-		random.nextBytes(randomKey);
-
-		//获得checkKey和加密后的用户ID号userid
-		mDecrypt = new Decrypt();
-		byte[] decryptData = mDecrypt.check(randomKey, customerKey);
-
-		//decryptData前8位是checkKey
-		byte[] checkKey = new byte[8];
-		for(int i = 0; i < 8; i++)
-		{
-			checkKey[i] = decryptData[i];
-		}
-
-		//decryptData后8位是加密后的用户ID号userid
-		byte[] userId = new byte[8];
-		for(int i = 8; i < 16; i++)
-		{
-			userId[i-8] = decryptData[i];
-		}
-
-		//解密算法
-		byte[] desKey = new byte[24];
-		System.arraycopy(randomKey, 0, desKey, 0, 8);
-		System.arraycopy(customerKey, 0, desKey, 8, 8);
-		System.arraycopy(checkKey, 0, desKey, 16, 8);
-		byte[] outData = decryptMode(userId,desKey);
-
-		//outData是解密得到的ID号，和用户ID号进行比较，如果一致则校验通过
-		int len = outData.length;
-		for(int i = 0; i < len; i++)
-		{
-			if(customerId[i] != outData[i])
-			{
-				//解密得到的ID号和用户ID号不一致，校验不通过
-				//TODO：
-				Log.e("~~!!!"," not pass");
-				return false;
-			}
-		}
-		//校验结束
-		Log.e("~~!!!","pass");
-		return true;
-	}
-
-	public static byte[] decryptMode(byte[] src ,byte[] key) {
-		try {
-			SecretKey deskey = new SecretKeySpec(key, ALGORITHM_DESEDE);
-			Cipher c1 = Cipher.getInstance(ALGORITHM_ECB);
-			c1.init(Cipher.DECRYPT_MODE, deskey);
-			return c1.doFinal(src);
-		} catch (java.security.NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
-		} catch (javax.crypto.NoSuchPaddingException e2) {
-			e2.printStackTrace();
-		} catch (java.lang.Exception e3) {
-			e3.printStackTrace();
-		}
-		return null;
-	}
 
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -316,12 +226,6 @@ public class CameraPublishActivity extends Activity
 		wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 		wifiauto = new WifiAutoConnectManager(wifiManager);
 		//check psw if not exit
-		if( CheckOK() == false)
-		{
-			super.onDestroy();
-			finish();
-			System.exit(0);
-		}
 
 		pst_front = PushState.UNKNOWN;
 		pst_back = PushState.UNKNOWN;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="D:\wawaji\RTMPPush\app\libs\smartavengine.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="1e322a52c47d17920fa8f9b2aa3a58ae2d620072">
+        <dex dex="D:\wawaji\RTMPPush\app\build\intermediates\pre-dexed\debug\smartavengine_806ca4fed57e8ac2f7a3f94d3f5163d49a4c446e.jar" />
+    </item>
+
+</items>
