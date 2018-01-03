@@ -212,12 +212,6 @@ public class SockConfig {
                 FireHeadbeat();
                 StopReconnect();
 
-                {
-                    Message message = Message.obtain();
-                    message.what = 3;
-                    if(handler  != null) handler.sendMessage(message);
-                }
-
                 while(socket != null && socket.isConnected() && ShouldStopNow == false){
                     try{
                         DataInputStream input = new DataInputStream(socket.getInputStream());

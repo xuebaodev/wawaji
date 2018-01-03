@@ -101,6 +101,7 @@ public class MyTCServer {
                     }else if(cmd.equals("applyconfig"))
                     {
                         boolean apply_ret = VideoConfig.instance.ApplyConfig(aa, socket);
+                        Log.e("收到配置数据", aa);
                         /*if(apply_ret)
                         {
                             String s = "{\"result\":\"ok\"}";

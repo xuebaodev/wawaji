@@ -41,20 +41,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CameraPublishActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CameraPublishActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="1106" column="45" selection-start-line="1106" selection-start-column="45" selection-end-line="1106" selection-end-column="45" />
+            <state relative-caret-position="141">
+              <caret line="262" column="0" selection-start-line="262" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#onDestroy#0;class#CameraPublishActivity#0" expanded="false" />
+                <element signature="e#9379#10411#0" expanded="true" />
+                <element signature="e#10410#10411#0" expanded="true" />
+                <element signature="e#10536#11395#0" expanded="true" />
+                <element signature="e#11394#11395#0" expanded="true" />
+                <element signature="e#11650#11658#0" expanded="true" />
+                <element signature="e#12476#12484#0" expanded="true" />
+                <element signature="e#13356#13364#0" expanded="true" />
+                <element signature="e#14161#14169#0" expanded="true" />
+                <element signature="e#15553#15811#0" expanded="true" />
+                <element signature="e#15810#15811#0" expanded="true" />
+                <element signature="e#16126#16382#0" expanded="true" />
+                <element signature="e#16381#16382#0" expanded="true" />
                 <element signature="method#send_com_data#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#ComParamSet#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#getLocalIpAddress#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#outputInfo#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#SwitchResolution#0;class#CameraPublishActivity#0" expanded="false" />
-                <element signature="method#RestoreConfigAndUpdateVideoUI#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#ConfigRecorderFuntion#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="class#ButtonRecorderMangerListener#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="class#ButtonHardwareEncoderListener#0;class#CameraPublishActivity#0" expanded="false" />
@@ -76,17 +87,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SendThread.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/SendThread.java">
+      <file leaf-file-name="VideoConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/VideoConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="95" column="9" selection-start-line="95" selection-start-column="9" selection-end-line="95" selection-end-column="9" />
+            <state relative-caret-position="160">
+              <caret line="244" column="0" selection-start-line="244" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
               <folding>
-                <element signature="method#IsReady#0;class#SendThread#0" expanded="false" />
-                <element signature="method#ReadDataUnti#0;class#SendThread#0" expanded="false" />
-                <element signature="e#3220#4040#0" expanded="true" />
-                <element signature="e#4039#4040#0" expanded="true" />
-                <element signature="method#bytesToHexString#0;class#SendThread#0" expanded="false" />
+                <element signature="method#getMac#0;class#VideoConfig#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -1802,14 +1809,14 @@
         <option value="$PROJECT_DIR$/app/src/main/java/socks/WifiUtil.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/android_serialport_api/ComPort.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/socks/WifiAutoConnectManager.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/socks/VideoConfig.java" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/update/SilentInstall.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/socks/SockConfig.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/socks/MyTCServer.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/socks/SendThread.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/socks/MyTCServer.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/socks/VideoConfig.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/socks/SockConfig.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java" />
       </list>
     </option>
   </component>
@@ -1867,6 +1874,38 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RTMPPush" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RTMPPush" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2290,28 +2329,29 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1444" height="876" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32775453" sideWeight="0.47976878" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44211996" sideWeight="0.34393063" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44211996" sideWeight="0.33959538" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32775453" sideWeight="0.5216763" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31659693" sideWeight="0.7731214" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32775453" sideWeight="0.52745664" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33472803" sideWeight="0.7601156" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34670487" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50906557" sideWeight="0.48554912" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32914925" sideWeight="0.49421966" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5690377" sideWeight="0.4355301" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22254336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42677826" sideWeight="0.5166185" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21459538" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42677826" sideWeight="0.507948" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32775453" sideWeight="0.4783237" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32775453" sideWeight="0.47254336" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2319,7 +2359,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34670487" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -2338,12 +2377,30 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java</url>
-          <line>1178</line>
+          <line>1181</line>
           <properties />
           <option name="timeStamp" value="114" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java</url>
+          <line>1797</line>
+          <properties />
+          <option name="timeStamp" value="124" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java</url>
+          <line>244</line>
+          <properties />
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java</url>
+          <line>241</line>
+          <properties />
+          <option name="timeStamp" value="128" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="124" />
+      <option name="time" value="129" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2525,17 +2582,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="33" column="41" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -2550,24 +2596,6 @@
           <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
           <folding>
             <element signature="method#checkDownloadStatus#0;class#SilentInstall#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/VideoConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1862">
-          <caret line="118" column="34" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1932#1933#0" expanded="false" />
-            <element signature="e#1965#1966#0" expanded="false" />
-            <element signature="e#3138#3139#0" expanded="false" />
-            <element signature="e#3169#3170#0" expanded="false" />
-            <element signature="e#3423#3424#0" expanded="false" />
-            <element signature="e#3456#3457#0" expanded="false" />
-            <element signature="method#SaveConfig#0;class#VideoConfig#0" expanded="false" />
-            <element signature="method#getMac#0;class#VideoConfig#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2626,25 +2654,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/SockConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="665">
-          <caret line="252" column="25" selection-start-line="252" selection-start-column="25" selection-end-line="252" selection-end-column="25" />
-          <folding>
-            <element signature="method#FireHeadbeat#0;class#SockConfig#0" expanded="false" />
-            <element signature="method#FireReconnect#0;class#SockConfig#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/MyTCServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="62" column="9" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/RecorderPlayback.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
@@ -2661,19 +2670,84 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/SendThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+          <folding>
+            <element signature="method#IsReady#0;class#SendThread#0" expanded="false" />
+            <element signature="method#ReadDataUnti#0;class#SendThread#0" expanded="false" />
+            <element signature="e#3220#4040#0" expanded="true" />
+            <element signature="e#4039#4040#0" expanded="true" />
+            <element signature="method#bytesToHexString#0;class#SendThread#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/MyTCServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="102" column="74" selection-start-line="102" selection-start-column="74" selection-end-line="102" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/SockConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="874">
+          <caret line="64" column="5" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
+          <folding>
+            <element signature="method#FireHeadbeat#0;class#SockConfig#0" expanded="false" />
+            <element signature="method#FireReconnect#0;class#SockConfig#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="73" column="39" selection-start-line="73" selection-start-column="39" selection-end-line="73" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/VideoConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="244" column="0" selection-start-line="244" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
+          <folding>
+            <element signature="method#getMac#0;class#VideoConfig#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="1106" column="45" selection-start-line="1106" selection-start-column="45" selection-end-line="1106" selection-end-column="45" />
+        <state relative-caret-position="141">
+          <caret line="262" column="0" selection-start-line="262" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#onDestroy#0;class#CameraPublishActivity#0" expanded="false" />
+            <element signature="e#9379#10411#0" expanded="true" />
+            <element signature="e#10410#10411#0" expanded="true" />
+            <element signature="e#10536#11395#0" expanded="true" />
+            <element signature="e#11394#11395#0" expanded="true" />
+            <element signature="e#11650#11658#0" expanded="true" />
+            <element signature="e#12476#12484#0" expanded="true" />
+            <element signature="e#13356#13364#0" expanded="true" />
+            <element signature="e#14161#14169#0" expanded="true" />
+            <element signature="e#15553#15811#0" expanded="true" />
+            <element signature="e#15810#15811#0" expanded="true" />
+            <element signature="e#16126#16382#0" expanded="true" />
+            <element signature="e#16381#16382#0" expanded="true" />
             <element signature="method#send_com_data#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#ComParamSet#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#getLocalIpAddress#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#outputInfo#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#SwitchResolution#0;class#CameraPublishActivity#0" expanded="false" />
-            <element signature="method#RestoreConfigAndUpdateVideoUI#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#ConfigRecorderFuntion#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="class#ButtonRecorderMangerListener#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="class#ButtonHardwareEncoderListener#0;class#CameraPublishActivity#0" expanded="false" />
@@ -2690,20 +2764,6 @@
             <element signature="method#findBackCamera#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#setHardwareEncoderKbps#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#getOwnCacheDirectory#0;class#CameraPublishActivity#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/socks/SendThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="95" column="9" selection-start-line="95" selection-start-column="9" selection-end-line="95" selection-end-column="9" />
-          <folding>
-            <element signature="method#IsReady#0;class#SendThread#0" expanded="false" />
-            <element signature="method#ReadDataUnti#0;class#SendThread#0" expanded="false" />
-            <element signature="e#3220#4040#0" expanded="true" />
-            <element signature="e#4039#4040#0" expanded="true" />
-            <element signature="method#bytesToHexString#0;class#SendThread#0" expanded="false" />
           </folding>
         </state>
       </provider>

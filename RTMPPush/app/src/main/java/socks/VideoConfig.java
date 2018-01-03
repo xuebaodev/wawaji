@@ -28,24 +28,47 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    //上次保存的正确配置。每次应用之前先保存当前的值
-    public int last_resolution_index = 2;
-    public int last_video_width = 640;
-    public int last_video_height = 360;
-
     //分辨率
     int resolution_index = 0;
     public void SetResolutionIndex(int newIndex)
     {
-        last_resolution_index = resolution_index;
         resolution_index = newIndex;
+        if(resolution_index != -1)
+        {
+            switch (resolution_index) {
+                case 0: {
+                    VideoConfig.instance.videoWidth = 960;
+                    VideoConfig.instance.videoHeight = 720;
+                }
+                break;
+                case 1:
+                    VideoConfig.instance.videoWidth = 640;
+                    VideoConfig.instance.videoHeight = 480;
+                    break;
+                case 2:
+                    VideoConfig.instance.videoWidth = 640;
+                    VideoConfig.instance.videoHeight = 360;
+                    break;
+                case 3:
+                    VideoConfig.instance.videoWidth = 352;
+                    VideoConfig.instance.videoHeight = 288;
+                    break;
+                case 4:
+                    VideoConfig.instance.videoWidth = 320;
+                    VideoConfig.instance.videoHeight = 240;
+                    break;
+
+                default:
+                    VideoConfig.instance.videoWidth = 640;
+                    VideoConfig.instance.videoHeight = 360;
+            }
+        }
     }
     public int GetResolutionIndex(){ return resolution_index; }
 
     int videoWidth = 640;
     public void SetVideoWidth(int w)
     {
-        last_video_width =  videoWidth;
         videoWidth = w;
     }
     public int GetVideoWidth(){return videoWidth;}
@@ -53,16 +76,20 @@ public class VideoConfig
     int videoHeight = 360;
     public void SetVideoHeight(int h)
     {
-        last_video_height = videoHeight;
         videoHeight = h;
     }
     public int GetVideoHeight(){return videoHeight;}
 
-    public void RestoreLastVideoSizeAndIndex()
+    public void RestoreLastVideoSizeAndIndex(Context context)
     {
-        resolution_index = last_resolution_index;
-        videoWidth = last_video_width;
-        videoHeight = last_video_height;
+        SharedPreferences share = context.getSharedPreferences("pushConfig", Context.MODE_PRIVATE);
+        resolution_index = share.getInt("resolution_index", 1);
+        if (resolution_index != -1)
+            SetResolutionIndex(resolution_index);
+        else {
+            videoWidth = share.getInt("videoWidth", 640);
+            videoHeight = share.getInt("videoHight", 480);
+        }
     }
 
     public boolean is_hardware_encoder = false;//硬编码 软编码
@@ -163,45 +190,12 @@ public class VideoConfig
         SharedPreferences share = context.getSharedPreferences("pushConfig", Context.MODE_PRIVATE);
 
         resolution_index = share.getInt("resolution_index", 1);
-        if(resolution_index != -1)
-        {
-            switch (resolution_index) {
-                case 0: {
-                    VideoConfig.instance.videoWidth = 960;
-                    VideoConfig.instance.videoHeight = 720;
-                }
-                break;
-                case 1:
-                    VideoConfig.instance.videoWidth = 640;
-                    VideoConfig.instance.videoHeight = 480;
-                    break;
-                case 2:
-                    VideoConfig.instance.videoWidth = 640;
-                    VideoConfig.instance.videoHeight = 360;
-                    break;
-                case 3:
-                    VideoConfig.instance.videoWidth = 352;
-                    VideoConfig.instance.videoHeight = 288;
-                    break;
-                case 4:
-                    VideoConfig.instance.videoWidth = 320;
-                    VideoConfig.instance.videoHeight = 240;
-                    break;
-
-                default:
-                    VideoConfig.instance.videoWidth = 640;
-                    VideoConfig.instance.videoHeight = 360;
-            }
+        if (resolution_index != -1)
+            SetResolutionIndex(resolution_index);
+        else {
+            videoWidth = share.getInt("videoWidth", 640);
+            videoHeight = share.getInt("videoHight", 480);
         }
-        else
-            {
-                videoWidth = share.getInt("videoWidth", 640);
-                videoHeight = share.getInt("videoHight", 360);
-            }
-
-        last_resolution_index = share.getInt("last_resolution_index", 2);
-        last_video_width = share.getInt("last_video_width", 640);
-        last_video_height = share.getInt("last_video_height", 360);
 
         is_hardware_encoder  = share.getBoolean("is_hardware_encoder", false);
         hwEncoderKpbs = share.getInt("hwEncoderKpbs", 560);
@@ -256,12 +250,41 @@ public class VideoConfig
         SharedPreferences.Editor editor = share.edit();
 
         editor.putInt("resolution_index", resolution_index);
+        if(resolution_index != -1)
+        {
+            switch (resolution_index) {
+                case 0: {
+                    VideoConfig.instance.videoWidth = 960;
+                    VideoConfig.instance.videoHeight = 720;
+                }
+                break;
+                case 1:
+                    VideoConfig.instance.videoWidth = 640;
+                    VideoConfig.instance.videoHeight = 480;
+                    break;
+                case 2:
+                    VideoConfig.instance.videoWidth = 640;
+                    VideoConfig.instance.videoHeight = 360;
+                    break;
+                case 3:
+                    VideoConfig.instance.videoWidth = 352;
+                    VideoConfig.instance.videoHeight = 288;
+                    break;
+                case 4:
+                    VideoConfig.instance.videoWidth = 320;
+                    VideoConfig.instance.videoHeight = 240;
+                    break;
+
+                default:
+                    VideoConfig.instance.videoWidth = 640;
+                    VideoConfig.instance.videoHeight = 360;
+            }
+        }
+    else
+    {
         editor.putInt("videoWidth", videoWidth);
         editor.putInt("videoHight", videoHeight);
-
-        editor.putInt("last_resolution_index", last_resolution_index);
-        editor.putInt("last_video_width", last_video_width);
-        editor.putInt("last_video_height", last_video_height);
+    }
 
         editor.putBoolean("is_hardware_encoder", is_hardware_encoder);
         editor.putInt("hwEncoderKpbs", hwEncoderKpbs);
@@ -388,8 +411,12 @@ public class VideoConfig
             machine_name =  jsonOBJ.getString("name");
 
             if(jsonOBJ.has("autoResolutionIndex")) SetResolutionIndex( jsonOBJ.getInt("autoResolutionIndex"));
-            if(jsonOBJ.has("width"))  SetVideoWidth( jsonOBJ.getInt("width") );
-            if(jsonOBJ.has("height"))  SetVideoHeight(jsonOBJ.getInt("height"));
+            if(resolution_index == -1)
+            {
+                if(jsonOBJ.has("width"))  SetVideoWidth( jsonOBJ.getInt("width") );
+                if(jsonOBJ.has("height"))  SetVideoHeight(jsonOBJ.getInt("height"));
+            }
+
             if(jsonOBJ.has("encodeHW")) is_hardware_encoder = jsonOBJ.getBoolean("encodeHW");
             if(jsonOBJ.has("encodeQuality")) sw_video_encoder_profile = jsonOBJ.getInt("encodeQuality");
             if(jsonOBJ.has("encodeNum")) sw_video_encoder_speed = jsonOBJ.getInt("encodeNum");

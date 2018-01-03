@@ -259,6 +259,8 @@ public class CameraPublishActivity extends Activity
 
 		initUI();
 
+		UpdateConfigToUI();
+
 		if(getLocalIpAddress().equals(""))
 		{
 			mHandler.sendEmptyMessage(1);
@@ -1029,6 +1031,7 @@ public class CameraPublishActivity extends Activity
 			{
 				RestoreConfigAndUpdateVideoUI();
 				Toast.makeText(getApplicationContext(), "无效的视频配置，已恢复原状!", Toast.LENGTH_SHORT).show();
+				Log.e("asdfasdf", "无效的视频配置，已恢复原状");
 				//	return false;
 			}
 		}
@@ -1393,7 +1396,7 @@ public class CameraPublishActivity extends Activity
 
     void  RestoreConfigAndUpdateVideoUI()
 	{
-		VideoConfig.instance.RestoreLastVideoSizeAndIndex();
+		VideoConfig.instance.RestoreLastVideoSizeAndIndex(this);
 
 		if( VideoConfig.instance.GetResolutionIndex() != -1 )
 		{

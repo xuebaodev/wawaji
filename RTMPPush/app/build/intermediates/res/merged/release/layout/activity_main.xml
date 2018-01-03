@@ -71,7 +71,7 @@
                 android:layout_toRightOf="@+id/id_my_name_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="按时撒地方"
+                android:text="娃娃名称方便管理"
                 android:textColor="@android:color/black" />
 
             <CheckBox
