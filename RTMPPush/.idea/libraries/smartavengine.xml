@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="smartavengine">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/smartavengine.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
