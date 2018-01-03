@@ -4,23 +4,7 @@
         "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\menu\\menu_play_active.xml"
     },
     {
-        "merged": "D:\\SDK_Daniulive\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_play_active.xml",
-        "source": "D:\\SDK_Daniulive\\RTMPPush\\app\\src\\main\\res\\menu\\menu_play_active.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_play_active.xml",
-        "source": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\src\\main\\res\\menu\\menu_play_active.xml"
-    },
-    {
         "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_main.xml",
         "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\menu\\menu_main.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_main.xml",
-        "source": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\src\\main\\res\\menu\\menu_main.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_main.xml",
-        "source": "D:\\SDK_Daniulive\\RTMPPush\\app\\src\\main\\res\\menu\\menu_main.xml"
     }
 ]

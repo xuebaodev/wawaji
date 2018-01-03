@@ -1,27 +1,7 @@
 [
     {
-        "merged": "D:\\SDK_Daniulive\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
-        "source": "D:\\SDK_Daniulive\\RTMPPush\\app\\src\\main\\res\\layout\\activity_main.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_recorder_manager.xml",
-        "source": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\src\\main\\res\\layout\\activity_recorder_manager.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
-        "source": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\src\\main\\res\\layout\\activity_main.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_recorder_playback.xml",
-        "source": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\src\\main\\res\\layout\\activity_recorder_playback.xml"
-    },
-    {
         "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_recorder_manager.xml",
         "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\layout\\activity_recorder_manager.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\rec_files_list_view_item.xml",
-        "source": "D:\\SDK_Daniulive\\SmartPublisher-double1\\app\\src\\main\\res\\layout\\rec_files_list_view_item.xml"
     },
     {
         "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_recorder_playback.xml",
@@ -32,19 +12,7 @@
         "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\layout\\rec_files_list_view_item.xml"
     },
     {
-        "merged": "D:\\SDK_Daniulive\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_recorder_manager.xml",
-        "source": "D:\\SDK_Daniulive\\RTMPPush\\app\\src\\main\\res\\layout\\activity_recorder_manager.xml"
-    },
-    {
         "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
         "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\layout\\activity_main.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\layout\\rec_files_list_view_item.xml",
-        "source": "D:\\SDK_Daniulive\\RTMPPush\\app\\src\\main\\res\\layout\\rec_files_list_view_item.xml"
-    },
-    {
-        "merged": "D:\\SDK_Daniulive\\RTMPPush\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_recorder_playback.xml",
-        "source": "D:\\SDK_Daniulive\\RTMPPush\\app\\src\\main\\res\\layout\\activity_recorder_playback.xml"
     }
 ]

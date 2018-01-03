@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Wed Jan 03 11:12:12 CST 2018
+#Wed Jan 03 11:23:08 CST 2018
 8.set=ANDROID_RESOURCE
 1.base=D\:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\resources-debug.ap_
 1.file=D\:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-mdpi-v4\\ic_launcher.png

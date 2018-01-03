@@ -10,7 +10,6 @@
 
 package com.daniulive.smartpublisher;
 
-import com.cosofteck.decrypt.Decrypt;
 import com.daniulive.smartpublisher.SmartPublisherJni.WATERMARK;
 import com.eventhandle.NTSmartEventCallbackV2;
 import com.eventhandle.NTSmartEventID;
