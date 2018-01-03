@@ -213,7 +213,6 @@ public class CameraPublishActivity extends Activity
 		}
 	};
 
-
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -230,6 +229,7 @@ public class CameraPublishActivity extends Activity
 		pst_front = PushState.UNKNOWN;
 		pst_back = PushState.UNKNOWN;
 
+		//接受U盘挂载事件
 		IntentFilter filter = null;
 		filter = new IntentFilter();
 		filter.addAction(Intent.ACTION_MEDIA_MOUNTED);   //接受外媒挂载过滤器
