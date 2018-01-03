@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daniulive.smartpublisher"
     android:installLocation="internalOnly"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="RTMP双路推流V" >
 
     <uses-sdk

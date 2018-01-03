@@ -41,11 +41,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CameraPublishActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CameraPublishActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4568">
-              <caret line="1800" column="0" selection-start-line="1800" selection-start-column="0" selection-end-line="1800" selection-end-column="0" />
+            <state relative-caret-position="209">
+              <caret line="1120" column="49" selection-start-line="1120" selection-start-column="49" selection-end-line="1120" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#onDestroy#0;class#CameraPublishActivity#0" expanded="false" />
@@ -86,6 +86,16 @@
                 <element signature="method#setHardwareEncoderKbps#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#getOwnCacheDirectory#0;class#CameraPublishActivity#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1456,7 +1466,7 @@
         <entry key="C:\Users\mmc\Desktop\SmartPublisher-double1" value="4536526322106" />
         <entry key="D:\SDK_Daniulive\RTMPPush" value="4538974402603" />
         <entry key="D:\SDK_Daniulive\SmartPublisher-double1" value="4538974402603" />
-        <entry key="D:\wawaji\RTMPPush" value="4538974402603" />
+        <entry key="D:\wawaji\RTMPPush" value="4539323728077" />
         <entry key="H:\SDK_Daniulive\SmartPublisher-double1" value="4537593454083" />
       </map>
     </option>
@@ -1825,7 +1835,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/socks/WifiUtil.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/android_serialport_api/ComPort.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/socks/WifiAutoConnectManager.java" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/update/SilentInstall.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/socks/SendThread.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/socks/MyTCServer.java" />
@@ -1833,6 +1842,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/socks/SockConfig.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
       </list>
     </option>
   </component>
@@ -2345,14 +2355,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1444" height="876" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32775453" sideWeight="0.47976878" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44211996" sideWeight="0.33959538" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44211996" sideWeight="0.33742774" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32775453" sideWeight="0.5303468" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.44211996" sideWeight="0.66257226" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39470014" sideWeight="0.75578034" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34670487" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2367,7 +2377,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32775453" sideWeight="0.4696532" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32775453" sideWeight="0.4696532" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2592,14 +2602,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/update/SilentInstall.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
@@ -2736,8 +2738,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4568">
-          <caret line="1800" column="0" selection-start-line="1800" selection-start-column="0" selection-end-line="1800" selection-end-column="0" />
+        <state relative-caret-position="209">
+          <caret line="1120" column="49" selection-start-line="1120" selection-start-column="49" selection-end-line="1120" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#onDestroy#0;class#CameraPublishActivity#0" expanded="false" />
@@ -2778,6 +2780,14 @@
             <element signature="method#setHardwareEncoderKbps#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#getOwnCacheDirectory#0;class#CameraPublishActivity#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>

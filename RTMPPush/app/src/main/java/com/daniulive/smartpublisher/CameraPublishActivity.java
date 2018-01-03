@@ -2129,14 +2129,14 @@ public class CameraPublishActivity extends Activity
 			//return false;
 		}
 		
-		if ( FRONT == camera_type )
+		if ( FRONT == camera_type  && camera != null)
 		{
 			if ( mPreviewRunningFront )
 			{
 				camera.stopPreview();
 			}
 		}
-		else if ( BACK == camera_type )
+		else if ( BACK == camera_type && camera != null )
 		{
 			if ( mPreviewRunningBack )
 			{
@@ -2144,7 +2144,7 @@ public class CameraPublishActivity extends Activity
 			}
 		}
 			
-		Camera.Parameters parameters;
+		Camera.Parameters parameters ;
 		try {
 			parameters = camera.getParameters();
 			//List<Size> ss = parameters.getSupportedPictureSizes();
@@ -2166,12 +2166,12 @@ public class CameraPublishActivity extends Activity
 		
 		SetCameraFPS(parameters);
 
-		camera.setDisplayOrientation (90);
+		if(camera != null) camera.setDisplayOrientation (90);
 
 		Log.e("Cmeraaaa", "apply w:" + VideoConfig.instance.GetVideoWidth() + "h "+ VideoConfig.instance.GetVideoHeight());
 		try
 		{
-			camera.setParameters(parameters);
+			if(camera != null) camera.setParameters(parameters);
 		}
 		catch (Exception ex)
 		{
@@ -2180,14 +2180,14 @@ public class CameraPublishActivity extends Activity
 		}
 
 		int bufferSize = (((VideoConfig.instance.GetVideoWidth()|0xf)+1) * VideoConfig.instance.GetVideoHeight() * ImageFormat.getBitsPerPixel(parameters.getPreviewFormat())) / 8;
-		
-		camera.addCallbackBuffer(new byte[bufferSize]);
-		
-		camera.setPreviewCallbackWithBuffer(new NT_SP_CameraPreviewCallback(camera_type));  
+
+		if(camera != null) camera.addCallbackBuffer(new byte[bufferSize]);
+
+		if(camera != null) camera.setPreviewCallbackWithBuffer(new NT_SP_CameraPreviewCallback(camera_type));
         
 		try
-        {  
-        	camera.setPreviewDisplay(holder);  
+        {
+			if(camera != null) camera.setPreviewDisplay(holder);
         } catch (Exception ex) {
         	// TODO Auto-generated catch block 
         	if(null != camera)
@@ -2206,12 +2206,12 @@ public class CameraPublishActivity extends Activity
 			camera.startPreview();  
 		}
         
-        if ( FRONT == camera_type )
+        if ( FRONT == camera_type  && camera!= null)
         {
         	camera.autoFocus(myAutoFocusCallbackFront);
         	mPreviewRunningFront = true;  	
         }
-        else if ( BACK == camera_type )
+        else if ( BACK == camera_type && camera!= null)
         {
         	camera.autoFocus(myAutoFocusCallbackBack);
         	mPreviewRunningBack = true; 
