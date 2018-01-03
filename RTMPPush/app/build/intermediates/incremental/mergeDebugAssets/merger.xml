@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\wawaji\RTMPPush\app\src\main\assets"><file name="logo.png" path="D:\wawaji\RTMPPush\app\src\main\assets\logo.png"/></source><source path="D:\wawaji\RTMPPush\app\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="D:\wawaji\RTMPPush\app\src\debug\assets"/></dataSet></merger>
