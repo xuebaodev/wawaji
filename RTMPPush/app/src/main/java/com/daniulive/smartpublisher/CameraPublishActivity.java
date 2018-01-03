@@ -251,7 +251,8 @@ public class CameraPublishActivity extends Activity
 		if( VideoConfig.instance.destHost.equals("") || VideoConfig.instance.GetAppPort()==0)
 		{
 			send_com_data(0x3c);
-		}
+		}else
+			ServerStopAndReconnect();
 
 		//连接配置服务器
 		ConfigServerStopAndReconnect();

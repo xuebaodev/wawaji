@@ -352,7 +352,7 @@ public class WawaServer {
 						continue;
 					}
 					
-					//System.out.println("cmd recv:" + total_data[7]);
+					System.out.println("cmd recv:" + total_data[7]);
 					
 
 					if ((total_data[7]&0xff)== 0x35) {//heart beat
