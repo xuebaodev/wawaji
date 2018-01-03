@@ -1,0 +1,279 @@
+[
+    {
+        "outputFile": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 44,
+                    "endOffset": 95
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\colors.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 70,
+                        "endColumn": 44,
+                        "endOffset": 110
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 100,
+                    "endColumn": 49,
+                    "endOffset": 145
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\colors.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 19,
+                        "endColumn": 49,
+                        "endOffset": 64
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 335,
+                    "endColumn": 57,
+                    "endOffset": 388
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\dimens.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 90,
+                        "endColumn": 57,
+                        "endOffset": 143
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 393,
+                    "endColumn": 55,
+                    "endOffset": 444
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\dimens.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 149,
+                        "endColumn": 55,
+                        "endOffset": 200
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 449,
+                    "endColumn": 52,
+                    "endOffset": 497
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 255,
+                        "endColumn": 52,
+                        "endOffset": 303
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 502,
+                    "endColumn": 58,
+                    "endOffset": 556
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 59,
+                        "endColumn": 58,
+                        "endOffset": 113
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 561,
+                    "endColumn": 88,
+                    "endOffset": 645
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 119,
+                        "endColumn": 88,
+                        "endOffset": 203
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 650,
+                    "endColumn": 44,
+                    "endOffset": 690
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 209,
+                        "endColumn": 44,
+                        "endOffset": 249
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 695,
+                    "endColumn": 60,
+                    "endOffset": 751
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 364,
+                        "endColumn": 60,
+                        "endOffset": 420
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 756,
+                    "endColumn": 53,
+                    "endOffset": 805
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 309,
+                        "endColumn": 53,
+                        "endOffset": 358
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 810,
+                    "endLine": 15,
+                    "endColumn": 12,
+                    "endOffset": 938
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\styles.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 97,
+                        "endLine": 6,
+                        "endColumn": 12,
+                        "endOffset": 227
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 943,
+                    "endLine": 22,
+                    "endColumn": 12,
+                    "endOffset": 1266
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\styles.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 597,
+                        "endLine": 21,
+                        "endColumn": 12,
+                        "endOffset": 926
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 1271,
+                    "endColumn": 35,
+                    "endOffset": 1302
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\styles.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 934,
+                        "endColumn": 36,
+                        "endOffset": 966
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 24,
+                    "startColumn": 4,
+                    "startOffset": 1307,
+                    "endLine": 29,
+                    "endColumn": 12,
+                    "endOffset": 1656
+                },
+                "from": {
+                    "file": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\values\\styles.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 235,
+                        "endLine": 13,
+                        "endColumn": 12,
+                        "endOffset": 589
+                    }
+                }
+            }
+        ]
+    }
+]

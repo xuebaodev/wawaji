@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\release\\layout\\activity_main.xml",
+        "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\release\\layout\\activity_recorder_playback.xml",
+        "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\layout\\activity_recorder_playback.xml"
+    },
+    {
+        "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\release\\layout\\activity_recorder_manager.xml",
+        "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\layout\\activity_recorder_manager.xml"
+    },
+    {
+        "merged": "D:\\wawaji\\RTMPPush\\app\\build\\intermediates\\res\\merged\\release\\layout\\rec_files_list_view_item.xml",
+        "source": "D:\\wawaji\\RTMPPush\\app\\src\\main\\res\\layout\\rec_files_list_view_item.xml"
+    }
+]
