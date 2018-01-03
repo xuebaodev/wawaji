@@ -127,6 +127,10 @@ public class SendThread {
                     Log.e("my headt", "breat");
                     sendMsg(heart_beat_msg);
 
+                    Message me1 = Message.obtain();//心跳消息
+                    me1.what = 11;
+                    if (handler != null) handler.sendMessage(me1);
+
                     if(ShouldStopNow == true)
                         break;
 

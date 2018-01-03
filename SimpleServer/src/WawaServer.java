@@ -354,7 +354,6 @@ public class WawaServer {
 					
 					System.out.println("cmd recv:" + total_data[7]);
 					
-
 					if ((total_data[7]&0xff)== 0x35) {//heart beat
 						String strMAC = new String(total_data, 8, 12);
 						System.out.println("wawa heartbeat." + strMAC);

@@ -1099,9 +1099,14 @@ public class CameraPublishActivity extends Activity
 						//往串口发
 						mComPort.SendData(test_data, msg_len);
 					}
-
                 }
                 break;
+				case 11:
+					{
+						//心跳调试
+						outputInfo("发送心跳消息");
+					}
+					break;
 				case 104:
 					{
 						//收到配置口过来的数据
