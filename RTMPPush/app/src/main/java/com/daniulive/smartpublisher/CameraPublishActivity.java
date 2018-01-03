@@ -397,7 +397,7 @@ public class CameraPublishActivity extends Activity
 
 		//分辨率配置
 		resolutionSelector = (Spinner)findViewById(R.id.resolutionSelctor);
-		final String []resolutionSel = new String[]{"960*720", "640*480","640*360", "352*288","320*240", "555*444"};
+		final String []resolutionSel = new String[]{"960*720", "640*480","640*360", "352*288","320*240"};
 		ArrayAdapter<String> adapterResolution = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, resolutionSel);
 		adapterResolution.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		resolutionSelector.setAdapter(adapterResolution);

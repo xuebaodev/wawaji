@@ -44,8 +44,8 @@
       <file leaf-file-name="CameraPublishActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="262" column="0" selection-start-line="262" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
+            <state relative-caret-position="351">
+              <caret line="412" column="13" selection-start-line="412" selection-start-column="13" selection-end-line="412" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#onDestroy#0;class#CameraPublishActivity#0" expanded="false" />
@@ -53,17 +53,21 @@
                 <element signature="e#10410#10411#0" expanded="true" />
                 <element signature="e#10536#11395#0" expanded="true" />
                 <element signature="e#11394#11395#0" expanded="true" />
-                <element signature="e#11650#11658#0" expanded="true" />
-                <element signature="e#12476#12484#0" expanded="true" />
-                <element signature="e#13356#13364#0" expanded="true" />
-                <element signature="e#14161#14169#0" expanded="true" />
-                <element signature="e#15553#15811#0" expanded="true" />
-                <element signature="e#15810#15811#0" expanded="true" />
-                <element signature="e#16126#16382#0" expanded="true" />
-                <element signature="e#16381#16382#0" expanded="true" />
+                <element signature="e#11639#11647#0" expanded="true" />
+                <element signature="e#12465#12473#0" expanded="true" />
+                <element signature="e#13345#13353#0" expanded="true" />
+                <element signature="e#14150#14158#0" expanded="true" />
+                <element signature="e#15542#15800#0" expanded="true" />
+                <element signature="e#15799#15800#0" expanded="true" />
+                <element signature="e#16115#16371#0" expanded="true" />
+                <element signature="e#16370#16371#0" expanded="true" />
+                <element signature="method#strIPtob#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#send_com_data#0;class#CameraPublishActivity#0" expanded="false" />
+                <element signature="method#SaveAppHostInfoToCom#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#ComParamSet#0;class#CameraPublishActivity#0" expanded="false" />
+                <element signature="method#ServerStopAndReconnect#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#getLocalIpAddress#0;class#CameraPublishActivity#0" expanded="false" />
+                <element signature="method#SaveConfigFromUI#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#outputInfo#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#SwitchResolution#0;class#CameraPublishActivity#0" expanded="false" />
                 <element signature="method#ConfigRecorderFuntion#0;class#CameraPublishActivity#0" expanded="false" />
@@ -94,6 +98,19 @@
               <caret line="244" column="0" selection-start-line="244" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
               <folding>
                 <element signature="method#getMac#0;class#VideoConfig#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Handler.class" pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Android_sdk/platforms/android-26/android.jar!/android/os/Handler.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="151">
+              <caret line="92" column="25" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="25" />
+              <folding>
+                <element signature="e#2443#2444#0" expanded="true" />
+                <element signature="e#2494#2495#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2328,7 +2345,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1444" height="876" extended-state="0" />
+    <frame x="-8" y="-8" width="1444" height="876" extended-state="1" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32775453" sideWeight="0.47976878" order="6" side_tool="false" content_ui="tabs" />
@@ -2400,7 +2417,7 @@
           <option name="timeStamp" value="128" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="129" />
+      <option name="time" value="130" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2643,17 +2660,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Android_sdk/platforms/android-26/android.jar!/android/os/Handler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="92" column="25" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="25" />
-          <folding>
-            <element signature="e#2443#2444#0" expanded="true" />
-            <element signature="e#2494#2495#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/RecorderPlayback.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
@@ -2724,10 +2730,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Android_sdk/platforms/android-26/android.jar!/android/os/Handler.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="92" column="25" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="25" />
+          <folding>
+            <element signature="e#2443#2444#0" expanded="true" />
+            <element signature="e#2494#2495#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/daniulive/smartpublisher/CameraPublishActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="262" column="0" selection-start-line="262" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
+        <state relative-caret-position="351">
+          <caret line="412" column="13" selection-start-line="412" selection-start-column="13" selection-end-line="412" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#onDestroy#0;class#CameraPublishActivity#0" expanded="false" />
@@ -2735,17 +2752,21 @@
             <element signature="e#10410#10411#0" expanded="true" />
             <element signature="e#10536#11395#0" expanded="true" />
             <element signature="e#11394#11395#0" expanded="true" />
-            <element signature="e#11650#11658#0" expanded="true" />
-            <element signature="e#12476#12484#0" expanded="true" />
-            <element signature="e#13356#13364#0" expanded="true" />
-            <element signature="e#14161#14169#0" expanded="true" />
-            <element signature="e#15553#15811#0" expanded="true" />
-            <element signature="e#15810#15811#0" expanded="true" />
-            <element signature="e#16126#16382#0" expanded="true" />
-            <element signature="e#16381#16382#0" expanded="true" />
+            <element signature="e#11639#11647#0" expanded="true" />
+            <element signature="e#12465#12473#0" expanded="true" />
+            <element signature="e#13345#13353#0" expanded="true" />
+            <element signature="e#14150#14158#0" expanded="true" />
+            <element signature="e#15542#15800#0" expanded="true" />
+            <element signature="e#15799#15800#0" expanded="true" />
+            <element signature="e#16115#16371#0" expanded="true" />
+            <element signature="e#16370#16371#0" expanded="true" />
+            <element signature="method#strIPtob#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#send_com_data#0;class#CameraPublishActivity#0" expanded="false" />
+            <element signature="method#SaveAppHostInfoToCom#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#ComParamSet#0;class#CameraPublishActivity#0" expanded="false" />
+            <element signature="method#ServerStopAndReconnect#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#getLocalIpAddress#0;class#CameraPublishActivity#0" expanded="false" />
+            <element signature="method#SaveConfigFromUI#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#outputInfo#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#SwitchResolution#0;class#CameraPublishActivity#0" expanded="false" />
             <element signature="method#ConfigRecorderFuntion#0;class#CameraPublishActivity#0" expanded="false" />
