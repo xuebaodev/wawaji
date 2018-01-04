@@ -20,18 +20,37 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 //handle msg from wawaji.
+//配置服务器。这个专门处理娃娃机的配置信息应用和转发
+//这个服务器是可选的。当这个功能不启用时，无法通过外网配置娃娃机参数和版本升级。
+//你必须亲自到场地去，通过如下手段配置娃娃机参数
+//1.给娃娃机接上鼠标和显示器，通过鼠标配置。此方法相当麻烦，机器数量多时，效率不高。
+//2.用电脑连接到娃娃机所在的同一个局域网，然后打开局域网配置工具进行查找和配置
 
+
+//配置信息结构体
 class ConfigInfo
 {
+	//娃娃机的名称--用于方便标识哪台娃娃机。推荐是以里面放的娃娃命名此字段。
+	//比如你放的是大灰狼，就设置该娃娃机名称为 大灰狼01 、比卡丘05  大白兔08
 	public String name;//wawaji name
+	
+	//娃娃机的MAC
     public String mac;//it's mac
+    
+    //这台娃娃机是属于谁的。 如果你们不止管理一个客户的娃娃机，可以根据客户端传过来的userID返回该userID对应的娃娃机列表
+    //我们这个服务器就处理这种情况。默认返回所有用户。只是留了这个功能，以便于你们要使用
     public String userID;//belong to who
     
+    //娃娃机对应的socket
     public Socket socket;
+    
+    //上次心跳时间
     public long last_heartbeattime;
     
+    //配置工具客户端的连接
     public Socket cur_configer;//娃娃机的消息返回给谁
     
+    //同理，处理线程的句柄。
 	public Thread runningThread;//my running thread. drop when no heart beat or something.
 	
 	public void Clear() 
@@ -54,10 +73,11 @@ class ConfigInfo
 	}
 }
 
+//
 public class ConfigServer {
 	private Thread newThread;
 
-	Map<String, ConfigInfo> all_machines;//
+	Map<String, ConfigInfo> all_machines;//娃娃机的列表.配置工具要从这里获取到活的娃娃机列表
 
 	ServerSocket listenSocket;
 
@@ -121,6 +141,12 @@ public class ConfigServer {
 		all_machines.clear();
 	}
 
+	//超时删除娃娃机--实际应用中，应当将该娃娃机的配置状态置为离线。
+	//此时，娃娃机可能正常工作，但不可以通过外网去配置它。
+	//这种情况通常是:
+	//1.长时间断网。(短时的断网RTMP会自动重连，应用服务器也是)
+	//2.app退出了。
+	//3.由于客户不想开启外网配置的功能，因此重新设置了安卓板的配置地址和端口。
 	void processTimeOut(/* Map<String, MachineInfo> list */) {
 
 		if (all_machines.size() <= 0)
@@ -143,6 +169,7 @@ public class ConfigServer {
 		}
 	}
 		
+	//配置者离开
 	public void processPlayerLeave(String MAC, Socket client) 
 	{
 		if (all_machines.size() <= 0)
@@ -162,12 +189,11 @@ public class ConfigServer {
 		return;
 	}
 	
-	
+	//构造设备列表并返回
 	public String MakeRoomList() 
 	{
 		if (all_machines.size() <= 0)
 			return "[]";
-		
 		
 		JSONArray jsonArray1 = new JSONArray();
 		
@@ -187,6 +213,7 @@ public class ConfigServer {
 		return jsonStr;
 	}
 
+	//检测心跳超时
 	void CheckTimeout() // check if any machine is timeout.
 	{
 		Thread thTimer = new Thread(new Runnable() {
@@ -261,6 +288,8 @@ public class ConfigServer {
 					
 					System.out.println("Received From Wawaji:" + strData);
 					
+					//配置口过来的协议全都是json。所以千万不要把配置口和应用端口混用或者搞反
+					
 					JSONObject jsonObject = new JSONObject(strData);
 					if( jsonObject.has("cmd") )
 					{
@@ -304,6 +333,7 @@ public class ConfigServer {
 					}
 					else //replay to config client
 					{
+						//娃娃机过来的消息，除了心跳以外，全部都无脑转发给配置者就对了。这个配置服务器只起中转的作用
 						//dest_mac.cur_configer
 						SimpleApp.conf_clientserver.TranlsateToPlayer(ci.cur_configer, total_data);
 					}

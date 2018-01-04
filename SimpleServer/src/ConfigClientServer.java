@@ -139,7 +139,8 @@ public class ConfigClientServer {
 					
 					System.out.println("Received From Client:" + strData);
 					
-					if(strCMD.equals("getlist") )
+					
+					if(strCMD.equals("getlist") )//获取娃娃机列表。这是配置服务器用的。不要搞混
 					{
 						String strRoomList="";
 						if (SimpleApp.conf_server != null) {
@@ -156,19 +157,19 @@ public class ConfigClientServer {
 
 						}
 					}
-					else if(strCMD.equals("getconfig"))//get specific machine config
+					else if(strCMD.equals("getconfig"))//get specific machine config//配置工具发来：要求获取某个机器的配置
 					{
 						String strMAC = jsonObject.getString("mac");
 						pi.in_room_mac = strMAC;
-						SimpleApp.conf_server.TranlsateToWawaji(strMAC, total_data, pi.socket);
+						SimpleApp.conf_server.TranlsateToWawaji(strMAC, total_data, pi.socket);//转发给该台娃娃机
 					}
-					else if(strCMD.equals("applyconfig") )
+					else if(strCMD.equals("applyconfig") )//配置工具:发来该台机器配置信息。
 					{
 						String strMAC = jsonObject.getString("mac");
 						pi.in_room_mac = strMAC;
-						SimpleApp.conf_server.TranlsateToWawaji(strMAC, total_data, pi.socket);
+						SimpleApp.conf_server.TranlsateToWawaji(strMAC, total_data, pi.socket);//转发给娃娃机
 					}
-					else if(strCMD.equals("update") ) 
+					else if(strCMD.equals("update") ) //给某台娃娃机发送升级命令。要求它去某个url下载apk回来安装。
 					{
 						String strMAC = jsonObject.getString("mac");
 						pi.in_room_mac = strMAC;

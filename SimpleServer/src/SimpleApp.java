@@ -14,19 +14,19 @@ public class SimpleApp {
 	public void Start() {
 		System.out.println("app start");
 
-		wserver = new WawaServer();
-		wserver.Start(7770);
+		wserver = new WawaServer();//处理娃娃机应用消息的类。你应该在这部分完成：处理娃娃机心跳保活，超时，并维护娃娃机状态(空闲，可用，当前玩家，当前在这个房间里面的玩家等等信息)
+		wserver.Start(7770);//此即安卓板所连接的应用服务器端口
 
-		cserver = new ClientServer();
-		cserver.Start(7771);
+		cserver = new ClientServer();//处理玩家app的类。
+		cserver.Start(7771);//玩家app所连的端口
 
-		conf_server = new ConfigServer();
-		conf_server.Start(7776);
+		conf_server = new ConfigServer();//此即为配置服务器。此服务器负责娃娃机列表，转发娃娃机参数
+		conf_server.Start(7776);//安卓板所连接的配置服务器端口
 
-		conf_clientserver = new ConfigClientServer();
+		conf_clientserver = new ConfigClientServer();//外网配置工具处理类
 		conf_clientserver.Start(7778);
 
-		while (app_should_stop == false) {
+		while (app_should_stop == false) {//死循环监听是否输入exit。如果输入exit则，正常的退出。
 			try {
 				InputStreamReader is_reader = new InputStreamReader(System.in);
 				String str = new BufferedReader(is_reader).readLine();
