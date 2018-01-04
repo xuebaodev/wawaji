@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -1583,26 +1584,70 @@ public class CameraPublishActivity extends Activity
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTION_FAILED:
                 	 txt = "连接失败。。";
 					 if( handle == publisherHandleFront)
-					 	NotifyStreamResult(0,PushState.FAILED);
+					 {
+						 VideoConfig.instance.videoPushState_1 = false;
+						 NotifyStreamResult(0,PushState.FAILED);
+						 TextView tvFr = findViewById(R.id.cam1_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+					 }
 					 else if(handle == publisherHandleBack)
+					 {
 						 NotifyStreamResult(1, PushState.FAILED);
+						 VideoConfig.instance.videoPushState_2 = false;
+						 TextView tvFr = findViewById(R.id.cam2_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTED:
                 	 txt = "连接成功。。";
 					 if( handle == publisherHandleFront)
-					 	NotifyStreamResult(0, PushState.OK);
+					 {
+						 NotifyStreamResult(0, PushState.OK);
+						 VideoConfig.instance.videoPushState_1 = true;
+						 TextView tvFr = findViewById(R.id.cam1_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
+					 }
 					 else if(handle == publisherHandleBack)
+					 {
 						 NotifyStreamResult(1, PushState.OK);
+						 VideoConfig.instance.videoPushState_2 = true;
+						 TextView tvFr = findViewById(R.id.cam2_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
+					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_DISCONNECTED:
                 	 txt = "连接断开。。";
+					 if( handle == publisherHandleFront)
+					 {
+						 VideoConfig.instance.videoPushState_1 = false;
+						 NotifyStreamResult(0,PushState.FAILED);
+						 TextView tvFr = findViewById(R.id.cam1_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+					 }
+					 else if(handle == publisherHandleBack)
+					 {
+						 NotifyStreamResult(1, PushState.FAILED);
+						 VideoConfig.instance.videoPushState_2 = false;
+						 TextView tvFr = findViewById(R.id.cam2_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_STOP:
                 	 txt =  "关闭。。";
 					 if( handle == publisherHandleFront)
+					 {
 						 NotifyStreamResult(0, PushState.CLOSE);
+						 VideoConfig.instance.videoPushState_1 = false;
+						 TextView tvFr = findViewById(R.id.cam1_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+					 }
 					 else if(handle == publisherHandleBack)
+					 {
 						 NotifyStreamResult(1, PushState.CLOSE);
+						 VideoConfig.instance.videoPushState_2 = false;
+						 TextView tvFr = findViewById(R.id.cam2_url_tip);
+						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_RECORDER_START_NEW_FILE:
                 	 Log.i(TAG, "开始一个新的录像文件 : " + param3);
@@ -1775,6 +1820,9 @@ public class CameraPublishActivity extends Activity
 
 		isPushing = true;
 
+		VideoConfig.instance.videoPushState_1 = false;
+		VideoConfig.instance.videoPushState_2 = false;
+
 		Camera front_cam = GetCameraObj(FRONT);
 		if (front_cam != null)
 		{
@@ -1788,12 +1836,15 @@ public class CameraPublishActivity extends Activity
 
 			if (libPublisher.SmartPublisherSetURL(publisherHandleFront, VideoConfig.instance.url1) != 0) {
 				Log.e(TAG, "Failed to set publish stream URL..");
+				outputInfo("前置推流地址应用失败.");
 			}
 
 			int startRet = libPublisher.SmartPublisherStartPublisher(publisherHandleFront);
 			if (startRet != 0) {
 				isPushing = false;
 				Log.e(TAG, "Failed to start push stream..");
+				TextView tvFr = findViewById(R.id.cam1_url_tip);
+				if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
 			}
 			else
 				{
@@ -1821,14 +1872,19 @@ public class CameraPublishActivity extends Activity
 			if (startRet != 0) {
 				isPushing = false;
 				Log.e(TAG, "Failed to start push stream back..");
+				TextView tvFr = findViewById(R.id.cam2_url_tip);
+				if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
 			}
 		}
 
-		if (!isRecording) {
+		if (!isRecording && isPushing == true ) {
 			ConfigControlEnable(false);
-		}
-
-		btnStartPush.setText(" 停止推送 ");
+			btnStartPush.setText(" 停止推送 ");
+		}else if(isPushing == false) {
+				ConfigControlEnable(true);
+				btnStartPush.setText(" 推送");
+				outputInfo("推送失败。检查推流URL,或摄像头是否已插好");
+			}
 	}
 
 	void UIClickStopPush()

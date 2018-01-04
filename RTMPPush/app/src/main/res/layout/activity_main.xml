@@ -368,9 +368,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:inputType="number"
                 android:layout_toRightOf="@id/server_port_tip"
                  />
-
 
             <TextView
                 android:id="@+id/configserver_ip_tip"
@@ -398,6 +398,7 @@
                 android:layout_toRightOf="@+id/config_server_ip"
                 android:layout_marginLeft="10dp"
                 android:text="端口:"
+                android:inputType="number"
                 android:textColor="@android:color/black" />
 
             <EditText

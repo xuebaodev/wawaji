@@ -183,6 +183,8 @@ public class VideoConfig
     public String machine_name;//给人看的 方便记住这台机器
     public String userID;////这台娃娃机所属的用户。 ----即 哪个老板买了它。挂到名下方便管理
 
+    public boolean videoPushState_1 = false;
+    public boolean videoPushState_2 = false;
     public void LoadConfig(Context context, Handler hh)
 	{
         msgHandler = hh;
@@ -393,6 +395,9 @@ public class VideoConfig
             inf.put("dhcp", using_dhcp);
             inf.put("mac", my_mac);
             inf.put("userID", userID);
+
+            inf.put("videoPushState_1", videoPushState_1);
+            inf.put("videoPushState_2", videoPushState_2);
 
             return inf.toString();
         }catch (JSONException e)
