@@ -38,7 +38,7 @@ void PrintTime()
 	printf("[%d:%d:%d]",  lt->tm_hour, lt->tm_min, lt->tm_sec);
 }
 
-
+//保证消息接收完整性
 bool recv_unti(int socketFD, char* buffer, int len) 
 {
 	int total_recved = 0;
@@ -128,13 +128,13 @@ void player_recv()
 			continue;
 		}
 
-		//data is complete and ok.
+		//玩家点了开局按钮
 		 if (pData[7] == 0x31)// new game recv. you should decide whether to grasp or not. here ,i simply translate to the dool machine.
 		{
 			PrintTime();
 			printf("cmd:request new game.tranlating to room ..\r\n");
 
-			if (ROOM_SOCKET != -1) 
+			if (ROOM_SOCKET != -1) //有娃娃机 直接转发到娃娃机
 			{
 				send(ROOM_SOCKET, pData, data_len, 0);//send to the doll machine.let it begin!
 			}
@@ -142,7 +142,7 @@ void player_recv()
 			send(PLAYER_SOCKET, pData, data_len, 0);//send back to the player to enable the gui button. 
 			//In fact you should wait the reply from the doll machine . Translate it's replay to player. You should check to make sure the doll machine is ok.
 		}
-		else if (ROOM_SOCKET != -1)
+		else if (ROOM_SOCKET != -1)//任何消息都直接转发到娃娃机.但是实际场景中要处理登录 获取房间列表等等一堆东西。这些东西是不能转发给娃娃机。而需要你自己处理
 		{
 			PrintTime();
 			printf(" tranlating to room ..\r\n");
@@ -158,6 +158,7 @@ void player_recv()
 	close(PLAYER_SOCKET); PLAYER_SOCKET = -1;
 }
 
+//处理娃娃机过来的消息
 void room_recv()
 {
 	while (stopRunning == false)
@@ -214,7 +215,7 @@ void room_recv()
 			break;
 		}
 
-		//data is complete and ok.
+		//如果是心跳。直接原样返回
 		if (pData[7] == 0x35)//heartbeat msg from the doll machine. you should flag this server as 'live'. More than 30s is dead...
 		{
 			//pData[8] - pData[19];
@@ -228,8 +229,9 @@ void room_recv()
 			send(ROOM_SOCKET, pData, data_len, 0);
 
 		}
-		else if (PLAYER_SOCKET != -1)
-		{
+		else if (PLAYER_SOCKET != -1)//否则如果有玩家，就把任何消息转发给玩家
+		{//实际应用中，你还得处理故障和游戏结束后的回调消息。如果玩家抓到娃娃..等等消息。所以不能只是无脑转发给玩家
+			//此例子只是演示基本核心逻辑
 			printf(" tranlating to client.\n");
 			send(PLAYER_SOCKET, pData, data_len, 0);
 		}
