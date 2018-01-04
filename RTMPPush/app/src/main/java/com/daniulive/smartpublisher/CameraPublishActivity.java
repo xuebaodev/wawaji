@@ -1853,13 +1853,16 @@ public class CameraPublishActivity extends Activity
 				UIClickStopPush();
 				return;
 			} else {
+
+				boolean previewOK = SaveConfigFromUI();
+
 				//检查是否需要重连服务器
 				ServerStopAndReconnect();
 
 				//检查是否需要连接配置服务器
 				ConfigServerStopAndReconnect();
 
-				if (SaveConfigFromUI()) {
+				if (previewOK) {
 					UIClickStartPush();
 				}
 			}
