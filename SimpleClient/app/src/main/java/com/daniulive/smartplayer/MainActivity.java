@@ -275,6 +275,9 @@ public class MainActivity extends Activity {
                             params.height = ((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics()));
                             rel.setLayoutParams(params);
 
+                            TextView tii = samview.findViewById( R.id.txtRoomTitle);
+                            tii.setText( mac );
+
                             ImageView imgBtn = (ImageView) samview.findViewById(R.id.imgRoom);
                             imgBtn.setTag(mac);
                             imgBtn.setOnClickListener(new View.OnClickListener() {

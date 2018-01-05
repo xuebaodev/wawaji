@@ -115,7 +115,7 @@ public class SendThread {
         heart_beat_msg[heart_beat_msg.length - 1] = (byte) (total_c % 100);
 
        String sss = bytesToHexString( heart_beat_msg );
-        Log.e("asdfasdf", "asdf " + sss);
+        Log.e("触发心跳创建", "asdf " + sss);
         thHearbeatTimer = new Thread(new Runnable() {
             @Override
             public void run() {
