@@ -113,6 +113,7 @@ run
 * [**SimpleServer.c**]	简单应用服务器c版本的源码。该源码配套客户端SimpleClient-C.apk使用。仅支持一娃娃机一玩家的简单转发。
 
 * [**网络娃娃机主板对接协议.docx**]	网络娃娃机相关的命令文档。 例如，按下左右移动操作是发什么命令？下抓是什么命令？报故障时是什么命令？方便您的程序员在不使用以上范例的时候，自行发送命令使娃娃机可以操作。
+<br><a href="https://github.com/xuebaodev/wawaji/wiki" target="_blank">**更加详细请看WIKI**</a>
 
 源码工程SimpleClient SimpleServer可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持(会有少许的bug更新修复)。
 <br>Simplelient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。
