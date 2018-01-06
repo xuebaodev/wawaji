@@ -385,6 +385,8 @@ public class WawaServer {
 							//我这里不考虑其他情况。所以上来都是加入列表。你可不能这么做。。
 							me.last_heartbeattime = now_tw;
 							me.mac = strMAC;
+							
+							//功能添加 首次登陆
 					
 							synchronized (all_machines) {
 								all_machines.put(strMAC, me);

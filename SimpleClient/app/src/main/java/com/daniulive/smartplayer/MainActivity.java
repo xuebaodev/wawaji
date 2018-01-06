@@ -50,6 +50,13 @@ import socks.MsgThread;
 import socks.SendThread;
 
 
+class RoomInfo
+{
+    String mac;
+    String vurl1;
+    String vurl2;
+}
+
 public class MainActivity extends Activity {
 
     public static SendThread sendThread;
