@@ -2410,7 +2410,7 @@ public class CameraPublishActivity extends Activity
 			} 
 			else 
 			{
-				if(  isPushing || isRecording )
+				//if(  isPushing || isRecording )// isPushing || isRecording//todo 其实应该单独判断每路的推流状态。
 				{
 					if ( FRONT == type_ && publisherHandleFront != 0 )
 					{

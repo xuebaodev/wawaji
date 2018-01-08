@@ -372,7 +372,7 @@ public class WawaServer {
 						continue;
 					}
 					
-					System.out.println("cmd recv:" + total_data[7]);
+					//System.out.println("cmd recv:" + total_data[7]);
 					
 					if ((total_data[7]&0xff)== 0x35) {//心跳消息
 						String strMAC = new String(total_data, 8, 12);
