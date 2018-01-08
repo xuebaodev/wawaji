@@ -5,9 +5,9 @@ https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DA
 
 20171221 对外公开附加工具软件免费使用，但不包软件售后。
 
-1.安卓板上运行的应用xuebaoRtmpPush  (仅限雪暴娃娃机配套主板，安卓板固件请升级至1221版本或以上，安卓系统版本4.4)
+1.安卓板上运行的应用xuebaoRtmpPush  安卓板固件推荐使用1221版本或以上，安卓系统版本4.4，最新版本固件请见首页的说明
 
-包含功能:源码现已对外开放。
+包含功能:
 
 1.1通用RTMP的低延迟推流
 
@@ -26,8 +26,6 @@ https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DA
 2018.1.3 add
 
 1.8接受升级指令自动下载安装重启。
-
-<br>安装时，如果配置好adb运行环境。可运行android-push_install.bat脚本一键自动覆盖安装并升级。
 
 请留意更新并升级。如发现bug，欢迎及时反馈。
 
