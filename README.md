@@ -7,7 +7,7 @@
 使用雪暴娃娃机的安卓版套装，您可以方便的开发支持双路摄像头推流的安卓软件,配合娃娃机实现视频和操作的反馈。
 <br>或:
 <br>
-1.通过我们提供的xuebaoRtmpPush快速拥有一个完整的支持双路视频RTMP推流并使娃娃机联网的解决方案。配合** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播SDK播放端</a>**，将可以使视频延迟保证在一秒左右。
+1.通过我们提供的xuebaoRtmpPush快速拥有一个完整的支持双路视频RTMP推流并使娃娃机联网的解决方案。配合** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播SDK播放端</a>**，将可以使视频延迟保证在一秒以内。
 * 只需要配置相应的视频服务器地址，应用服务器地址，流媒体服务器地址，娃娃机就可以正确联网并推流视频。
 * 通过我们提供的简单客户端（SimpleClient）和服务器(SimpleServer)，您可以快速的了解如何操作雪暴网络娃娃机以及如何开发您的应用服务器。定制您自己的网络娃娃机项目。
 * 配套xuebaoRtmpPush公网，局域网，本机，升级，安装，管理的一系列工具软件,该管理软件所使用的协议稍后将在wiki放出，以便您开发自己的管理软件。
