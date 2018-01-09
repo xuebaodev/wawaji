@@ -65,8 +65,8 @@ public class MainActivity extends Activity {
     private TableLayout mDeviceView;//显示设备列表
 
     SharedPreferences share ;
-    public static String playbackUrl = "rtmp://your video stream server url";
-    public static String playbackUrl2 = "rtmp://your video stream server url2";
+    public static String playbackUrl = "rtmp://";
+    public static String playbackUrl2 = "rtmp://";
     public static String ServerHost = "192.168.0.110";//your application server ip.
     public static int ServerPort = 1090;//your application server port. your control command is send to this server .and the server will translate to the doll machine
 
@@ -165,10 +165,10 @@ public class MainActivity extends Activity {
 
         share = this.getSharedPreferences("share", Context.MODE_PRIVATE);
 
-        ServerPort = share.getInt("ServerPort", 0);
+        ServerPort = share.getInt("ServerPort", 7771);
         ServerHost = share.getString("ServerHost", "192.168.0.116");
-        playbackUrl = share.getString("playbackUrl", "rtmp://what you like");//rtmp video1 url
-        playbackUrl2 = share.getString("playbackUrl2", "rtmp://what you like2");//rtmp video2 url
+        playbackUrl = share.getString("playbackUrl", "rtmp://");//rtmp video1 url
+        playbackUrl2 = share.getString("playbackUrl2", "rtmp://");//rtmp video2 url
 
         mDeviceScr = findViewById(R.id.device_scr);
         mDeviceView = (TableLayout) findViewById(R.id.device_list);
@@ -315,6 +315,11 @@ public class MainActivity extends Activity {
                                         sendThread.sendMsg( msg_content );
                                     }
 
+                                    if( playbackUrl.equals("rtmp://") )
+                                        playbackUrl = "rtmp://119.29.226.242:1935/hls/" + amac + "_1";
+
+                                    if(playbackUrl2.equals("rtmp://"))
+                                        playbackUrl2 = "rtmp://119.29.226.242:1935/hls/" + amac + "_2";
 
                                     Intent intent = new Intent(MainActivity.this, SmartPlayer.class);
                                     intent.putExtra("mac", amac);

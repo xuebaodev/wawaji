@@ -20,13 +20,13 @@
             android:textSize="12sp"
             android:textColor="@android:color/black" />
 
-        <ImageView
+        <!--ImageView
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:layout_toLeftOf="@+id/btnClose"
             android:scaleType="center"
             android:src="@drawable/icon_settings"
-            android:onClick="onClickSetting" />
+            android:onClick="onClickSetting" /-->
 
         <ImageView
             android:id="@+id/btnClose"
