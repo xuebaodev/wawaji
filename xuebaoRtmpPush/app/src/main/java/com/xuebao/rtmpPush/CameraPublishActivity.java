@@ -661,61 +661,6 @@ public class CameraPublishActivity extends Activity
 		}
 	}
 
-    //断开已有连接。重新连接到服务器
-    void ServerStopAndReconnect()
-	{
-		if( VideoConfig.instance.destHost.equals("") || VideoConfig.instance.GetAppPort()==0)
-		{
-			outputInfo("应用服务器未配置。不连.");
-			Toast.makeText(getApplicationContext(), "应用服务器未配置。不连.", Toast.LENGTH_SHORT).show();
-			Log.e("MainAAAAA", "应用服务器未配置。不连.");
-			return;
-		}
-
-		if( sendThread != null)
-		{
-			if(sendThread.hostName.equals(VideoConfig.instance.destHost) && sendThread.port == VideoConfig.instance.GetAppPort())
-				return;
-		}
-
-		if (sendThread != null) {
-			Log.e("应用服务器配置变", "重新连接");
-			sendThread.StopNow();
-			sendThread = null;
-		}
-
-        sendThread = new SockAPP();
-		sendThread.StartWokring(mHandler, VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
-	}
-
-	//断开已有连接。重新连接到服务器
-	void ConfigServerStopAndReconnect()
-	{
-		Log.e("ConfigSerReconnect", "ConfigServerStopAndReconnect");
-		if( VideoConfig.instance.configHost.equals("") || VideoConfig.instance.GetConfigPort()==0)
-		{
-			outputInfo("配置服务器未配置。不连.");
-			Toast.makeText(getApplicationContext(), "配置服务器未配置。不连.", Toast.LENGTH_SHORT).show();
-			Log.e("MainAAAAA", "配置服务器未配置。不连.");
-			return;
-		}
-
-		if( confiThread != null)
-		{
-			if(confiThread.hostName .equals(VideoConfig.instance.configHost) && confiThread.port == VideoConfig.instance.GetConfigPort())
-				return;
-		}
-
-		if (confiThread != null) {
-			Log.e("配置服务器配置变", "重新连接");
-			confiThread.StopNow();
-			confiThread = null;
-		}
-
-		confiThread = new SockConfig();
-		confiThread.StartWokring(mHandler,  VideoConfig.instance.configHost, VideoConfig.instance.GetConfigPort());
-	}
-
 	public static String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface
@@ -1024,15 +969,19 @@ public class CameraPublishActivity extends Activity
 					break;
 				case 2:
 					{
+						//连接应用服务器
+						sendThread = new SockAPP();//空循环等待 没事
+						sendThread.StartWokring(mHandler, VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
+
 						//本地无目标服务器地址配置 先跟串口要
 						if( VideoConfig.instance.destHost.equals("") || VideoConfig.instance.GetAppPort()==0)
 						{
 							send_com_data(0x3c);//跟串口要IP和端口 要到以后 如果合法 它会自己开始连接并心跳
-						}else
-							ServerStopAndReconnect();
+						}
 
 						//连接配置服务器
-						ConfigServerStopAndReconnect();
+						confiThread = new SockConfig();
+						confiThread.StartWokring(mHandler,  VideoConfig.instance.configHost, VideoConfig.instance.GetConfigPort());
 
 						mHandler.sendEmptyMessageDelayed(3, 2000);
 					}
@@ -1091,8 +1040,11 @@ public class CameraPublishActivity extends Activity
 						UpdateConfigToUI();
 						UIClickStopPush();
 
-						ConfigServerStopAndReconnect();
-						ServerStopAndReconnect();
+						if( sendThread!= null )
+							sendThread.ApplyNewServer( VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
+
+						if( confiThread != null)
+							confiThread.ApplyNewServer(VideoConfig.instance.configHost, VideoConfig.instance.GetConfigPort());
 
 						boolean is_applyok = true;
 						Camera front_camera = GetCameraObj(FRONT);
@@ -1218,7 +1170,8 @@ public class CameraPublishActivity extends Activity
 							EditText eti_server_port= findViewById(R.id.server_port);
 							eti_server_port.setText( Integer.toString(VideoConfig.instance.GetAppPort() ));
 
-							ServerStopAndReconnect();
+							if( sendThread!= null )
+								sendThread.ApplyNewServer( VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
 
 							VideoConfig.instance.SaveConfig(getApplicationContext());
 						} else {
@@ -1922,10 +1875,12 @@ public class CameraPublishActivity extends Activity
 				boolean previewOK = SaveConfigFromUI();
 
 				//检查是否需要重连服务器
-				ServerStopAndReconnect();
+				if( sendThread!= null )
+					sendThread.ApplyNewServer( VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
 
 				//检查是否需要连接配置服务器
-				ConfigServerStopAndReconnect();
+				if( confiThread != null)
+					confiThread.ApplyNewServer(VideoConfig.instance.configHost, VideoConfig.instance.GetConfigPort());
 
 				if (previewOK) {
 					UIClickStartPush();

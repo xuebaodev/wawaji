@@ -32,7 +32,6 @@ public class SockConfig {
 
     Thread thSocket  = null;
     Thread thHearbeatTimer  = null;
-    Thread thRecconet = null;
 
     private boolean ShouldStopNow = false;
 
@@ -57,12 +56,6 @@ public class SockConfig {
         {
             thHearbeatTimer.interrupt();
             thHearbeatTimer = null;
-        }
-
-        if(thRecconet != null)
-        {
-            thRecconet.interrupt();
-            thRecconet = null;
         }
     }
 
@@ -96,11 +89,11 @@ public class SockConfig {
                         try {
                             Thread.sleep(10000);
                         } catch (InterruptedException e) {
-                            break;
+                            continue;
                         }
                     }
 
-                Log.e(TAG, "heartbeat stop");
+                Log.e(TAG, "心跳线程退出");
             }
         });
         thHearbeatTimer.start();
@@ -112,79 +105,27 @@ public class SockConfig {
         hostName = strHost;
         port = dport;
 
-        //先停掉heatBeat 和reconnet
-        StopNow();
+        ShouldStopNow = false;
 
         thSocket = new Thread(new ReceiveWatchDog());
         thSocket.start();
+
+        FireHeadbeat();
     }
 
-    void FireReconnect()
+    public void ApplyNewServer(String strHost, int dport)
     {
-        if(socket != null)
+        if(hostName.equals(strHost) && port == dport)
+            return;
+
+        hostName = strHost;
+        port = dport;
+
+        try{
+          if(socket != null){  socket.close(); socket = null;}
+        }catch (IOException e)
         {
-            try{
-                socket.close(); socket = null;
-            }catch (IOException e){}
-        }
-        if(thSocket!= null){
-            thSocket.interrupt(); thSocket = null;
-        }
 
-        if( thHearbeatTimer != null)
-        {
-            thHearbeatTimer.interrupt();
-            thHearbeatTimer = null;
-        }
-
-        if( thRecconet == null )
-        {
-            thRecconet = new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                        while(ShouldStopNow == false)
-                        {
-                            try {
-                             Thread.sleep(3000);
-                            } catch (InterruptedException e) {
-                                break;
-                            }
-                            if(ShouldStopNow == true)
-                                break;
-
-                            if(socket != null)
-                            {
-                                try{
-                                    socket.close(); socket = null;
-                                }catch (IOException e){}
-                            }
-                            if(thSocket!= null){
-                                thSocket.interrupt(); thSocket = null;
-                            }
-
-                            if( thHearbeatTimer != null)
-                            {
-                                thHearbeatTimer.interrupt();
-                                thHearbeatTimer = null;
-                            }
-                            Log.e("SockConfig", "正在重连.");
-                            thSocket = new Thread(new ReceiveWatchDog());
-                            thSocket.start();
-                        }
-                    Log.e("Reconnect","stop");
-                }
-            });
-            thRecconet.start();
-        }
-    }
-
-    void StopReconnect()
-    {
-        if(thRecconet != null)
-        {
-            thRecconet.interrupt();
-            thRecconet = null;
         }
     }
 
@@ -192,21 +133,44 @@ public class SockConfig {
         @Override
         public void run() {
 
-            try {
-                Log.e(TAG, "try connect====IP:"+ hostName +"Port:" +Integer.toString(port));
+            while( ShouldStopNow == false)
+            {
+                if( hostName.equals("") || port==0)//参数不对。空循环
+                {
+                    try {
+                        Thread.sleep(3000);
+                        continue;
+                    } catch (InterruptedException ea) {
+                        continue;
+                    }
+                }
+                else{
+                    try {
+                        Log.e(TAG, "try connect====IP:" + hostName + "Port:" + Integer.toString(port));
 
-                ShouldStopNow = false;
-                InetAddress addr = InetAddress.getByName(hostName);
-                String domainName = addr.getHostName();//获得主机名
-                String ServerIP = addr.getHostAddress();//获得IP地址
+                        InetAddress addr = InetAddress.getByName(hostName);
+                        String domainName = addr.getHostName();//获得主机名
+                        String ServerIP = addr.getHostAddress();//获得IP地址
 
-                socket = new Socket(ServerIP, port);
-                socket.setKeepAlive(true);
+                        socket = new Socket(ServerIP, port);
+                        socket.setKeepAlive(true);
+                    }catch (IOException e)//连接不成功 重连
+                    {
+                        Log.e(TAG,"Connect excetion..retry after 3s");
+                        try {
+                            Thread.sleep(3000);
+                            continue;
+                        } catch (InterruptedException ea) {
+                            continue;
+                        }
+                    }
+                }
 
-                Log.e(TAG, "连接成功开始心跳");
+                //连接成功立刻心跳
+                String strHeadBeat = String.format("{\"userID\":\"%s\",\"mac\":\"%s\",\"cmd\":\"heartbeat\",\"name\":\"%s\"}",
+                        VideoConfig.instance.userID, VideoConfig.instance.my_mac,VideoConfig.instance.machine_name);
 
-                FireHeadbeat();
-                StopReconnect();
+                sendMsg(strHeadBeat.getBytes());
 
                 while(socket != null && socket.isConnected() && ShouldStopNow == false){
                     try{
@@ -218,6 +182,7 @@ public class SockConfig {
                         if (r_len <= 0)
                         {
                             Log.e(TAG, "收到数据<=0.断开");
+                           if(socket!= null) {socket.close(); socket = null;}
                             break;
                         }
 
@@ -231,6 +196,7 @@ public class SockConfig {
                         if(jsonObject.has("cmd") == false)
                         {
                             Log.e("没有CMD","关闭此连接");
+                            if(socket!= null){socket.close(); socket = null;}
                             break;
                         }
 
@@ -246,7 +212,8 @@ public class SockConfig {
                                 String req_mac = jsonObject.getString("mac");
                                 if( req_mac.equals( VideoConfig.instance.my_mac) == false)
                                 {
-                                    Log.e(TAG,"不响应获取配置命令");
+                                    Log.e(TAG,"mac不是本机。不响应获取配置命令");
+                                    if( socket!= null){socket.close(); socket = null;}
                                     break;
                                 }
                             }
@@ -262,7 +229,8 @@ public class SockConfig {
                                 String req_mac = jsonObject.getString("mac");
                                 if( req_mac.equals( VideoConfig.instance.my_mac) == false)
                                 {
-                                    Log.e("MAC错误","不响应应用配置命令");
+                                    Log.e(TAG,"MAC不是本机。不响应应用配置命令");
+                                    if(socket!= null){socket.close(); socket = null;}
                                     break;
                                 }
                             }
@@ -296,7 +264,7 @@ public class SockConfig {
                                 String s = "{\"result\":\"ok\"}";
                                 out.write(s.getBytes(), 0, s.getBytes().length);
                                 out.flush();
-                                }
+                            }
 
                             Message message1 = Message.obtain();
                             message1.what = 110;//软件自动更新
@@ -308,20 +276,19 @@ public class SockConfig {
                             //{"cmd":"update", "url":"https://ssfasdfasdf", "versionCode":2}
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                       // e.printStackTrace();
+                        try{
+                            if( socket != null){socket.close(); socket = null;}
+                        }catch (IOException aa)
+                        {
+                            break;
+                        }
                         break;
                     }
                 }
             }
-            catch (IOException e) {
-               // e.printStackTrace();
-            }
 
-            if (ShouldStopNow == false) {
-                FireReconnect();
-            } else {
-                Log.e(TAG, "用户终止发送线程.");
-            }
+            Log.e(TAG, "接收线程退出.");
         }
     }
 
@@ -347,22 +314,5 @@ public class SockConfig {
                // FireReconnect();
             }
         }
-    }
-
-    public static final String bytesToHexString(byte[] buffer)
-    {
-        StringBuffer sb = new StringBuffer(buffer.length);
-        String temp;
-
-        for (int i = 0; i < buffer.length; ++i)
-        {
-            temp = Integer.toHexString(0xff&buffer[i]);
-            if (temp.length() < 2)
-                sb.append(0);
-
-            sb.append(temp);
-        }
-
-        return sb.toString();
     }
 }
