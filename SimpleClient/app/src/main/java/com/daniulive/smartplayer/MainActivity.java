@@ -46,20 +46,13 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import socks.MsgThread;
-import socks.SendThread;
 
+import socks.SockAPP;
 
-class RoomInfo
-{
-    String mac;
-    String vurl1;
-    String vurl2;
-}
 
 public class MainActivity extends Activity {
 
-    public static SendThread sendThread;
+    public static SockAPP sendThread;
 
     private View mDeviceScr;
     private TableLayout mDeviceView;//显示设备列表
@@ -78,7 +71,6 @@ public class MainActivity extends Activity {
         if(sendThread != null) {sendThread.StopNow(); sendThread = null;}
         System.exit(0);
     }
-
 
     @Override
     protected void onResume()
@@ -123,16 +115,11 @@ public class MainActivity extends Activity {
                 editor.putString("playbackUrl", playbackUrl);
                 editor.putString("playbackUrl2", playbackUrl2);
 
-                if(sendThread != null) {sendThread.StopNow(); sendThread = null;}
-                try {
-                    InetAddress addr = InetAddress.getByName(ServerHost);
-                    String ServerIP = addr.getHostAddress();
-                    sendThread = new SendThread(handler, ServerIP, ServerPort);//dip
-                    sendThread.start();
-
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
+                if(sendThread != null)
+                {
+                    sendThread.ApplyNewServer(ServerHost, ServerPort);
                 }
+
 
                 editor.commit();
             }
@@ -173,41 +160,10 @@ public class MainActivity extends Activity {
         mDeviceScr = findViewById(R.id.device_scr);
         mDeviceView = (TableLayout) findViewById(R.id.device_list);
 
-        if (sendThread != null) {
-            sendThread.StopNow();
-            sendThread = null;
-        }
-        try {
-            InetAddress addr = InetAddress.getByName(ServerHost);
-            String ServerIP = addr.getHostAddress();
-            sendThread = new SendThread(handler, ServerIP, ServerPort);//dip
-            sendThread.start();
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        sendThread = new SockAPP();
+        sendThread.StartWokring( handler, ServerHost, ServerPort);
     }
 
-    //断开已有连接。重新连接到服务器
-    void ServerStopAndReconnect()
-    {
-        if (sendThread != null) {
-            sendThread.StopNow();
-            sendThread = null;
-        }
-
-        try {
-            InetAddress addr = InetAddress.getByName(ServerHost);
-            String ServerIP = addr.getHostAddress();
-            sendThread = new SendThread(handler, ServerIP, ServerPort);//dip
-            sendThread.start();
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
-
-    Timer reconnect_timer = null;
     Handler handler = new Handler() {
 
         @Override
@@ -315,10 +271,10 @@ public class MainActivity extends Activity {
                                         sendThread.sendMsg( msg_content );
                                     }
 
-                                    if( playbackUrl.equals("rtmp://") )
+                                    if( playbackUrl.contains("rtmp://119")|| playbackUrl.equals("rtmp://"))
                                         playbackUrl = "rtmp://119.29.226.242:1935/hls/" + amac + "_1";
 
-                                    if(playbackUrl2.equals("rtmp://"))
+                                    if(playbackUrl2.contains("rtmp://119")|| playbackUrl2.equals("rtmp://"))
                                         playbackUrl2 = "rtmp://119.29.226.242:1935/hls/" + amac + "_2";
 
                                     Intent intent = new Intent(MainActivity.this, SmartPlayer.class);
@@ -346,33 +302,6 @@ public class MainActivity extends Activity {
                     }
                 }
                 break;
-                case 20: {
-                    if( reconnect_timer == null)
-                    {
-                        if (sendThread != null) {
-                            sendThread.StopNow();
-
-                            sendThread = null;
-                        }
-
-                        reconnect_timer = new Timer();
-                        reconnect_timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                reconnect_timer = null;
-                                handler.sendEmptyMessage(21);
-                                Log.e("case20", "socket连接已断开。正在重连");
-                            }
-                        }, 3000);
-                    }
-                }
-                break;
-                case 21:
-                {
-                    ServerStopAndReconnect();
-                }
-                break;
-
             }
 
             super.handleMessage(msg);
