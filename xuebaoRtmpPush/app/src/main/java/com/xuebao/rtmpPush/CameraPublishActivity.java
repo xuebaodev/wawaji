@@ -1541,17 +1541,28 @@ public class CameraPublishActivity extends Activity
 					 {
 						 VideoConfig.instance.videoPushState_1 = false;
 						 NotifyStreamResult(0,PushState.FAILED);
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
 					 else if(handle == publisherHandleBack)
 					 {
 						 NotifyStreamResult(1, PushState.FAILED);
 						 VideoConfig.instance.videoPushState_2 = false;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+
 					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTED:
@@ -1560,17 +1571,27 @@ public class CameraPublishActivity extends Activity
 					 {
 						 NotifyStreamResult(0, PushState.OK);
 						 VideoConfig.instance.videoPushState_1 = true;
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
 					 else if(handle == publisherHandleBack)
 					 {
 						 NotifyStreamResult(1, PushState.OK);
 						 VideoConfig.instance.videoPushState_2 = true;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_DISCONNECTED:
@@ -1579,17 +1600,29 @@ public class CameraPublishActivity extends Activity
 					 {
 						 VideoConfig.instance.videoPushState_1 = false;
 						 NotifyStreamResult(0,PushState.FAILED);
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+
 					 }
 					 else if(handle == publisherHandleBack)
 					 {
 						 NotifyStreamResult(1, PushState.FAILED);
 						 VideoConfig.instance.videoPushState_2 = false;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+
 					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_STOP:
@@ -1598,17 +1631,34 @@ public class CameraPublishActivity extends Activity
 					 {
 						 NotifyStreamResult(0, PushState.CLOSE);
 						 VideoConfig.instance.videoPushState_1 = false;
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+
 					 }
 					 else if(handle == publisherHandleBack)
 					 {
 						 NotifyStreamResult(1, PushState.CLOSE);
 						 VideoConfig.instance.videoPushState_2 = false;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 /*CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+
+							 }
+						 });*/
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_RECORDER_START_NEW_FILE:
@@ -2198,7 +2248,13 @@ public class CameraPublishActivity extends Activity
         
 		if ( camera != null )
 		{
-			camera.startPreview();  
+			try
+			{
+				camera.stopPreview();//crash and add
+				camera.startPreview();
+			}catch (Exception aa)
+			{
+			}
 		}
         
         if ( FRONT == camera_type  && camera!= null)

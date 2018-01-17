@@ -215,8 +215,8 @@ public class VideoConfig
         //rtmp://119.29.226.242:1935/hls/229031AA7875_1
 
         my_mac = getMac();
-        url1 = share.getString("url1", "rtmp://videoServerNameOrIP:videoServerPort/catalog/pushID");
-        url2 = share.getString("url2", "rtmp://videoServerNameOrIP:videoServerPort/catalog/pushID");
+        url1 = share.getString("url1", "rtmp://videoServerNameOrIP:videoServerPort/catalog/pushID"+"/"+my_mac);
+        url2 = share.getString("url2", "rtmp://videoServerNameOrIP:videoServerPort/catalog/pushID"+"/"+my_mac);
 
         using_dhcp = share.getBoolean("using_dhcp", true);
         my_mac  = getMac();
@@ -233,8 +233,8 @@ public class VideoConfig
         gateIP = share.getString("gateIP", "192.168.0.0");
         maskIP = share.getString("maskIP", "192.168.0.0");
 
-        destHost = share.getString("destHost", "");
-        destPort = share.getInt("destPort", 0);
+        destHost = share.getString("destHost", "192.168.0.116");
+        destPort = share.getInt("destPort", 7770);
 
         configHost = share.getString("configHost", "192.168.0.116");
         configPort = share.getInt("configPort", 7776);
