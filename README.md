@@ -115,8 +115,10 @@ run
 <br><a href="https://github.com/xuebaodev/wawaji/wiki" target="_blank">**更加详细请看WIKI**</a>
 
 源码工程SimpleClient SimpleServer可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持(会有少许的bug更新修复)。
-<br>Simplelient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。
-<br>源码工程xuebaoRtmpPush则可以自由修改，但只限运行于雪暴公司提供的安卓板。
+<br>SimpleClient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。
+<br>源码工程xuebaoRtmpPush则可以自由修改，但只限运行于雪暴公司提供的安卓板。**rtmpPush应用的名字不能改动，因为是和推流模块授权绑定的。**
+<br>SimpleClient中的操作指令推荐放服务器端。只是为了看流程，所以才放客户端的。
+<br>**指令不能太频繁。不建议一秒往娃娃机发送10个以上的指令。**
 <br>如果在操作娃娃机移动下抓开局的基本命令对接上仍存在困难,欢迎直接前来要求技术指导.
 <br>如果有潜在的bug也欢迎反馈。
 
