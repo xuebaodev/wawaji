@@ -13,6 +13,12 @@ public class SimpleApp {
 
 	public void Start() {
 		System.out.println("app start");
+		
+		long aa = System.currentTimeMillis()/1000;
+		
+		int bb = (int)aa;
+		
+		int c = bb;
 
 		wserver = new WawaServer();//处理娃娃机应用消息的类。你应该在这部分完成：处理娃娃机心跳保活，超时，并维护娃娃机状态(空闲，可用，当前玩家，当前在这个房间里面的玩家等等信息)
 		wserver.Start(7770);//此即安卓板所连接的应用服务器端口

@@ -376,7 +376,9 @@ public class WawaServer {
 					
 					if ((total_data[7]&0xff)== 0x35) {//心跳消息
 						String strMAC = new String(total_data, 8, 12);
-						System.out.println("wawa heartbeat." + strMAC);
+						long t1=System.currentTimeMillis();
+								
+						System.out.println("["+ t1+"] wawa heartbeat." + strMAC);
 						long now_tw = System.currentTimeMillis();
 						MachineInfo tmp = all_machines.get(strMAC);
 						if (tmp == null) {
@@ -422,7 +424,7 @@ public class WawaServer {
 					else  {//translate msg to playing player. but you should check if any error happen.
 						
 						//娃娃机有故障上报。你要标记娃娃机状态为故障-维护中。
-						if( total_data[7] == 0x34 )//error happend..do your code.change machine state and etc.
+						if( total_data[7] == 0x37 )//error happend..do your code.change machine state and etc.
 						{
 							
 						}
