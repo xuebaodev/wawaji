@@ -1533,85 +1533,113 @@ public class CameraPublishActivity extends Activity
                 	 txt = "开始。。";
                      break;
                  case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTING:
-                	 txt = "连接中。。";
-                     break;
-                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTION_FAILED:
-                	 txt = "连接失败。。";
-					 if( handle == publisherHandleFront)
-					 {
+					 txt = "连接中。。";
+					 break;
+				 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTION_FAILED:
+					 txt = "连接失败。。";
+					 if (handle == publisherHandleFront) {
 						 VideoConfig.instance.videoPushState_1 = false;
-						 NotifyStreamResult(0,PushState.FAILED);
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
-					 }
-					 else if(handle == publisherHandleBack)
-					 {
+						 NotifyStreamResult(0, PushState.FAILED);
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+					 } else if (handle == publisherHandleBack) {
 						 NotifyStreamResult(1, PushState.FAILED);
 						 VideoConfig.instance.videoPushState_2 = false;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
-                     break;
-                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTED:
-                	 txt = "连接成功。。";
-					 if( handle == publisherHandleFront)
-					 {
+					 break;
+				 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTED:
+					 txt = "连接成功。。";
+					 if (handle == publisherHandleFront) {
 						 NotifyStreamResult(0, PushState.OK);
 						 VideoConfig.instance.videoPushState_1 = true;
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
-						 getWindow().getDecorView().postInvalidate();
-					 }
-					 else if(handle == publisherHandleBack)
-					 {
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+					 } else if (handle == publisherHandleBack) {
 						 NotifyStreamResult(1, PushState.OK);
 						 VideoConfig.instance.videoPushState_2 = true;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
-                     break;
-                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_DISCONNECTED:
-                	 txt = "连接断开。。";
-					 if( handle == publisherHandleFront)
-					 {
+					 break;
+				 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_DISCONNECTED:
+					 txt = "连接断开。。";
+					 if (handle == publisherHandleFront) {
 						 VideoConfig.instance.videoPushState_1 = false;
-						 NotifyStreamResult(0,PushState.FAILED);
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
-					 }
-					 else if(handle == publisherHandleBack)
-					 {
+						 NotifyStreamResult(0, PushState.FAILED);
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+					 } else if (handle == publisherHandleBack) {
 						 NotifyStreamResult(1, PushState.FAILED);
 						 VideoConfig.instance.videoPushState_2 = false;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
-                     break;
-                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_STOP:
-                	 txt =  "关闭。。";
-					 if( handle == publisherHandleFront)
-					 {
+					 break;
+				 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_STOP:
+					 txt = "关闭。。";
+					 if (handle == publisherHandleFront) {
 						 NotifyStreamResult(0, PushState.CLOSE);
 						 VideoConfig.instance.videoPushState_1 = false;
-						 TextView tvFr = findViewById(R.id.cam1_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
-					 }
-					 else if(handle == publisherHandleBack)
-					 {
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam1_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
+					 } else if (handle == publisherHandleBack) {
 						 NotifyStreamResult(1, PushState.CLOSE);
 						 VideoConfig.instance.videoPushState_2 = false;
-						 TextView tvFr = findViewById(R.id.cam2_url_tip);
-						 if(tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-						 getWindow().getDecorView().postInvalidate();
+						 CameraPublishActivity.this.runOnUiThread(new Runnable() {
+							 @Override
+							 public void run() {
+								 TextView tvFr = findViewById(R.id.cam2_url_tip);
+								 if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
+								 getWindow().getDecorView().postInvalidate();
+							 }
+						 });
 					 }
-                     break;
-                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_RECORDER_START_NEW_FILE:
+					 break;
+				 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_RECORDER_START_NEW_FILE:
                 	 Log.i(TAG, "开始一个新的录像文件 : " + param3);
                 	 txt = "开始一个新的录像文件。。";
                      break;
