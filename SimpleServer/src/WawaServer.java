@@ -462,7 +462,7 @@ public class WawaServer {
 				all_machines.remove(me.mac);
 			}
 			
-			System.out.println("[AppServer] "+ me.mac  +"thread exit.");
+			System.out.println("[AppServer] "+ me.mac +"thread exit.");
 			
 			me.Clear();
 			me = null;
