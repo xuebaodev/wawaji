@@ -1,0 +1,104 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="WpfApp1.MainWindow"
+        xmlns:input="clr-namespace:System.Windows.Input;assembly=PresentationCore"
+        mc:Ignorable="d"
+        Title="雪暴科技批量部署工具" Height="795" Width="1330">
+
+    <Window.Resources>
+        <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+
+        <ControlTemplate x:Key="ItemTemplate" TargetType="ListViewItem">
+            <Border
+		BorderThickness="{TemplateBinding Border.BorderThickness}"
+		Padding="{TemplateBinding Control.Padding}"
+		BorderBrush="{TemplateBinding Border.BorderBrush}"
+		Background="{TemplateBinding Panel.Background}"
+		SnapsToDevicePixels="True">
+                <ContentPresenter
+			Content="{TemplateBinding ContentControl.Content}"
+			ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+			HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+			VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+			SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+            </Border>
+
+
+
+        </ControlTemplate>
+
+        <!--<Style TargetType="ListViewItem">
+            <Setter Property="Template" Value="{StaticResource ItemTemplate}" />
+        </Style>
+
+        <DataTemplate x:Key="ItemDataTemplate">
+            <CheckBox
+			x:Name="checkbox"
+			Content="{Binding ip}"
+                IsChecked="{Binding	RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" />
+
+        </DataTemplate>-->
+
+        <DataTemplate x:Key="FirstCell">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding Path=IsSelected, 
+      RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"/>
+            </StackPanel>
+        </DataTemplate>
+
+
+
+    </Window.Resources>
+
+    <Viewbox Margin="0,0,0,-19">
+
+        <Grid Width="1190">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="33*"/>
+                <ColumnDefinition Width="137*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="findButton" Content="查找设备" HorizontalAlignment="Right" Margin="0,631,139.339,15" Width="82" Click="Button_Click"/>
+            <CheckBox x:Name="selectAll" Content="全选" Click="OnSelectAllChanged" Margin="10,10,163.339,652" FontSize="18" />
+            <ListView x:Name="listView" HorizontalAlignment="Left" Height="573" Margin="10,42,0,0" VerticalAlignment="Top" Width="178" ItemContainerStyle="{StaticResource ListViewItemStyle}" 
+                SelectionMode="Multiple">
+
+                <!--ItemTemplate="{StaticResource ItemDataTemplate}"
+			CheckBox.Unchecked="OnUncheckItem">-->
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn CellTemplate="{StaticResource FirstCell}" 
+                Width="30"/>
+                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding ip}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="ip" Click="listViewColumnHeader_Click">IP地址</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+
+                    </GridView>
+                </ListView.View>
+
+
+            </ListView>
+
+
+            <Button x:Name="installButton" Content="批量安装" HorizontalAlignment="Left" Margin="286.661,627,0,0" VerticalAlignment="Top" Width="112" Click="Button_Click_2" Height="44" Grid.Column="1"/>
+            <Button x:Name="uninstallButton" Content="批量卸载" HorizontalAlignment="Left" Margin="110.661,627,0,15" Width="102" Click="Button_Click_3" Grid.Column="1"/>
+            <Button x:Name="customButton" Content="批量自定义" HorizontalAlignment="Left" Margin="569.661,627,0,0" VerticalAlignment="Top" Width="112"  Height="44" Click="Button_Click_5" Grid.Column="1"/>
+            <Label Content="简要说明：&#xA;1.查找设备&#xA;查找同一网段内的所有安卓板&#xA;查找是批量调用是该程序同目录下的 tryToConnect.bat&#xA;2.批量卸载&#xA;对被选定的设备进行卸载操作，&#xA;卸载操作是批量调用该程序同目录下的 auto_uninstall.bat&#xA;3.批量安装&#xA;对被选定的设备进行安装应用操作   (安装过程需要30秒左右，安装后安卓板会被重启，请勿断电)&#xA;安装操作是批量调用改程序同目录下的 install_restart.bat&#xA;4.批量自定义&#xA;对被选定的设备进行批量自定义操作&#xA;自定义是批量调用该程序同目录下的 customize.bat   可在此文件中补充用户自定义执行的指令&#xA;&#xA;默认针对的是我们推出的推流端app，如要用别的app，请改程序同目录下的&#xA;auto_uninstall.bat  install_restart.bat 中的对应内容" HorizontalAlignment="Left" Margin="228,20,0,0" VerticalAlignment="Top" Height="358" Width="920" FontSize="16" Grid.ColumnSpan="2"/>
+            <Label Content="Log:" HorizontalAlignment="Left" Margin="228,383,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.495,-0.463" Grid.ColumnSpan="2"/>
+            <ScrollViewer x:Name="LogViewer" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Right" Width="886" Height="220" VerticalAlignment="Bottom" Margin="0,0,37,91" Grid.Column="1">
+                <TextBlock x:Name="LogLabel" Grid.Row="0" Margin="10,10,10,10" TextWrapping="Wrap" Text=""  />
+            </ScrollViewer>
+            <TextBox x:Name="numText" HorizontalAlignment="Left" Height="27" Margin="162,633,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="45" IsReadOnly="True"/>
+            <Label Content="数量" HorizontalAlignment="Left" Height="27" Margin="119,631,0,0" VerticalAlignment="Top" Width="38"/>
+        </Grid>
+    </Viewbox>
+</Window>

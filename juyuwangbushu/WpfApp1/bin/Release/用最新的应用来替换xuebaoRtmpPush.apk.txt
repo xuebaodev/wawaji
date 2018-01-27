@@ -1,0 +1,6 @@
+批量部署
+安装和卸载的工具
+该版本供大家参考使用。
+
+最新版 应用下载地址:
+https://github.com/xuebaodev/wawaji/tree/master/prebuild
