@@ -8,6 +8,7 @@
 <br>或:
 <br>
 1.通过我们提供的xuebaoRtmpPush快速拥有一个完整的支持双路视频RTMP推流并使娃娃机联网的解决方案。配合** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播SDK播放端</a>**，将可以使视频延迟保证在一秒以内。
+* 支持通用的rtmp播放器来进行播放视频。您也可以选择腾讯的sdk或者ijkplayer等播放组件来播放视频。经过适当的调整，相信延迟问题都能得到很好的解决。我们有客户使用腾讯的播放延迟非常令人惊叹，但我们不清楚他具体是怎么做到的。我们自己并未测出来如此效果。
 * 只需要配置相应的视频服务器地址，应用服务器地址，流媒体服务器地址，娃娃机就可以正确联网并推流视频。
 * 通过我们提供的简单客户端（SimpleClient）和服务器(SimpleServer)，您可以快速的了解如何操作雪暴网络娃娃机以及如何开发您的应用服务器。定制您自己的网络娃娃机项目。
 * 配套xuebaoRtmpPush公网，局域网，本机，升级，安装，管理的一系列工具软件,该管理软件所使用的协议稍后将在wiki放出，以便您开发自己的管理软件。
@@ -63,10 +64,10 @@ export PATH JAVA_HOME CLASSPATH
 
 ```
 然后如图操作
-<img src="http://chuantu.biz/t6/216/1517102463x-1404793465.png" alt="SimpleServer编译示意图" />
-即：
-切换到SimpleServer/src 输入：javac SimpleApp.java
-然后切换到SimpleServer/bin 输入:java SimpleApp
+<br><img src="http://chuantu.biz/t6/216/1517102463x-1404793465.png" alt="SimpleServer编译示意图" />
+<br>即：
+<br>切换到SimpleServer/src 输入：javac SimpleApp.java
+<br>然后切换到SimpleServer/bin 输入:java SimpleApp
 
 
 4.配置娃娃机参数。可使用本工程自带的局域网，公网配置软件，或安卓版连接鼠标显示器自行配置应用服务器地址、推流视频质量，及推流地址，娃娃机名称等属性。
@@ -103,9 +104,10 @@ export PATH JAVA_HOME CLASSPATH
 	* 您可以通过此源码更好的熟悉娃娃机的操作命令。
 	* 或直接在此基础上开发出您特有的网络娃娃机app。
 	* 本客户端视频播放使用了** <a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播SDK</a>**  **如要商用请自己联系，我们不负责版权问题**
+	* 您也可以根据自己的需求选择腾讯SDK或者ijkplayer来实现视频流播放。
 
 * [**SimpleServer**]简单应用服务器java源码。
-	* 兼容串口版和安卓板的娃娃机协议。
+	* 兼容串口版和安卓版的娃娃机协议。
 	* 包含了应用服务器基本的工作流程。比如列举房间列表，玩家进出，开始玩的命令中转到网络娃娃机的基本流程。
 	* 支持多个玩家，多个娃娃机。但同一时间，一台娃娃机只能由一个玩家操控。
 	* 您可以自行二次开发实现排队预约，支付等等功能。
@@ -136,7 +138,7 @@ export PATH JAVA_HOME CLASSPATH
 源码工程SimpleClient SimpleServer可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持(会有少许的bug更新修复)。
 <br>SimpleClient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。
 <br>源码工程xuebaoRtmpPush则可以自由修改，但只限运行于雪暴公司提供的安卓板。**rtmpPush应用的名字不能改动，因为是和推流模块授权绑定的。**
-<br>SimpleClient中的操作指令推荐放服务器端。只是为了看流程，所以才放客户端的。
+<br>SimpleClient中的操作指令推荐放服务器端。目前放在客户端只是为了用户看代码时，明确知道哪个操作对应哪个命令，所以才放客户端的。实际场景下，在客户端应该自行开发和服务器的协议。服务器自行转换成娃娃机可以操控的指令即可。这样才具有可行性。比如客户端发{"cmd":"move","dir":left,"userid":XXX,timeStamp:xxxx}.服务器端自行转换成 FE XX XX 01 XX XX 0C 32 02 XX...即可。
 <br>**指令不能太频繁。不建议一秒往娃娃机发送10个以上的指令。**
 <br>如果在操作娃娃机移动下抓开局的基本命令对接上仍存在困难,欢迎直接前来要求技术指导.
 <br>如果有潜在的bug也欢迎反馈。
