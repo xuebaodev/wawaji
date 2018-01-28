@@ -61,16 +61,18 @@ public class ClientServer {
 	private Thread newThread;
 	ServerSocket serverSocket;
 	boolean showldStop = false;
+	int nport = 0;
 
 	public void Start(int np) {
 		showldStop = false;
+		nport = np;
 		all_clients = new HashMap<Socket, PlayerInfo>();
 		newThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					serverSocket = new ServerSocket();
-					serverSocket.bind(new InetSocketAddress("0.0.0.0", np));
+					serverSocket.bind(new InetSocketAddress("0.0.0.0", nport));
 
 					while (showldStop == false) {
 						Socket cur_socket = serverSocket.accept();
@@ -80,10 +82,10 @@ public class ClientServer {
 						new HandlerThread(cur_socket);
 					}
 
-					System.out.println("listen is exit at" + np);
+					System.out.println("listen is exit at" + nport);
 
 				} catch (Exception e) {
-					System.out.println("listen is exit at" + np);
+					System.out.println("listen is exit at" + nport);
 					// e.printStackTrace();
 				}
 			}

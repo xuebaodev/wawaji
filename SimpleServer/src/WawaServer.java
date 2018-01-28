@@ -75,9 +75,11 @@ public class WawaServer {
 	ServerSocket listenSocket;
 
 	boolean showldStop = false;
-
+	int nport =0;
 	public void Start(int np) {
 		showldStop = false;
+		nport = np;
+		
 		all_machines = new HashMap<String, MachineInfo>();
 
 		newThread = new Thread(new Runnable() {
@@ -85,7 +87,7 @@ public class WawaServer {
 			public void run() {
 				try {
 					listenSocket = new ServerSocket();
-					listenSocket.bind(new InetSocketAddress("0.0.0.0", np));//监听本机所有网卡的该端口。别问为什么。。。
+					listenSocket.bind(new InetSocketAddress("0.0.0.0", nport));//监听本机所有网卡的该端口。别问为什么。。。
 					while (showldStop == false) {
 						Socket cur_socket = listenSocket.accept();
 
@@ -95,10 +97,10 @@ public class WawaServer {
 						new HandlerThread(cur_socket);
 					}
 
-					System.out.println("listen is exit at" + np);
+					System.out.println("listen is exit at" + nport);
 
 				} catch (Exception e) {
-					System.out.println("listen thread is exit at" + np);
+					System.out.println("listen thread is exit at" + nport);
 					//e.printStackTrace();
 				}
 			}

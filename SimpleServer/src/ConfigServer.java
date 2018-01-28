@@ -82,7 +82,7 @@ public class ConfigServer {
 	ServerSocket listenSocket;
 
 	boolean showldStop = false;
-
+	int nport = 0;
 	public void Start(int np) {
 		showldStop = false;
 		all_machines = new HashMap<String, ConfigInfo>();
@@ -92,7 +92,7 @@ public class ConfigServer {
 			public void run() {
 				try {
 					listenSocket = new ServerSocket();
-					listenSocket.bind(new InetSocketAddress("0.0.0.0", np));
+					listenSocket.bind(new InetSocketAddress("0.0.0.0", nport));
 					while (showldStop == false) {
 						Socket cur_socket = listenSocket.accept();
 
@@ -102,12 +102,11 @@ public class ConfigServer {
 						new HandlerThread(cur_socket);
 					}
 
-					System.out.println("listen is exit at" + np);
+					System.out.println("listen is exit at" + nport);
 
 				} catch (Exception e) {
 					//e.printStackTrace();
-					System.out.println("listen thread is exit at" + np);
-					
+					System.out.println("listen thread is exit at" + nport);
 				}
 			}
 		});
