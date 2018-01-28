@@ -69,6 +69,7 @@ export PATH JAVA_HOME CLASSPATH
 <br>切换到SimpleServer/src 输入：javac SimpleApp.java
 <br>然后切换到SimpleServer/bin 输入:java SimpleApp
 
+**如何优雅的停止服务器? 只需要在Eclipse的控制台窗口或linux的app所在terminal 输入exit即可。这样才不会因端口资源没法释放，导致短时间不能再启动的情况**
 
 4.配置娃娃机参数。可使用本工程自带的局域网，公网配置软件，或安卓版连接鼠标显示器自行配置应用服务器地址、推流视频质量，及推流地址，娃娃机名称等属性。
 (使用SimpleServer做服务器时，应用服务器端口设置为7770, 配置服务器端口设置为7776)
