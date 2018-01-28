@@ -43,15 +43,31 @@
 
 3.运行SimpleServer程序-即开启应用服务器，记录好服务器此时的IP。--如果您已熟知娃娃机的协议，可以忽略本例子代码自行开发您的应用服务器。
 
-```
-linux：
+``` 
+SimpleServer.c linux 编译运行方法
 g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
 
 run
 ./SimpleServer
 ```
 
-<br>java:则直接用eclipse 打开工程SimpleServer 点运行即可。
+<br>SimpleServer java版
+* windows下直接用eclipse 打开工程SimpleServer 点运行即可。
+* linux请先安装配置好环境变量 如ubuntu 或linuxmint。先执行sudo vim /etc/profile 最后一行加上如下字段。--请以您自己下载的路径为准。本例只是给个说明
+
+```
+JAVA_HOME=/opt/jdk1.8.0_162
+CLASSPATH=.;$JAVA_HOME/lib/dt.jar;$JAVA_HOME/lib/tools.jar;
+PATH=$PATH:$JAVA_HOME/bin
+export PATH JAVA_HOME CLASSPATH
+
+```
+然后如图操作
+<img src="http://chuantu.biz/t6/216/1517102463x-1404793465.png" alt="SimpleServer编译示意图" />
+即：
+切换到SimpleServer/src 输入：javac SimpleApp.java
+然后切换到SimpleServer/bin 输入:java SimpleApp
+
 
 4.配置娃娃机参数。可使用本工程自带的局域网，公网配置软件，或安卓版连接鼠标显示器自行配置应用服务器地址、推流视频质量，及推流地址，娃娃机名称等属性。
 (使用SimpleServer做服务器时，应用服务器端口设置为7770, 配置服务器端口设置为7776)
@@ -96,11 +112,14 @@ run
 	* 应用服务器 （默认端口:娃娃机请连接到7770 端口。玩家手机客户端simpleClient.apk请连接到7771）
 	* 配置服务器[可选] （默认端口 对于安卓板xuebaoRtmpPush是7776，对于公网配置工具是7778）--如果不用配置功能。这个相关代码都可以忽略。
 
+* [**juyuwangbushu**] 局域网部署工具的源码。该工程编译出来的工具用于批量安装xuebaoRtmpPush.apk.因为我们出厂是不带这个apk的。需要你们自行安装。该工具在prebuild里面有直接编译好的版本。
+
+* [**juyuwangpeizhi**] 局域网批量配置工具的源码。该工程编译出来的工具可以给xuebaoRtmpPush配置推流地址，推流质量，应用服务器地址等。该工具在prebuild里面有直接编译好的版本。
 
 * [**prebuild**] 包含了最新的安卓推流程序, 局域网配置工具 公网配置工具 预生成的安卓简单操作客户端.
 	* 安卓版电脑有线部署工具，电脑有线直连安装脚本。
 	* simpleClient-C.apk 配合c版本服务运行的客户端
-	* simpleClient-JAVA.apk 配合java版本服务运行的客户端
+	* simpleClient-JAVA.apk 配合java版本服务器运行的客户端
 	* xuebaoRtmpPush.apk 由源码编译出来的apk。您也可以自行从源码生成。
 	* 雪暴安卓板局域网批量部署工具--局域网内批量安装xuebaoRtmpPush.apk工具
 	* 雪暴安卓推流应用局域网配置工具--搜索局域网内所有机器，并配置参数或更新推流程序。
@@ -122,11 +141,9 @@ run
 <br>如果在操作娃娃机移动下抓开局的基本命令对接上仍存在困难,欢迎直接前来要求技术指导.
 <br>如果有潜在的bug也欢迎反馈。
 
-安卓板刷机工具及固件（推荐使用4.4）
+安卓板刷机工具及固件（推荐使用4.4）--仅限于2017年以前拿到我们板子的客户。
+打开设置-关于平板电脑-版本号-如果不是20171221 则需要刷新本链接提供的固件。
 <br>链接：https://pan.baidu.com/s/1mi3ltKs 密码：wu39
-
-其他资料总汇：
-<br>链接：https://pan.baidu.com/s/1jIpHpMA 密码：5y3l
 
 
 SRS流媒体服务器搭建指引
