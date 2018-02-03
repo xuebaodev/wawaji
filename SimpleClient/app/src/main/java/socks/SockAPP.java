@@ -53,6 +53,13 @@ public class SockAPP {
             thSocket.interrupt();
             thSocket = null;
         }
+
+        if( msgThread != null)
+        {
+            msgThread.StopNow();
+            msgThread.interrupt();
+            msgThread = null;
+        }
     }
 
     public void StartWokring(Handler handler, String strHost, int dport)//connect and recv

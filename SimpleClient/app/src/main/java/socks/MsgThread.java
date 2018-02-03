@@ -16,8 +16,11 @@ public class MsgThread extends Thread {
     private Queue<byte[]> sendMsgQuene = new LinkedList<byte[]>();
     private SockAPP sd;
 
+    private boolean shouldStopNow = false;
+
     public MsgThread(SockAPP sd) {
         this.sd = sd;
+        shouldStopNow = false;
     }
 
     public synchronized void putMsg(byte[] msg) {
@@ -28,11 +31,17 @@ public class MsgThread extends Thread {
             notify();
     }
 
+    public void StopNow()
+    {
+        shouldStopNow = true;
+        notify();
+    }
+
     @Override
     public void run() {
         super.run();
         synchronized (this) {
-            while (true) {
+            while (shouldStopNow == false) {
                 // 当队列里的消息发送完毕后，线程等待
                 while (sendMsgQuene.size() > 0) {
                     byte[] msg = sendMsgQuene.poll();
