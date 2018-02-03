@@ -216,7 +216,7 @@ public class SmartPlayer extends Activity {
 		byte com_cmd[]= user_uart_sendcom(3);
 		if(MainActivity.sendThread != null)
 		{
-			MainActivity.sendThread.sendMsg( com_cmd );
+			MainActivity.sendThread.SendOut( com_cmd );
 		}
 
 		super.onDestroy();
@@ -371,6 +371,16 @@ public class SmartPlayer extends Activity {
 		return true;
 	}
 
+	public void OnClickReboot(View v)
+    {
+        byte com_cmd[] = user_uart_sendcom(0x88);
+        Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
+        if(MainActivity.sendThread != null)
+        {
+            MainActivity.sendThread.SendOut( com_cmd );
+        }
+    }
+
 	Handler handler = new Handler() {
 
 		@Override
@@ -510,7 +520,7 @@ public class SmartPlayer extends Activity {
 					Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
 					if(MainActivity.sendThread != null)
 					{
-						MainActivity.sendThread.sendMsg( com_cmd );
+						MainActivity.sendThread.SendOut( com_cmd );
 					}
 				}
 			}
@@ -520,7 +530,7 @@ public class SmartPlayer extends Activity {
 				byte com_cmd[] = user_uart_sendcom(0x32, 4, 0, 0);//下抓
 				if(MainActivity.sendThread != null)
 				{
-					MainActivity.sendThread.sendMsg( com_cmd );
+					MainActivity.sendThread.SendOut( com_cmd );
 				}
 			}
 		}
@@ -563,7 +573,7 @@ public class SmartPlayer extends Activity {
 				byte com_cmd[] = user_uart_sendcom(0x32, 0x05, num2, num3);//release pressing button  send cmd 05
 				if(MainActivity.sendThread != null)
 				{
-					MainActivity.sendThread.sendMsg( com_cmd );
+					MainActivity.sendThread.SendOut( com_cmd );
 				}
 			}
 			if(event.getAction() == MotionEvent.ACTION_DOWN){
@@ -613,7 +623,7 @@ public class SmartPlayer extends Activity {
 					byte com_cmd[] = user_uart_sendcom(0x32, dir, num2, num3);//constant move time 5000 in millisecond. don't change.
 					if(MainActivity.sendThread != null)
 					{
-						MainActivity.sendThread.sendMsg( com_cmd );
+						MainActivity.sendThread.SendOut( com_cmd );
 					}
 				}
 			}

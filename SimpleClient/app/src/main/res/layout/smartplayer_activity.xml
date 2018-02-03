@@ -20,6 +20,15 @@
             android:textSize="12sp"
             android:textColor="@android:color/black" />
 
+        <Button
+            android:id="@+id/btnReboot"
+            android:layout_toRightOf="@+id/room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重启娃娃机"
+            android:onClick="OnClickReboot"/>
+
+
         <!--ImageView
             android:layout_width="54dp"
             android:layout_height="54dp"

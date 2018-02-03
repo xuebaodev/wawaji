@@ -1,5 +1,6 @@
 package com.daniulive.smartplayer;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,9 +53,9 @@ import socks.SockAPP;
 
 
 public class MainActivity extends Activity {
-
+    private final String TAG = "MainActivity";
     public static SockAPP sendThread;
-
+    private final int PERMISSION_REQUEST = 0xa00;
     private View mDeviceScr;
     private TableLayout mDeviceView;//显示设备列表
 
@@ -150,6 +152,14 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.INTERNET,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
+                            Manifest.permission.MODIFY_AUDIO_SETTINGS}, PERMISSION_REQUEST);
+        }
+
         share = this.getSharedPreferences("share", Context.MODE_PRIVATE);
 
         ServerPort = share.getInt("ServerPort", 7771);
@@ -162,6 +172,22 @@ public class MainActivity extends Activity {
 
         sendThread = new SockAPP();
         sendThread.StartWokring( handler, ServerHost, ServerPort);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case PERMISSION_REQUEST:
+                if (grantResults != null && permissions != null) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        Log.d(TAG, "grantResults[" + i + "]:" + grantResults[i]);
+                        Log.d(TAG, "permissions[" + i + "]:" + permissions[i]);
+                    }
+                }
+
+                break;
+        }
     }
 
     Handler handler = new Handler() {
@@ -193,7 +219,7 @@ public class MainActivity extends Activity {
 
                     if(sendThread != null)
                     {
-                        sendThread.sendMsg( msg_content );
+                        sendThread.SendOut( msg_content );
                     }
                 }
                 break;
@@ -268,7 +294,7 @@ public class MainActivity extends Activity {
 
                                     if(sendThread != null)
                                     {
-                                        sendThread.sendMsg( msg_content );
+                                        sendThread.SendOut( msg_content );
                                     }
 
                                     if( playbackUrl.contains("rtmp://119")|| playbackUrl.equals("rtmp://"))

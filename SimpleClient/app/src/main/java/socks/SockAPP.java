@@ -27,6 +27,8 @@ public class SockAPP {
 
     Thread thSocket = null;
 
+    MsgThread msgThread= null;
+
     private boolean ShouldStopNow = false;
 
     public SockAPP() {
@@ -63,6 +65,9 @@ public class SockAPP {
 
         thSocket = new Thread(new ReceiveWatchDog());
         thSocket.start();
+
+        msgThread = new MsgThread(this);
+        msgThread.start();
     }
 
     public void ApplyNewServer(String strHost, int dport) {
@@ -243,8 +248,13 @@ public class SockAPP {
         }
     }
 
-    public void sendMsg(byte[] msg) {
-        synchronized (this) {
+    public void SendOut(byte[] msg)
+    {
+        if( msgThread != null)
+            msgThread.putMsg( msg );
+    }
+
+    void sendMsg(byte[] msg) {
             if (socket == null) {
                 Log.e(TAG, "socket是空,不发送");
                 return;
@@ -261,7 +271,6 @@ public class SockAPP {
             } catch (IOException e) {
                 // FireReconnect();
             }
-        }
     }
 
     public static final String bytesToHexString(byte[] buffer) {
