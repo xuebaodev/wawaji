@@ -146,7 +146,11 @@ public class MainActivity extends Activity {
             //透明状态栏
             //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //透明导航栏
-            getWindow().setNavigationBarColor(Color.BLACK);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            {
+                getWindow().setNavigationBarColor(Color.BLACK);
+            }
+
             //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
 

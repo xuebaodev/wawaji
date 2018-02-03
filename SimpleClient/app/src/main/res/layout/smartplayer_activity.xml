@@ -25,7 +25,7 @@
             android:layout_toRightOf="@+id/room_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="重启娃娃机"
+            android:text="重启安卓板"
             android:onClick="OnClickReboot"/>
 
 
