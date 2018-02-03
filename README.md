@@ -11,7 +11,7 @@
 * 支持通用的rtmp播放器来进行播放视频。您也可以选择腾讯的sdk或者ijkplayer等播放组件来播放视频。经过适当的调整，相信延迟问题都能得到很好的解决。我们有客户使用腾讯的播放延迟非常令人惊叹，但我们不清楚他具体是怎么做到的。我们自己并未测出来如此效果。
 * 只需要配置相应的视频服务器地址，应用服务器地址，流媒体服务器地址，娃娃机就可以正确联网并推流视频。
 * 通过我们提供的简单客户端（SimpleClient）和服务器(SimpleServer)，您可以快速的了解如何操作雪暴网络娃娃机以及如何开发您的应用服务器。定制您自己的网络娃娃机项目。
-* 配套xuebaoRtmpPush公网，局域网，本机，升级，安装，管理的一系列工具软件,该管理软件所使用的协议稍后将在wiki放出，以便您开发自己的管理软件。
+* 配套xuebaoRtmpPush公网，局域网，本机，升级，安装，管理的一系列工具软件,该管理软件所使用的协议已经在wiki放出，且该工具的源码都已开放，以便您开发自己的管理软件。
 * 此双路推流程序xuebaoRtmpPush由大牛直播授权使用于雪暴公司出品的安卓板。任何人不得将其使用除本程序和本安卓板以外的任何其他地方。否则一经发现，雪暴公司和<a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播</a>将有权起诉其侵权。
 
 
@@ -79,7 +79,7 @@ export PATH JAVA_HOME CLASSPATH
 正常工作如图
 <img src="http://chuantu.biz/t6/184/1514019686x-1566638157.png" alt="服务器运行示意图" />
 
-6.将prebuild文件夹下的simpleClient-C.apk或simpleClinet-JAVA.apk安装到您的手机上(安卓5.0以上)。 这取决于之前您安装的SimpleServer版本。--或者，您可以从simpleClient工程中自行编译出一个apk出来。请将该手机通过wifi连入娃娃机所在的一个局域网。
+6.将prebuild文件夹下的simpleClient-C.apk(安卓5.0以上)或simpleClinet-JAVA.apk(安卓4.4以上)安装到您的手机上。 这取决于之前您安装的SimpleServer版本。--或者，您可以从simpleClient工程中自行编译出一个apk出来。请将该手机通过wifi连入娃娃机所在的一个局域网。
 <br>然后点开配置按钮(齿轮状图标)，输入应用服务器IP，端口默认为7771 。如您已架设流媒体服务器，请输入之前娃娃机配好的推流地址。点击OK，您就可以开始玩网络抓娃娃了。
 <br>下图是simpleClinet-JAVA.apk的简单界面示意图。 C版本的有所不同。但都必须要配置好参数。
 
@@ -136,7 +136,7 @@ export PATH JAVA_HOME CLASSPATH
 <br><a href="https://github.com/xuebaodev/wawaji/wiki" target="_blank">**更加详细请看WIKI**</a>
 
 源码工程SimpleClient SimpleServer可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持(会有少许的bug更新修复)。
-<br>SimpleClient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。
+<br>SimpleClient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。您也可以根据自身团队情况去选择其他播放器端。比如腾讯SDK，开源的IJKPLAYER等等支持解码RTMP视频流的sdk都可以。
 <br>源码工程xuebaoRtmpPush则可以自由修改，但只限运行于雪暴公司提供的安卓板。**rtmpPush应用的名字不能改动，因为是和推流模块授权绑定的。**
 <br>SimpleClient中的操作指令推荐放服务器端。目前放在客户端只是为了用户看代码时，明确知道哪个操作对应哪个命令，所以才放客户端的。实际场景下，在客户端应该自行开发和服务器的协议。服务器自行转换成娃娃机可以操控的指令即可。这样才具有可行性。比如客户端发{"cmd":"move","dir":left,"userid":XXX,timeStamp:xxxx}.服务器端自行转换成 FE XX XX 01 XX XX 0C 32 02 XX...即可。
 <br>**指令不能太频繁。不建议一秒往娃娃机发送10个以上的指令。**
@@ -147,9 +147,6 @@ export PATH JAVA_HOME CLASSPATH
 打开设置-关于平板电脑-版本号-如果不是20171221 则需要刷新本链接提供的固件。
 <br>链接：https://pan.baidu.com/s/1mi3ltKs 密码：wu39
 
-
-SRS流媒体服务器搭建指引
-https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP
 
 ## 更多信息 ##
 
@@ -204,7 +201,7 @@ how to control the doll machine from the app?
 
 
 <br>===================question========================
-<br>1.Can't see heart beat from the doll machine?
+<br>1.Can't see heartbeat from the doll machine?
 <br>
 <br>Make sure your doll machine's ip is connect to your server. That would happend when the ip is conflict, if your configure is absolutly right.(Make sure the LAN line is connect to the route too!)
 <br>
