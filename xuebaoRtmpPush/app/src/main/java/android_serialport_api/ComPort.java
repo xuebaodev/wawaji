@@ -186,10 +186,10 @@ public  class ComPort {
 				if (sBegin.equals("FE")) {
 					//开头正确
 					String msgContent = readBuffer.substring(0, len * 2);
-					Log.e("开头正确", msgContent);
+					Log.e("开头正确com", msgContent);
 					//校验指令
 					if (check_com_data_string(msgContent, len * 2)) {
-						Log.e("指令正确", msgContent);
+						Log.e("指令正确com", msgContent);
 						readBuffer = readBuffer.substring(len * 2);
 						//指令正确
 						if (mOutputStream != null) {

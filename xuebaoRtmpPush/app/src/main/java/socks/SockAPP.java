@@ -191,7 +191,7 @@ public class SockAPP {
                     if (sBegin.equals("FE")) {
                         //开头正确
                         String msgContent = readBuffer.substring(0, len * 2);
-                        if (showlog) Log.e("开头正确", msgContent);
+                        if (showlog) Log.e("开头正确sock", msgContent);
                         //校验指令
                         if (ComPort.check_com_data_string(msgContent, len * 2)) {
                             Log.e(TAG, "收到:" + msgContent);

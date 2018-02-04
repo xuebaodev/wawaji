@@ -129,7 +129,8 @@ public class CameraPublishActivity extends Activity
         msgMyFireHeartBeat,//调试信息。。心跳
 		msgWaitIP,//等待IP
 		msgIpGOT, //IP已得到。开始检查时间
-		msgDebugTxt
+		msgDebugTxt,
+		msgCheckWawaNowState //检查娃娃机当前状态的循环
 	};
 
 	private static String TAG = "SmartPublisher";
@@ -222,6 +223,7 @@ public class CameraPublishActivity extends Activity
 	boolean isShouldRebootSystem = false;//检测到推流预览停止时，这变量置为真.此时立刻查询娃娃机状态，如果娃娃机是空闲的，直接关掉socket。重启。
 
 	int timeWaitCount = 20;//等待时间就绪的次数。我们只等2分钟。也就是20次。
+	int wawajiCurrentState = -1;//娃娃机当前状态
 
 	static {  
 		System.loadLibrary("SmartPublisher");
@@ -1146,6 +1148,8 @@ public class CameraPublishActivity extends Activity
 							sendThread.StopNow(); sendThread = null;
 						}
 
+						Log.e(TAG,"收到重启指令，立刻重启" );
+
 						Intent intent=new Intent();
 						intent.setAction("ACTION_RK_REBOOT");
 						sendBroadcast(intent,null);
@@ -1159,7 +1163,7 @@ public class CameraPublishActivity extends Activity
 						//往串口发
 						if( isShouldRebootSystem == true && net_cmd == 0x31)//系统因为摄像头断流的原因要重启。析出开局指令不转发
 						{
-
+								outputInfo("检测到设备需要重启。不转发开局指令");
 						}
 						else
 							mComPort.SendData(test_data, msg_len);
@@ -1272,14 +1276,19 @@ public class CameraPublishActivity extends Activity
 				break;
                 case msgComData: //串口过来的消息
                 	{
+
+						Log.e("串口收到", "串l,,,,,");
+
                     byte test_data[] = (byte[]) (msg.obj);
                     int data_len = msg.arg1;
+
+						Log.e("串口收到", "串口数误" + data_len);
 
 					//处理从串口过来的消息。如果是心跳 不管。如果不是 转发给服务器
 					String com_data = ComPort.bytes2HexString(test_data, data_len);
 					//if( check_com_data( test_data, data_len ) == false )
 					{
-					//	Log.e("串口收到", "串口数据错误" + com_data);
+						Log.e("串口收到", "串口数据错误" + com_data);
 					}
 
 					outputInfo("com recv len:" + data_len + " data" + com_data);
@@ -1295,11 +1304,13 @@ public class CameraPublishActivity extends Activity
 							}
 						}
 
-						if( test_data[7] == (byte)0x34 && isShouldRebootSystem == true)
+						if( test_data[7] == (byte)0x34 &&  test_data[6] == (byte)0x0e && isShouldRebootSystem == true)
 						{
+							wawajiCurrentState = test_data[8] & 0xff;
 							//fe 00 00 01 ff ff 0e 34 num1 num2 num3 num4 num5 [校验位1] Num1表示机台状态0，1，2是正常状态，其它看 ** [通知]故障上报 **
 							if( test_data[8] ==1 ||  test_data[8] ==2)//要求重启的时候，娃娃机正在有人玩.啥事也不做。等待
 							{
+
 							}
 							else {
 
@@ -1307,6 +1318,8 @@ public class CameraPublishActivity extends Activity
 								{
 									sendThread.StopNow(); sendThread = null;
 								}
+
+								Log.e(TAG,"娃娃机已满足重启要求。立刻重启" );
 
 								Intent intent=new Intent();
 								intent.setAction("ACTION_RK_REBOOT");
@@ -1454,6 +1467,8 @@ public class CameraPublishActivity extends Activity
 
 							if( mCameraFront!= null )
 							{
+								outputInfo("isFrontCameraPreviewOK" + isFrontCameraPreviewOK);
+
 								if( isFrontCameraPreviewOK )
 									isFrontCameraPreviewOK = false;
 								else if(isFrontCameraPreviewOK == false)
@@ -1461,6 +1476,11 @@ public class CameraPublishActivity extends Activity
 									if(isShouldRebootSystem == false)
 									{
 										isShouldRebootSystem = true;
+										wawajiCurrentState = -1;
+										mHandler.sendEmptyMessageDelayed(MessageType.msgCheckWawaNowState.ordinal(), 3000);
+
+										outputInfo("前置摄像头有效性错误。设备需要重启。");
+										Log.e(TAG,"前置摄像头有效性错误。设备需要重启。" );
 										mHandler.sendEmptyMessage(MessageType.msgQueryWawajiState.ordinal());
 									}
 								}
@@ -1468,6 +1488,8 @@ public class CameraPublishActivity extends Activity
 
 							if(mCameraBack != null)
 							{
+								outputInfo("isBackCameraPreviewOK" + isBackCameraPreviewOK);
+
 								if(isBackCameraPreviewOK)
 									isBackCameraPreviewOK = false;
 								else if(isBackCameraPreviewOK == false)
@@ -1475,13 +1497,31 @@ public class CameraPublishActivity extends Activity
 									if(isShouldRebootSystem == false)
 									{
 										isShouldRebootSystem = true;
+										wawajiCurrentState = -1;
+										mHandler.sendEmptyMessageDelayed(MessageType.msgCheckWawaNowState.ordinal(), 3000);
+
+										outputInfo("后置摄像头有效性错误。设备需要重启。");
+										Log.e(TAG,"后置摄像头有效性错误。设备需要重启。" );
 										mHandler.sendEmptyMessage(MessageType.msgQueryWawajiState.ordinal());
 									}
 								}
 							}
 
+
 							//send_com_data(0x34);
 							mHandler.sendEmptyMessageDelayed(MessageType.msgCheckPreview.ordinal(), 5000);
+					}
+					break;
+				case msgCheckWawaNowState:
+					{
+						if( wawajiCurrentState != 1 && wawajiCurrentState != 2)
+						{
+							Log.e(TAG,"娃娃机状态已满足重启要求，立刻重启" );
+
+							Intent intent=new Intent();
+							intent.setAction("ACTION_RK_REBOOT");
+							sendBroadcast(intent,null);
+						}
 					}
 					break;
 				case msgQueryWawajiState:
