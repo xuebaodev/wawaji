@@ -9,6 +9,7 @@ public class APKVersionCodeUtils {
      * @param mContext
      * @return
      */
+    /*
     public static int getVersionCode(Context mContext) {
         int versionCode = 0;
         try {
@@ -19,7 +20,7 @@ public class APKVersionCodeUtils {
             e.printStackTrace();
         }
         return versionCode;
-    }
+    }*/
 
     /**
      * 获取版本号名称

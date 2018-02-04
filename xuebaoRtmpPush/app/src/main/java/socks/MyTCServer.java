@@ -3,6 +3,8 @@ package socks;
 import android.os.Message;
 import android.util.Log;
 
+import com.xuebao.rtmpPush.CameraPublishActivity;
+
 import org.json.JSONObject;
 
 import socks.VideoConfig;
@@ -132,7 +134,7 @@ public class MyTCServer {
                         }
 
                         Message message = Message.obtain();
-                        message.what = 110;//软件自动更新
+                        message.what = CameraPublishActivity.MessageType.msgOnUpdate.ordinal();//软件自动更新
                         message.obj = aa;
 
                         if( VideoConfig.instance.msgHandler  != null)

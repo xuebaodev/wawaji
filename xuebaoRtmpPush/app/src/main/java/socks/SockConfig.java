@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.xuebao.rtmpPush.CameraPublishActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -267,7 +269,7 @@ public class SockConfig {
                             }
 
                             Message message1 = Message.obtain();
-                            message1.what = 110;//软件自动更新
+                            message1.what = CameraPublishActivity.MessageType.msgOnUpdate.ordinal();//软件自动更新
                             message1.obj = aa;
 
                             if( handler  != null)

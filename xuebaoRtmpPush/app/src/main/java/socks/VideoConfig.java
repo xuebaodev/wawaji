@@ -28,6 +28,34 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
+    public int appVersion = 20180204;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+
+    //=================changelog
+    //20180204
+    //0x3c命令现在改成了配置服务器的地址。
+    //获取到IP以后立刻检查娃娃机是否就绪，并给他设置参数。如果已就绪，则开始连接应用服务器
+    //透传所有的0x34
+    //一些遗漏的逻辑修修补补
+
+    //20180203
+    //switch case里面的魔数现在更改成枚举的方式以使程序更具可读性和扩展性。--需经过全面测试查看是否遗漏,或者改错。
+    //重启系统前 会优雅的关掉应用服务器的连接防止它一脸懵逼的记录各种超时错误日志。当然你不处理关闭的socket我也没办法。
+    //逻辑变更为等待IP后开始配置线程，开始检查时间。
+
+   /*20180202
+    健壮性修改和bug修复措施。
+
+    修改：
+    appversion现在不再读取gradle配置的应用版本。而是采取版本发行日期的版本号为准。因为采取应用版本时，不方便紧急情况下回退旧版本。
+    打开串口函数：现在会打开，关闭，再打开。以便解决安卓板串口有时候无法正常收发数据的bug。
+    摄像头的预览现在会在系统获取时间后几秒内才会开始。以便解决安卓板因为时间获取功能导致摄像头预览卡顿引发推流失败的bug。
+    预览开始后，5秒钟循环检查是否预览已丢失(当摄像头失去连接时会产生这种状况)，如丢失，屏蔽开局指令。查询娃娃机状态，如空闲直接重启。否则等待玩家玩完本局，重启。
+
+    增加：
+    增加协议FE 00 00 01 FF FF 09 88 2D .安卓板收到此命令时，会重启安卓系统。
+    程序现在会在开始时，检查娃娃机是否就绪。因为偶尔会有娃娃机自检比安卓板慢的情况。如就绪，才会开始连接应用并心跳。否则间隔1秒去发送0X34等待娃娃机就绪。
+    这种情况是为了防止应用连接服务器后，娃娃机其实还未就绪时，导致玩家第一时间进入此机器后无法开局的问题。*/
+
     //分辨率
     int resolution_index = 0;
     public void SetResolutionIndex(int newIndex)
@@ -137,8 +165,6 @@ public class VideoConfig
     public String url1 = "";
     public String url2 = "";
 
-    public int appVersion;//本app的版本号。用于升级时比较大小
-
     //本机IP 应用服务器IP 端口
     public boolean using_dhcp = true;
     public String hostIP = "";//本机IP
@@ -236,14 +262,12 @@ public class VideoConfig
         destHost = share.getString("destHost", "");
         destPort = share.getInt("destPort", 0);
 
-        configHost = share.getString("configHost", "192.168.0.116");
-        configPort = share.getInt("configPort", 7776);
+        configHost = share.getString("configHost", "");
+        configPort = share.getInt("configPort", 0);
 
         userID = share.getString("userID", "xuebao");
 
         machine_name = share.getString("machine_name", "可爱小白兔");
-
-        appVersion = APKVersionCodeUtils.getVersionCode(context);
 	}
 
     public void SaveConfig(Context context)
@@ -446,7 +470,7 @@ public class VideoConfig
             if(jsonOBJ.has("dhcp")) using_dhcp = jsonOBJ.getBoolean("dhcp");
 
             Message message = Message.obtain();
-            message.what = 104;//更新配置到UI
+            message.what = CameraPublishActivity.MessageType.msgConfigData.ordinal();
             message.obj = ss;
             if(msgHandler  != null) msgHandler.sendMessage(message);
 

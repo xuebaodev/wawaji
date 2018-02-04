@@ -27,7 +27,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import android_serialport_api.SerialPort; 
+import com.xuebao.rtmpPush.CameraPublishActivity;
+
+import android_serialport_api.SerialPort;
 
 public  class ComPort {
 
@@ -193,12 +195,18 @@ public  class ComPort {
 						if (mOutputStream != null) {
 							if (mHandler != null) {
 								Message message = Message.obtain();
-								message.what = 188;
+								message.what = CameraPublishActivity.MessageType.msgComData.ordinal();
 								message.arg1 = len;
 								//这里可以直接传 msgContent 看你们自己的接收端处理参数类型
 								message.obj = hexStringToBytes(msgContent);
 								mHandler.sendMessage(message);
 								Log.e("发送指令", msgContent);
+
+
+								Message msa = Message.obtain();
+								msa.what = CameraPublishActivity.MessageType.msgDebugTxt.ordinal();
+								msa.obj = "发出串口数据";
+								mHandler.sendMessage(msa);
 							}
 						}
 					} else {

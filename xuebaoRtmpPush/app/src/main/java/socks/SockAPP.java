@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.xuebao.rtmpPush.CameraPublishActivity;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +77,7 @@ public class SockAPP {
                     sendMsg(heart_beat_msg);
 
                     Message me1 = Message.obtain();//心跳消息
-                    me1.what = 11;
+                    me1.what = CameraPublishActivity.MessageType.msgMyFireHeartBeat.ordinal();
                     if (handler != null) handler.sendMessage(me1);
 
                     if (ShouldStopNow == true) {
@@ -196,7 +198,7 @@ public class SockAPP {
                             readBuffer = readBuffer.substring(len * 2);
                             //指令正确
                             Message message = Message.obtain();
-                            message.what = 10;
+                            message.what = CameraPublishActivity.MessageType.msgNetworkData.ordinal();
                             message.arg1 = len;
                             message.obj = ComPort.hexStringToBytes(msgContent);
                             ;
@@ -255,7 +257,7 @@ public class SockAPP {
                         socket.setKeepAlive(true);
 
                         Message message1 = Message.obtain();//将IP地址保存给娃娃机
-                        message1.what = 0;
+                        message1.what = CameraPublishActivity.MessageType.msgConnectOK.ordinal();
                         message1.obj = ServerIP;
                         if (handler != null) handler.sendMessage(message1);
                     } catch (IOException e) {
