@@ -374,9 +374,11 @@ public class WawaServer {
 						continue;
 					}
 					
+					//命令码
+					int data_cmd = total_data[7]&0xff;
 					//System.out.println("cmd recv:" + total_data[7]);
 					
-					if ((total_data[7]&0xff)== 0x35) {//心跳消息
+					if (data_cmd == 0x35) {//心跳消息
 						String strMAC = new String(total_data, 8, 12);
 						long t1=System.currentTimeMillis();
 								
@@ -407,7 +409,7 @@ public class WawaServer {
 						} catch (IOException ioe) {
 
 						}
-					}else if((total_data[7]&0xff)== 0xa0) //1.2新增，视频推流成功通知消息
+					}else if(data_cmd== 0xa0) //1.2新增，视频推流成功通知消息
 					{
 						String strMAC = new String(total_data, 8, 12);
 						if((total_data[20]&0xff)== 0x00 )
@@ -426,9 +428,32 @@ public class WawaServer {
 					else  {//translate msg to playing player. but you should check if any error happen.
 						
 						//娃娃机有故障上报。你要标记娃娃机状态为故障-维护中。
-						if( total_data[7] == 0x37 )//error happend..do your code.change machine state and etc.
+						if( data_cmd == 0x37 )//error happend..do your code.change machine state and etc.
 						{
 							
+						}
+						
+						if( data_cmd == 0x89 )//摄像头预览故障-推流故障 娃娃机即将重启
+						{
+							int frontCamstate  = total_data[8]&0xff;
+							int backCamstate = total_data[9]&0xff;
+							String st_txt = "收到即将重启命令.";
+							
+							if(frontCamstate == 0 )
+								st_txt += "前置正常.";
+							else if (frontCamstate == 1)
+								st_txt += "前置推流故障.";
+							else if(frontCamstate == 2)
+								st_txt += "前置缺失.";
+							
+							if(backCamstate == 0 )
+								st_txt += "后置正常.";
+							else if (backCamstate == 1)
+								st_txt += "后置推流故障.";
+							else if(backCamstate == 2)
+								st_txt += "后置缺失.";
+							
+							System.out.println(st_txt);
 						}
 						
 						//translate to current player
@@ -438,7 +463,7 @@ public class WawaServer {
 						if(me.current_player != null && me.current_player.isClosed() == false)
 							SimpleApp.cserver.TranlsateToPlayer(me.current_player , total_data);
 						
-						if(total_data[7] == 0x33)//game end.//set wawaji to free.
+						if( data_cmd == 0x33 )//game end.//set wawaji to free.
 						{
 							if (all_machines.size() <= 0)
 								return ;

@@ -240,10 +240,12 @@ public class ClientServer {
 
 					//简单的登录消息命令---这个你可以随便自己定义。客户端和服务器配合就行了
 					//在实际的应用场景，你可以给玩家返回任意格式的信息。我这里只默认构造房间列表返回。--方便简单演示
-					if (total_data[7] == 0x01) // login and req room list//note: you should send other cmd to handle
-												// login.
+					int data_cmd = total_data[7]&0xff;
+					
+					if (data_cmd == 0x01) // login and request room list
 					{
 						// make this client login.
+						// just a simple test. should implement by yourself
 						synchronized (all_clients) {
 							all_clients.put(pi.socket, pi);
 						}
@@ -269,7 +271,7 @@ public class ClientServer {
 							out.flush();
 
 						}
-					} else if (total_data[7] == 0x02) // enter room 
+					} else if (data_cmd == 0x02) // enter room 
 					{
 						//玩家进入房间。也就是进入了该娃娃机的列表。该娃娃机状态发生变更时，必须通知这个列表里面的所有人
 						//简单版的服务器不做这个功能。然而你们必须要做。
@@ -277,7 +279,7 @@ public class ClientServer {
 						pi.in_room_mac = strMAC;
 
 						System.out.println("clinet enter room " + strMAC);
-					} else if (total_data[7] == 0x03) // leave room
+					} else if (data_cmd == 0x03) // leave room
 					{
 						//玩家离开房间--todo此时wserver必须通知房间里的所有人更新inroom的玩家个数什么的。
 						SimpleApp.wserver.processPlayerLeave(pi.in_room_mac, pi.socket);
@@ -285,7 +287,7 @@ public class ClientServer {
 						
 
 						System.out.println("clinet leave room ");
-					} else if (total_data[7] == 0x31)// player start play.
+					} else if (data_cmd == 0x31)// player start play.
 					{
 						//开局命令--
 						//检查是否可以开局并且回应给客户
@@ -322,12 +324,6 @@ public class ClientServer {
 					// {
 					// SimpleApp.wserver.Send(total_data);
 					// }
-
-					/*
-					 * Message message = Message.obtain(); message.what = 10; message.arg1 =
-					 * data_length; message.obj = total_data; if(handler != null)
-					 * handler.sendMessage(message);
-					 */
 
 				} catch (Exception e) {
 					e.printStackTrace();
