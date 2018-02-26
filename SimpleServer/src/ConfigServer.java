@@ -84,9 +84,10 @@ public class ConfigServer {
 	boolean showldStop = false;
 	int nport = 0;
 	public void Start(int np) {
+		nport = np;
 		showldStop = false;
 		all_machines = new HashMap<String, ConfigInfo>();
-
+		
 		newThread = new Thread(new Runnable() {
 			@Override
 			public void run() {

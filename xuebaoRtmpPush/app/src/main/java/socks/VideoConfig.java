@@ -28,9 +28,19 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180204;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180225;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180225
+    //远程配置逻辑修改:
+
+    //修改：
+    // 原先连接应用服务器成功，会将应用服务器IP保存到娃娃机，现在改成：远程配置功能变更时，则保存。
+
+    //增加：
+    //增加是否启用配置服务器的checkbox,当不启用配置服务器时，保存到娃娃机的就是空 和 0
+    //增加协议：0x89 用于检测到推流故障时，通知服务器，本安卓板即将重启。
+
     //20180204
     //0x3c命令现在改成了配置服务器的地址。
     //获取到IP以后立刻检查娃娃机是否就绪，并给他设置参数。如果已就绪，则开始连接应用服务器
@@ -172,7 +182,6 @@ public class VideoConfig
     public String maskIP="";//子网掩码
 
     public String destHost = "";//应用服务器地址
-
     int destPort = 0;//应用服务器地址
     public void SetAppPort(int np)
     {
@@ -188,8 +197,9 @@ public class VideoConfig
     }
 
     public String configHost;//配置服务器
-
     int configPort;//地址
+    public boolean enableConfigServer = false;//使用启用配置服务器
+
     public void SetConfigPort(int np)
     {
         if(np<=0 || np >= 65535)
@@ -264,6 +274,7 @@ public class VideoConfig
 
         configHost = share.getString("configHost", "");
         configPort = share.getInt("configPort", 0);
+        enableConfigServer = share.getBoolean("enableConfigServer", false);
 
         userID = share.getString("userID", "xuebao");
 
@@ -346,6 +357,7 @@ public class VideoConfig
 
         editor.putString("configHost", configHost);
         editor.putInt("configPort", configPort);
+        editor.putBoolean("enableConfigServer", enableConfigServer);
 
         editor.putString("machine_name", machine_name);
         editor.commit();
@@ -410,6 +422,7 @@ public class VideoConfig
             inf.put("operateServer", destHost);
             inf.put("operatePort", destPort);
 
+            inf.put("enableConfigServer", enableConfigServer);
             inf.put("configServer", configHost);
             inf.put("configPort", configPort);
 
@@ -459,6 +472,7 @@ public class VideoConfig
             if(jsonOBJ.has("operateServer")) destHost = jsonOBJ.getString("operateServer");
             if(jsonOBJ.has("operatePort")) SetAppPort(jsonOBJ.getInt("operatePort") );
 
+            if(jsonOBJ.has("enableConfigServer")) enableConfigServer = jsonOBJ.getBoolean("enableConfigServer");
             if(jsonOBJ.has("configServer")) configHost = jsonOBJ.getString("configServer");
             if(jsonOBJ.has("configPort"))  SetConfigPort(jsonOBJ.getInt("configPort"));
 

@@ -73,12 +73,15 @@ public class SockAPP {
                         break;
                     }
 
-                    Log.e(TAG, "心跳");
-                    sendMsg(heart_beat_msg);
+                    if( socket!= null )
+                    {
+                        Log.e(TAG, "心跳");
+                        sendMsg(heart_beat_msg);
 
-                    Message me1 = Message.obtain();//心跳消息
-                    me1.what = CameraPublishActivity.MessageType.msgMyFireHeartBeat.ordinal();
-                    if (handler != null) handler.sendMessage(me1);
+                        Message me1 = Message.obtain();//心跳消息
+                        me1.what = CameraPublishActivity.MessageType.msgMyFireHeartBeat.ordinal();
+                        if (handler != null) handler.sendMessage(me1);
+                    }
 
                     if (ShouldStopNow == true) {
                         break;
@@ -255,11 +258,6 @@ public class SockAPP {
 
                         socket = new Socket(ServerIP, port);
                         socket.setKeepAlive(true);
-
-                        Message message1 = Message.obtain();//将IP地址保存给娃娃机
-                        message1.what = CameraPublishActivity.MessageType.msgConnectOK.ordinal();
-                        message1.obj = ServerIP;
-                        if (handler != null) handler.sendMessage(message1);
                     } catch (IOException e) {
                         Log.e(TAG, "Connect excetion..retry after 3s");
                         try {

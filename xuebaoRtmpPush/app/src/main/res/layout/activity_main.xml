@@ -372,13 +372,21 @@
                 android:layout_toRightOf="@id/server_port_tip"
                  />
 
+            <CheckBox
+                android:id="@+id/enableConfServer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="启用远程配置功能"
+                android:layout_toRightOf="@id/server_port"
+                />
+
             <TextView
                 android:id="@+id/configserver_ip_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
-                android:layout_toRightOf="@id/server_port"
+                android:layout_toRightOf="@id/enableConfServer"
                 android:text="配置服务器:"
                 android:textColor="@android:color/black" />
 

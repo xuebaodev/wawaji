@@ -78,12 +78,15 @@ public class SockConfig {
                         if(ShouldStopNow == true)
                             break;
 
-                        Log.e(TAG, "心跳.");
+                        if( socket != null)
+                        {
+                            Log.e(TAG, "心跳.");
 
-                        String strHeadBeat = String.format("{\"userID\":\"%s\",\"mac\":\"%s\",\"cmd\":\"heartbeat\",\"name\":\"%s\"}",
-                                VideoConfig.instance.userID, VideoConfig.instance.my_mac,VideoConfig.instance.machine_name);
+                            String strHeadBeat = String.format("{\"userID\":\"%s\",\"mac\":\"%s\",\"cmd\":\"heartbeat\",\"name\":\"%s\"}",
+                                    VideoConfig.instance.userID, VideoConfig.instance.my_mac,VideoConfig.instance.machine_name);
 
-                        sendMsg(strHeadBeat.getBytes());
+                            sendMsg(strHeadBeat.getBytes());
+                        }
 
                         if(ShouldStopNow == true)
                             break;
