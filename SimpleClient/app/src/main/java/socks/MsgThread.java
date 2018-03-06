@@ -34,7 +34,7 @@ public class MsgThread extends Thread {
     public void StopNow()
     {
         shouldStopNow = true;
-        notify();
+        interrupt();
     }
 
     @Override
@@ -56,6 +56,8 @@ public class MsgThread extends Thread {
                     e.printStackTrace();
                 }
             }
+
+            Log.e("MsgThread", "发送线程退出");
         }
     }
 }
