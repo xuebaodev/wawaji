@@ -169,7 +169,7 @@ public class SockAPP {
             }
 
             //指令 至少是9位 包长度在第 7位
-            while (readBuffer.length() > 9 * 2) {
+            while (readBuffer.length() >= 9 * 2) {
                 String slen = readBuffer.substring(12, 14);
                 int len = Integer.parseInt(slen, 16);
 

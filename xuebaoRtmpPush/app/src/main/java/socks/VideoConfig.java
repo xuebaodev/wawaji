@@ -28,10 +28,14 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180225;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
-
+    public int appVersion = 20180306;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180306
+    //修复串口接收及socket接收的数据长度刚好为9时，不触发通知的bug。原因如下。原先是> 而实际应为>=
+    //指令 至少是9位 包长度在第 7位
+    //       while (readBuffer.length() >= 9 * 2) {
+
     //20180225
     //远程配置逻辑修改:
 
