@@ -59,7 +59,7 @@ public  class ComPort {
 
 					if (size > 0) {
 
-                        Log.i("com_recv", "size" + size);
+                       if(showlog) Log.i("com_recv", "size" + size);
 						onDataReceived(buffer, size);
 					}
 				} catch (IOException e) {

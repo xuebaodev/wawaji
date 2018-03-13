@@ -273,6 +273,14 @@
                 android:layout_height="wrap_content"
                 android:text="帧率建议在15-20即可。高了后果自负" />
 
+            <CheckBox
+                android:id="@+id/cbIncludeAudio"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="包含声音"
+                />
+
         </LinearLayout>
 
         <!--推流地址1-->
@@ -428,22 +436,20 @@
             android:id="@+id/lay_record"
             android:layout_below="@+id/lay_ip">
 
-            <Button
-                android:id="@+id/button_start_recorder"
+            <CheckBox
+                android:id="@+id/checkSwitchToOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" 录像" />
+                android:text="切换至一路"
+                />
 
-            <Spinner
-                android:id="@+id/recoder_selctor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/button_recoder_manage"
+            <TextView
+                android:id="@+id/curWay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" 录像管理 " />
+                android:layout_marginLeft="10dp"
+                android:text="当前:推前路"
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_start_push"
@@ -451,6 +457,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="保存并推送" />
+
+            <CheckBox
+                android:id="@+id/checkRecord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="启用录像"
+                />
+
+            <TextView
+                android:id="@+id/devSpace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="已有录像数: 存储空间剩余:"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 

@@ -43,7 +43,7 @@
             </ListView>
             <TabControl HorizontalAlignment="Left" Height="704" Margin="259,9,0,-27" VerticalAlignment="Top" Width="968">
                 <TabItem Header="参数配置">
-                    <Grid Background="White">
+                    <Grid x:Name="ConfigServerCheckBox" Background="White">
 
                         <ComboBox x:Name="resolutionInput" HorizontalAlignment="Left" Margin="448,10,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="3" SelectionChanged="resolutionInput_SelectionChanged">
                             <ComboBoxItem>960*720</ComboBoxItem>
@@ -68,28 +68,28 @@
                         <Label Content="IP" HorizontalAlignment="Left" Margin="112,149,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="IPShow" Content="0.0.0.0" HorizontalAlignment="Left" Margin="166,149,0,0" VerticalAlignment="Top" Width="155"/>
                         <Label Content="mac" HorizontalAlignment="Left" Margin="346,149,0,0" VerticalAlignment="Top"/>
-                        <Label Content="操作指令服务器" HorizontalAlignment="Left" Margin="27,208,0,0" VerticalAlignment="Top"/>
-                        <Label Content="域名或IP" HorizontalAlignment="Left" Margin="180,203,0,0" VerticalAlignment="Top"/>
-                        <Label Content="端口" HorizontalAlignment="Left" Margin="447,201,0,0" VerticalAlignment="Top"/>
-                        <TextBox x:Name="operationServerInput" HorizontalAlignment="Left" Height="23" Margin="260,203,0,0" TextWrapping="Wrap" Text="operationServer" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged_3"/>
-                        <TextBox x:Name="operationPortInput" HorizontalAlignment="Left" Height="23" Margin="502,203,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="120" PreviewTextInput="TextBox_TextChanged_4"  input:InputMethod.IsInputMethodEnabled="False" MaxLength="6" MaxLines="1" TextChanged="operationPortInput_TextChanged" />
-                        <Label Content="参数配置服务器" HorizontalAlignment="Left" Margin="27,255,0,0" VerticalAlignment="Top" Width="94"/>
-                        <Label Content="域名或IP" HorizontalAlignment="Left" Margin="180,249,0,0" VerticalAlignment="Top"/>
-                        <TextBox x:Name="configServerInput" HorizontalAlignment="Left" Height="24" Margin="260,249,0,0" TextWrapping="Wrap" Text="configServer" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged_5"/>
-                        <TextBox x:Name="configPortInput" HorizontalAlignment="Left" Height="24" Margin="502,249,0,0" TextWrapping="Wrap" Text="1081" VerticalAlignment="Top" Width="120" PreviewTextInput="TextBox_TextChanged_6" MaxLength="6" MaxLines="1" input:InputMethod.IsInputMethodEnabled="False" TextChanged="configPortInput_TextChanged"/>
-                        <Label Content="端口" HorizontalAlignment="Left" Margin="447,247,0,0" VerticalAlignment="Top"/>
-                        <CheckBox x:Name="hwEncodeInput" Content="硬编码" HorizontalAlignment="Left" Margin="38,311,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked_1" Unchecked="CheckBox_Checked_1"/>
-                        <Label Content="画质质量" HorizontalAlignment="Left" Margin="143,303,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.15,0.212"/>
-                        <ComboBox x:Name="encodeQualityInput" HorizontalAlignment="Left" Margin="227,303,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged">
+                        <Label Content="操作指令服务器" HorizontalAlignment="Left" Margin="27,202,0,0" VerticalAlignment="Top"/>
+                        <Label Content="域名或IP" HorizontalAlignment="Left" Margin="180,197,0,0" VerticalAlignment="Top"/>
+                        <Label Content="端口" HorizontalAlignment="Left" Margin="447,195,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="operationServerInput" HorizontalAlignment="Left" Height="23" Margin="260,197,0,0" TextWrapping="Wrap" Text="operationServer" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged_3"/>
+                        <TextBox x:Name="operationPortInput" HorizontalAlignment="Left" Height="23" Margin="502,197,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="120" PreviewTextInput="TextBox_TextChanged_4"  input:InputMethod.IsInputMethodEnabled="False" MaxLength="6" MaxLines="1" TextChanged="operationPortInput_TextChanged" />
+                        <Label Content="参数配置服务器" HorizontalAlignment="Left" Margin="27,249,0,0" VerticalAlignment="Top" Width="94"/>
+                        <Label Content="域名或IP" HorizontalAlignment="Left" Margin="180,243,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="configServerInput" HorizontalAlignment="Left" Height="24" Margin="260,243,0,0" TextWrapping="Wrap" Text="configServer" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged_5"/>
+                        <TextBox x:Name="configPortInput" HorizontalAlignment="Left" Height="24" Margin="502,243,0,0" TextWrapping="Wrap" Text="1081" VerticalAlignment="Top" Width="120" PreviewTextInput="TextBox_TextChanged_6" MaxLength="6" MaxLines="1" input:InputMethod.IsInputMethodEnabled="False" TextChanged="configPortInput_TextChanged"/>
+                        <Label Content="端口" HorizontalAlignment="Left" Margin="447,241,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="hwEncodeInput" Content="硬编码" HorizontalAlignment="Left" Margin="38,297,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked_1" Unchecked="CheckBox_Checked_1"/>
+                        <Label Content="画质质量" HorizontalAlignment="Left" Margin="143,289,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.15,0.212"/>
+                        <ComboBox x:Name="encodeQualityInput" HorizontalAlignment="Left" Margin="227,289,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged">
                             <ComboBoxItem>baseline profile</ComboBoxItem>
                             <ComboBoxItem>main profile</ComboBoxItem>
                             <ComboBoxItem>high profile</ComboBoxItem>
                         </ComboBox>
-                        <Label Content="关键帧间隔" HorizontalAlignment="Left" Margin="413,298,0,0" VerticalAlignment="Top"/>
-                        <TextBox x:Name="encodeNumInput" HorizontalAlignment="Left" Height="23" Margin="502,303,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="65" PreviewTextInput="TextBox_TextChanged_7" MaxLength="3" MaxLines="1" input:InputMethod.IsInputMethodEnabled="False" TextChanged="encodeNumInput_TextChanged"/>
-                        <Label Content="帧率" HorizontalAlignment="Left" Margin="644,299,0,0" VerticalAlignment="Top"/>
-                        <TextBox x:Name="fpsInput" HorizontalAlignment="Left" Height="23" Margin="686,301,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="56" PreviewTextInput="TextBox_TextChanged_8" MaxLength="2" MaxLines="1"  input:InputMethod.IsInputMethodEnabled="False" TextChanged="fpsInput_TextChanged"/>
-                        <CheckBox x:Name="recordInput" Content="录像" HorizontalAlignment="Left" Margin="811,303,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked_2" Unchecked="CheckBox_Checked_2"/>
+                        <Label Content="关键帧间隔" HorizontalAlignment="Left" Margin="413,284,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="encodeNumInput" HorizontalAlignment="Left" Height="23" Margin="502,289,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="65" PreviewTextInput="TextBox_TextChanged_7" MaxLength="3" MaxLines="1" input:InputMethod.IsInputMethodEnabled="False" TextChanged="encodeNumInput_TextChanged"/>
+                        <Label Content="帧率" HorizontalAlignment="Left" Margin="644,285,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="fpsInput" HorizontalAlignment="Left" Height="23" Margin="686,287,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="56" PreviewTextInput="TextBox_TextChanged_8" MaxLength="2" MaxLines="1"  input:InputMethod.IsInputMethodEnabled="False" TextChanged="fpsInput_TextChanged"/>
+                        <CheckBox x:Name="recordInput" Content="录像" HorizontalAlignment="Left" Margin="811,289,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked_2" Unchecked="CheckBox_Checked_2"/>
                         <Label Content="用户ID" HorizontalAlignment="Left" Margin="621,149,0,0" VerticalAlignment="Top"/>
                         <Button x:Name="savaApplyButton" Content="保存并应用" Margin="796,343,71,0" VerticalAlignment="Top" Height="42" Click="Button_Click_1" RenderTransformOrigin="0.5,0.5"/>
                         <Label x:Name="LogLabel" Content="" HorizontalAlignment="Left" Margin="77,359,0,0" VerticalAlignment="Top" Width="281" Foreground="Black"/>
@@ -115,6 +115,9 @@
                         <Label Content="应用版本号：" HorizontalAlignment="Left" Margin="27,629,0,0" VerticalAlignment="Top" Width="89"/>
                         <Label x:Name="Versionlabel" Content="0" HorizontalAlignment="Left" Margin="121,629,0,0" VerticalAlignment="Top" Width="80"/>
                         <TextBox x:Name="macShow" HorizontalAlignment="Left" Height="23" Margin="399,149,0,0" TextWrapping="Wrap" Text="00-00-00-00--00-00" VerticalAlignment="Top" Width="133" IsReadOnly="True"/>
+                        <CheckBox x:Name="enableConfigServerCheckBox" Content="启用配置服务器功能" HorizontalAlignment="Left" Margin="669,248,0,0" VerticalAlignment="Top" Height="19" Width="134" Checked="CheckBox_Checked_3"  Unchecked="CheckBox_Checked_3"/>
+                        <CheckBox x:Name="switchToOneCheckBox" Content="切换至一路(不要随意更改此值，除非你清楚)" HorizontalAlignment="Left" Margin="38,330,0,0" VerticalAlignment="Top" Width="268"   Checked="CheckBox_Checked_4" Unchecked="CheckBox_Checked_4" />
+                        <CheckBox x:Name="containAudioCheckBox" Content="包含声音" HorizontalAlignment="Left" Margin="345,330,0,0" VerticalAlignment="Top" Width="78" Checked="containAudioCheckBox_Checked" Unchecked="containAudioCheckBox_Checked"/>
 
 
 

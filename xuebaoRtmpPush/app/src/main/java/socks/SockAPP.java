@@ -75,7 +75,7 @@ public class SockAPP {
 
                     if( socket!= null )
                     {
-                        Log.e(TAG, "心跳");
+                        //Log.e(TAG, "心跳");
                         sendMsg(heart_beat_msg);
 
                         Message me1 = Message.obtain();//心跳消息
@@ -197,7 +197,7 @@ public class SockAPP {
                         if (showlog) Log.e("开头正确sock", msgContent);
                         //校验指令
                         if (ComPort.check_com_data_string(msgContent, len * 2)) {
-                            Log.e(TAG, "收到:" + msgContent);
+                            if (showlog) Log.e(TAG, "收到:" + msgContent);
                             readBuffer = readBuffer.substring(len * 2);
                             //指令正确
                             Message message = Message.obtain();

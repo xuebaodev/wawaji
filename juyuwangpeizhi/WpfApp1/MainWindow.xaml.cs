@@ -625,6 +625,12 @@ namespace WpfApp1
                 Versionlabel.Content = "";
 
 
+            enableConfigServerCheckBox.IsChecked = selectAndroidClient.enableConfigServer;
+
+            switchToOneCheckBox.IsChecked = selectAndroidClient.swtichToOne;
+
+            containAudioCheckBox.IsChecked = selectAndroidClient.containAudio;
+
         }
 
 
@@ -858,6 +864,23 @@ namespace WpfApp1
         {
             if (configPortInput.Text.Length != 0)
                 selectAndroidClient.configPort = int.Parse(configPortInput.Text);
+        }
+
+
+        //启用配置服务器选项
+        private void CheckBox_Checked_3(object sender, RoutedEventArgs e)
+        {
+            selectAndroidClient.enableConfigServer = enableConfigServerCheckBox.IsChecked.Value;
+            if (selectAndroidClient.enableConfigServer)
+            {
+                configServerInput.IsEnabled = true;
+                configPortInput.IsEnabled = true;
+            }
+            else
+            {
+                configServerInput.IsEnabled = false;
+                configPortInput.IsEnabled = false;
+            }
         }
 
         //关键帧间隔
@@ -1527,6 +1550,20 @@ namespace WpfApp1
         }
 
 
+        //切换至一路
+        private void CheckBox_Checked_4(object sender, RoutedEventArgs e)
+        {
+            selectAndroidClient.swtichToOne = switchToOneCheckBox.IsChecked.Value;
+        }
+
+        private void containAudioCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            selectAndroidClient.containAudio = containAudioCheckBox.IsChecked.Value;
+        }
+
+
+
+
 
 
 
@@ -1607,7 +1644,9 @@ namespace WpfApp1
         public string mac { get; set; }
         public string userID { set; get; }
         public int appVersion { set; get; }
-
+        public bool enableConfigServer { set; get; }
+        public bool swtichToOne { set; get; }
+        public bool containAudio { set; get; }
 
 
         public AndroidClient(string _ip, string _name)

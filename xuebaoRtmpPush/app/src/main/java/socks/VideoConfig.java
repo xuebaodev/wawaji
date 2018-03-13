@@ -28,9 +28,19 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180306;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180313;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180313
+    /*
+    新增功能:
+    1.录像。 当u盘存在 且可用空间大于500MB时，会在游戏开始时录像，游戏结束后停止录像。
+    2.推流的视频现在可以选择是否包含声音。
+    3.当两个摄像头存在时，可以选择只推一路，收到切换命令后，将另一个摄像头的流推往之前的地址。节省一半的带宽。
+    新增[命令]:
+        0x90 收到时，如果是只推一路模式，则会尝试切到另一个摄像头。
+    切流后，安卓版会返回 0x91 index 。其中 index 为1时，表示当前正在推第一路摄像头的数据。为2时，表示正在推第二路摄像头的数据 具体的字段见wiki*/
+
     //20180306
     //修复串口接收及socket接收的数据长度刚好为9时，不触发通知的bug。原因如下。原先是> 而实际应为>=
     //指令 至少是9位 包长度在第 7位
@@ -167,8 +177,8 @@ public class VideoConfig
 
     //录像
     public boolean is_need_local_recorder = false;		// 是否需要本地录像
-    public String recDirFront = "/sdcard/daniulive/recfront";	//本地录像的路径
-    public String recDirBack  = "/sdcard/daniulive/recback";
+
+    public boolean containAudio = false;//包含声音
 
     //摄像头的配置
     private static final int PORTRAIT = 1;	//竖屏
@@ -224,6 +234,9 @@ public class VideoConfig
     public String machine_name;//给人看的 方便记住这台机器
     public String userID;////这台娃娃机所属的用户。 ----即 哪个老板买了它。挂到名下方便管理
 
+    public boolean swtichToOne = false;//2018.3.8 增加只推一路，然后根据收到的命令切换摄像头的模式
+    public int     curPushWay = 1;//1 前路 2 后路
+
     public boolean videoPushState_1 = false;
     public boolean videoPushState_2 = false;
     public void LoadConfig(Context context, Handler hh)
@@ -248,8 +261,6 @@ public class VideoConfig
         sw_video_encoder_speed = share.getInt("sw_video_encoder_speed", 2);
 
         is_need_local_recorder = share.getBoolean("is_need_local_recorder", false);
-        recDirFront = share.getString("recDirFront", "/sdcard/daniulive/recfront");
-        recDirBack = share.getString("recDirBack", "/sdcard/daniulive/recback");
 
         currentOrigentation = share.getInt("currentOrigentation", 1);
 
@@ -284,6 +295,10 @@ public class VideoConfig
         userID = share.getString("userID", "xuebao");
 
         machine_name = share.getString("machine_name", "可爱小白兔");
+
+        swtichToOne = share.getBoolean("swtichToOne", false);
+
+        containAudio = share.getBoolean("containAudio", containAudio);
 	}
 
     public void SaveConfig(Context context)
@@ -336,8 +351,6 @@ public class VideoConfig
         editor.putInt("sw_video_encoder_speed", sw_video_encoder_speed);
 
         editor.putBoolean("is_need_local_recorder", is_need_local_recorder);
-        editor.putString("recDirFront", recDirFront);
-        editor.putString("recDirBack", recDirBack);
 
         editor.putInt("currentOrigentation", currentOrigentation);
 
@@ -365,6 +378,10 @@ public class VideoConfig
         editor.putBoolean("enableConfigServer", enableConfigServer);
 
         editor.putString("machine_name", machine_name);
+
+        editor.putBoolean("swtichToOne", swtichToOne);
+        editor.putBoolean("containAudio", containAudio);
+
         editor.commit();
 	}
 
@@ -438,8 +455,11 @@ public class VideoConfig
             inf.put("mac", my_mac);
             inf.put("userID", userID);
 
+            inf.put("swtichToOne", swtichToOne);
+
             inf.put("videoPushState_1", videoPushState_1);
             inf.put("videoPushState_2", videoPushState_2);
+            inf.put("containAudio", containAudio);
 
             return inf.toString();
         }catch (JSONException e)
@@ -486,7 +506,10 @@ public class VideoConfig
 
             if(jsonOBJ.has("userID")) userID = jsonOBJ.getString("userID");
 
+            if( jsonOBJ.has("swtichToOne")) swtichToOne = jsonOBJ.getBoolean("swtichToOne");
+
             if(jsonOBJ.has("dhcp")) using_dhcp = jsonOBJ.getBoolean("dhcp");
+            if(jsonOBJ.has("containAudio")) containAudio = jsonOBJ.getBoolean("containAudio");
 
             Message message = Message.obtain();
             message.what = CameraPublishActivity.MessageType.msgConfigData.ordinal();

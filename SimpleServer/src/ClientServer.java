@@ -1,4 +1,4 @@
-
+﻿
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -311,6 +311,7 @@ public class ClientServer {
 					else{//default translate other data to wawaji. not handle
 						//其他命令。可能是操作命令什么的，我这里默认转发给娃娃机去处理。
 						//实际应用场景中，应该会有其他请求命令过来，比如充值，获取抓取记录什么的，你们要自己处理哈
+
 						SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, total_data);
 					}
 					// cmd from client. maybe get room . enter room .exit room or play operation.

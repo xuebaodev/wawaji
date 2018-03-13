@@ -233,117 +233,116 @@ public class RecorderManager extends Activity {
 	private void DelAllRecFiles()
 	{
 		Log.i(Tag, "DelAllRecFiles++++");
-		
+
 		if ( recDirPath == null )
 		{
 			Log.i(Tag, "recDirPath is null");
 			return;
 		}
-			
-		
+
 		if ( recDirPath.isEmpty() )
 		{
 			Log.i(Tag, "recDirPath is empty");
 			return;
 		}
-			
+
 
 		File recDirFile = null;
-		
+
 		try
 		{
-			 recDirFile = new File(recDirPath);
+			recDirFile = new File(recDirPath);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 			return;
 		}
-		
+
 		if ( !recDirFile.exists() )
 		{
 			Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
 			return;
 		}
-		
+
 		if ( !recDirFile.isDirectory() )
 		{
 			Log.e(Tag, recDirPath + " is not dir");
 			return;
 		}
-		
-		 File[] files = recDirFile.listFiles();
-		 if ( files == null )
-		 {
-			 return;
-		 }
-		 
-		 try
-		 {
-			 for ( int i =0; i < files.length; ++i )
-			 {
-				
-				 
-				 File recFile = files[i];
-				 if ( recFile == null )
-				 {
-					 continue;
-				 }
-				 
-				 //Log.i(Tag, "recfile:" + recFile.getAbsolutePath());
-				 
-				 if ( !recFile.isFile() )
-				 {
-					 continue;
-				 }
-				 
-				 if ( !recFile.exists() )
-				 {
-					 continue;
-				 }
-				 
-				 String name = recFile.getName();
-				 if ( name == null )
-				 {
-					 continue;
-				 }
-				 
-				 if ( name.isEmpty() )
-				 {
-					 continue;
-				 }
-				
-				 if ( name.endsWith(".mp4") )
-				 {
-					 if ( recFile.delete()  )
-					 {
-						 Log.i(Tag, "Delete file:" + name);
-					 }
-					 else
-					 {
-						 Log.i(Tag, "Delete file failed, " + name);
-					 }
-					
-				 }
-				 
-				
-				 
-			 }
-		 }
-		 catch(Exception e)
-		 {
-			 e.printStackTrace();
-		 }
-		 
-		 fileList = null;
-		 
-		 SimpleAdapter ladapter = new SimpleAdapter(this,getMapData(fileList),R.layout.rec_files_list_view_item,
-	        		new String[]{"ItemFileName"},new int[]{R.id.ItemFileName});  
-	        
-	      recFileListView.setAdapter(ladapter);  
-		 
-	 
-		 Log.i(Tag, "DelAllRecFiles----");
+
+		File[] files = recDirFile.listFiles();
+		if ( files == null )
+		{
+			return;
+		}
+
+		try
+		{
+			for ( int i =0; i < files.length; ++i )
+			{
+
+
+				File recFile = files[i];
+				if ( recFile == null )
+				{
+					continue;
+				}
+
+				//Log.i(Tag, "recfile:" + recFile.getAbsolutePath());
+
+				if ( !recFile.isFile() )
+				{
+					continue;
+				}
+
+				if ( !recFile.exists() )
+				{
+					continue;
+				}
+
+				String name = recFile.getName();
+				if ( name == null )
+				{
+					continue;
+				}
+
+				if ( name.isEmpty() )
+				{
+					continue;
+				}
+
+				if ( name.endsWith(".mp4") )
+				{
+					if ( recFile.delete()  )
+					{
+						Log.i(Tag, "Delete file:" + name);
+					}
+					else
+					{
+						Log.i(Tag, "Delete file failed, " + name);
+					}
+
+				}
+
+
+
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		fileList = null;
+
+		SimpleAdapter ladapter = new SimpleAdapter(this,getMapData(fileList),R.layout.rec_files_list_view_item,
+				new String[]{"ItemFileName"},new int[]{R.id.ItemFileName});
+
+		recFileListView.setAdapter(ladapter);
+
+
+		Log.i(Tag, "DelAllRecFiles----");
 	}
 	
 	 class ButtonDelAllRecFilesListenser implements OnClickListener
