@@ -99,6 +99,7 @@ export PATH JAVA_HOME CLASSPATH
 * [**xuebaoRtmpPush**] 基于大牛SDK双路RTMP摄像头推流及娃娃机指令交互安卓板源码。 **此摄像头推流程序已获得大牛直播授权使用于本安卓板**
 	* xuebaoRtmpPush启动后，会自动注册到配置服务器，外网配置工具可通过配置服务器配置安卓板参数-可选项。当您暂时不用外网来进行配置修改时，这个功能可以无视。请把配置服务器地址和端口都留空。
 	* 目前没做用户认证，因此多个用户同时修改一个娃娃机的配置时，只有最后一个配置者的命令会生效。
+	* 要编译此源码，请使用AndroidStudio 2.3版本，Android SDK 26.然后使用根目录下的签名文件xuebao_android_key.jks 密码都是123456。Key alias:xuebao 来执行编译并生成release apk即可。
 
 * [**SimpleClient**] 简单操作客户端-安卓版的源码。
 	* 您可以通过此源码更好的熟悉娃娃机的操作命令。
