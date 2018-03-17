@@ -85,13 +85,14 @@
             android:id="@+id/my_ip_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:text="本机IP:"
             android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/my_ip_addr"
                 android:layout_width="150dp"
+                android:textSize="16dip"
                 android:layout_height="wrap_content"
                 android:text="0.0.0.0"
                 android:textColor="@android:color/black" />
@@ -100,13 +101,14 @@
                 android:id="@+id/my_netgate_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:text="网关:"
                 android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/my_gate_addr"
                 android:layout_width="150dp"
+                android:textSize="16dip"
                 android:layout_height="wrap_content"
                 android:text="0.0.0.0"
                 android:textColor="@android:color/black" />
@@ -115,13 +117,14 @@
                 android:id="@+id/my_netmask_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:text="子网掩码:"
                 android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/my_netmask_addr"
                 android:layout_width="150dp"
+                android:textSize="16dip"
                 android:layout_height="wrap_content"
                 android:text="0.0.0.0"
                 android:textColor="@android:color/black" />
@@ -131,13 +134,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="5dp"
                 android:text="所属用户:"
                 android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/id_userid"
-                android:layout_width="200dp"
+                android:layout_width="100dp"
+                android:textSize="16dip"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:maxLength="16"
@@ -355,7 +359,7 @@
 
             <EditText
                 android:id="@+id/server_ip"
-                android:layout_width="200dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/server_ip_tip"
@@ -373,7 +377,7 @@
 
             <EditText
                 android:id="@+id/server_port"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:inputType="number"
@@ -400,7 +404,7 @@
 
             <EditText
                 android:id="@+id/config_server_ip"
-                android:layout_width="200dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/configserver_ip_tip"
@@ -419,7 +423,7 @@
 
             <EditText
                 android:id="@+id/config_server_port"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/config_server_port_tip"
@@ -481,6 +485,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lay_record"
+
             >
 
             <TextView
@@ -530,14 +535,28 @@
         </RelativeLayout>
 
         <!-- 日志-->
-        <TextView
-            android:id="@+id/txtlog"
-            android:layout_below="@+id/lay_record"
-            android:layout_toRightOf="@+id/cam_preview"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:lines="20"
-            android:text="log" />
+            android:layout_toRightOf="@+id/cam_preview"
+            android:layout_below="@+id/lay_record"
+            android:id="@+id/lay_list"
+            android:background="@color/black_overlay"
+            >
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tablayout"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/tablayout"
+                android:layout_height="match_parent" />
+
+
+            </RelativeLayout>
+
 
     </RelativeLayout>
 

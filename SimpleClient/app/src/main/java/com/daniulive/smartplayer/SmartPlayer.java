@@ -381,6 +381,28 @@ public class SmartPlayer extends Activity {
         }
     }
 
+    //安卓板特有协议，当推流出于双路单推 模式时，按此按钮发送切流命令
+	public void OnClickSwitchCam(View v)
+	{
+		byte com_cmd[] = user_uart_sendcom(0x90);
+		Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
+		if(MainActivity.sendThread != null)
+		{
+			MainActivity.sendThread.SendOut( com_cmd );
+		}
+	}
+
+	//安卓板特有协议。模拟游戏结束。以便可以在不接娃娃机时测试录像逻辑
+	public void OnClickFakeEnd(View v)
+	{
+		byte com_cmd[] = user_uart_sendcom(0x99);
+		Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
+		if(MainActivity.sendThread != null)
+		{
+			MainActivity.sendThread.SendOut( com_cmd );
+		}
+	}
+
 	Handler handler = new Handler() {
 
 		@Override

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.Size;
 
 import com.xuebao.rtmpPush.CameraPublishActivity;
+import com.xuebao.rtmpPush.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +29,14 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180313;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180317;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180317
+    /*增加 摄像头的调色功能。需要特定的安卓板以及rom支持。
+    * */
+
+
     //20180313
     /*
     新增功能:
@@ -239,6 +245,20 @@ public class VideoConfig
 
     public boolean videoPushState_1 = false;
     public boolean videoPushState_2 = false;
+
+    public boolean usingCustomConfig = false;
+    //饱和度
+    public int staturation  = 0;
+    //对比度
+    public int contrast = 0;
+    //明度
+    public int brightness =0;
+
+    //存储默认的值用于恢复默认值
+    public int defaultStaturation = 0;
+    public int defaultContrast = 0;
+    public int defaultBrightness = 0;
+
     public void LoadConfig(Context context, Handler hh)
 	{
         msgHandler = hh;
@@ -299,6 +319,13 @@ public class VideoConfig
         swtichToOne = share.getBoolean("swtichToOne", false);
 
         containAudio = share.getBoolean("containAudio", containAudio);
+
+        //add 2018.03.16
+        usingCustomConfig = share.getBoolean("usingCustomConfig", false);
+        staturation = share.getInt("staturation", 0);
+        contrast = share.getInt("contrast", 0);
+        brightness = share.getInt("brightness", 0);
+
 	}
 
     public void SaveConfig(Context context)
@@ -382,6 +409,11 @@ public class VideoConfig
         editor.putBoolean("swtichToOne", swtichToOne);
         editor.putBoolean("containAudio", containAudio);
 
+        editor.putBoolean("usingCustomConfig", usingCustomConfig);
+        editor.putInt("staturation", staturation);
+        editor.putInt("contrast", contrast);
+        editor.putInt("brightness", brightness);
+
         editor.commit();
 	}
 
@@ -461,6 +493,16 @@ public class VideoConfig
             inf.put("videoPushState_2", videoPushState_2);
             inf.put("containAudio", containAudio);
 
+            inf.put("usingCustomConfig", usingCustomConfig);
+
+            inf.put("staturation", staturation);
+            inf.put("contrast", contrast);
+            inf.put("brightness", brightness);
+
+            inf.put("defaultStaturation", defaultStaturation);
+            inf.put("defaultContrast", defaultContrast);
+            inf.put("defaultBrightness", defaultBrightness);
+
             return inf.toString();
         }catch (JSONException e)
         {
@@ -477,6 +519,7 @@ public class VideoConfig
             if(jsonOBJ.has("name"))
             machine_name =  jsonOBJ.getString("name");
 
+            Log.e("asdfsadf", machine_name);
             if(jsonOBJ.has("autoResolutionIndex")) SetResolutionIndex( jsonOBJ.getInt("autoResolutionIndex"));
             if(resolution_index == -1)
             {
@@ -510,6 +553,19 @@ public class VideoConfig
 
             if(jsonOBJ.has("dhcp")) using_dhcp = jsonOBJ.getBoolean("dhcp");
             if(jsonOBJ.has("containAudio")) containAudio = jsonOBJ.getBoolean("containAudio");
+
+            if(jsonOBJ.has("usingCustomConfig")) usingCustomConfig = jsonOBJ.getBoolean("usingCustomConfig");
+            if( usingCustomConfig == false)
+            {
+                staturation = defaultStaturation;
+                contrast = defaultContrast;
+                brightness = defaultBrightness;
+            }else
+                {
+                    if(jsonOBJ.has("staturation")) staturation = jsonOBJ.getInt("staturation");
+                    if(jsonOBJ.has("contrast")) contrast = jsonOBJ.getInt("contrast");
+                    if(jsonOBJ.has("brightness")) brightness = jsonOBJ.getInt("brightness");
+                }
 
             Message message = Message.obtain();
             message.what = CameraPublishActivity.MessageType.msgConfigData.ordinal();

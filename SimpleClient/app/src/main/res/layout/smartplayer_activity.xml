@@ -28,6 +28,21 @@
             android:text="重启安卓板"
             android:onClick="OnClickReboot"/>
 
+        <Button
+            android:id="@+id/btnSwitchCam"
+            android:layout_toRightOf="@+id/btnReboot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="模拟切流"
+            android:onClick="OnClickSwitchCam"/>
+
+        <Button
+            android:id="@+id/btnFakeEnd"
+            android:layout_toRightOf="@+id/btnSwitchCam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="模拟结束"
+            android:onClick="OnClickFakeEnd"/>
 
         <!--ImageView
             android:layout_width="54dp"

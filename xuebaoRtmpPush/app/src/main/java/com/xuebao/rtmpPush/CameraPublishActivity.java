@@ -45,6 +45,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -114,7 +118,7 @@ import socks.*;
 import update.SilentInstall;
 
 @SuppressWarnings("deprecation")
-public class CameraPublishActivity extends Activity {
+public class CameraPublishActivity extends FragmentActivity {
     public enum MessageType {
         msgCheckTime,//检查系统时间是否已正确。正确之后才能开始预览并推流，否则会因为设置时间导致预览被卡住而死机
         msgOnTimeOK,//时间已准备就绪
@@ -133,7 +137,9 @@ public class CameraPublishActivity extends Activity {
         msgDebugTxt,
         msgCheckWawaNowState, //检查娃娃机当前状态的循环
         msgUDiskUnMount, //U盘拔掉消息
-        msgUpdateFreeSpace
+        msgUpdateFreeSpace,
+        msgApplyCamparam,//点击摄像头的对比度设置按钮
+        msgRestoreCamparam,//点击恢复默认按钮
     }
 
     ;
@@ -234,6 +240,17 @@ public class CameraPublishActivity extends Activity {
     CheckSpaceThread checkSpaceThread = null;
 
     //int queryStateTimeoutTime = 0;//娃娃机状态查询超时的次数
+    //新做的tab控件
+    //列表控件相关
+    private String[] titles = new String[]{"日志", "色彩调整"};
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private FragmentAdapter adapter;
+    //ViewPage选项卡页面列表
+    private List<Fragment> mFragments;
+    private List<String> mTitles;
+
+
 
     static {
         System.loadLibrary("SmartPublisher");
@@ -490,6 +507,9 @@ public class CameraPublishActivity extends Activity {
     public static List<String> getAllExternalSdcardPath() {
         List<String> PathList = new ArrayList<String>();
 
+        //PathList.add("/sdcard/daniulive");
+        //return PathList;
+
         String firstPath = Environment.getExternalStorageDirectory().getPath();
         Log.d(TAG,"getAllExternalSdcardPath , firstPath = "+firstPath);
 
@@ -533,10 +553,6 @@ public class CameraPublishActivity extends Activity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        /*if (!PathList.contains(firstPath)) {
-            PathList.add(firstPath);
-        }*/
 
         return PathList;
     }
@@ -790,7 +806,6 @@ public class CameraPublishActivity extends Activity {
                     findViewById(R.id.config_server_port).setEnabled(false);
 
                     VideoConfig.instance.enableConfigServer = false;
-
                 }
             }
         });
@@ -835,6 +850,22 @@ public class CameraPublishActivity extends Activity {
                 }
             }
         });
+
+        //日志的tab
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.tablayout);
+
+        mTitles = new ArrayList<>();
+        for (int i = 0; i < titles.length; i++) {
+            mTitles.add(titles[i]);
+        }
+        mFragments = new ArrayList<>();
+        mFragments.add(FragmentLogTxt.newInstance(0));
+        mFragments.add(FragmentCamSet.newInstance(1, mHandler));
+
+        adapter = new FragmentAdapter(getSupportFragmentManager(), mFragments, mTitles);
+        mViewPager.setAdapter(adapter);//给ViewPager设置适配器
+        mTabLayout.setupWithViewPager(mViewPager);//将TabLayout和ViewPager关联起来
     }
 
     byte[] strIPtob(String sip) {
@@ -1180,6 +1211,53 @@ public class CameraPublishActivity extends Activity {
 
         EditText eti_userID = findViewById(R.id.id_userid);
         eti_userID.setText(VideoConfig.instance.userID);
+
+        updateCamUI();//更新tablayout里面的值
+    }
+
+    //更新亮度饱和度对比到界面
+    void updateCamUI()
+    {
+        FragmentCamSet fcam = (FragmentCamSet) mFragments.get(1);
+        fcam.ConfigToUI();
+    }
+
+    //将亮度饱和度对比度应用到摄像头
+    public void ApplyCam3Params()
+    {
+        if( mCameraFront != null)
+        {
+            Camera.Parameters parameters;
+            try {
+                parameters = mCameraFront.getParameters();
+                parameters.set("staturation", VideoConfig.instance.staturation);
+                parameters.set("contrast", VideoConfig.instance.contrast);
+                parameters.set("brightness", VideoConfig.instance.brightness);
+
+                parameters.flatten();
+                mCameraFront.setParameters(parameters);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        if( mCameraBack != null)
+        {
+            Camera.Parameters parameters;
+            try {
+                parameters = mCameraBack.getParameters();
+                parameters.set("staturation", VideoConfig.instance.staturation);
+                parameters.set("contrast", VideoConfig.instance.contrast);
+                parameters.set("brightness", VideoConfig.instance.brightness);
+
+                parameters.flatten();
+                mCameraBack.setParameters(parameters);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
     boolean SaveConfigFromUI() {
@@ -1326,7 +1404,10 @@ public class CameraPublishActivity extends Activity {
     }
 
     private void outputInfo(String strTxt) {
-        TextView et = (TextView) findViewById(R.id.txtlog);
+
+        FragmentLogTxt fc = (FragmentLogTxt) mFragments.get(0);
+        fc.outputInfo( strTxt );
+        /*TextView et = (TextView) findViewById(R.id.txtlog);
         String str_conten = et.getText().toString();
         if (et.getLineCount() >= 20)
             et.setText(strTxt);
@@ -1334,7 +1415,7 @@ public class CameraPublishActivity extends Activity {
             str_conten += "\r\n";
             str_conten += strTxt;
             et.setText(str_conten);
-        }
+        }*/
     }
 
     public Handler mHandler = new Handler() {
@@ -1423,18 +1504,66 @@ public class CameraPublishActivity extends Activity {
                 break;
                 case msgOnTimeOK: {
                     outputInfo("时间已就绪.");
+
                     //调用摄像头 初始化预览
                     Camera front_camera = GetCameraObj(FRONT);
                     if (front_camera != null && mSurfaceHolderFront != null) {
                         front_camera.stopPreview();
                         initCamera(FRONT, mSurfaceHolderFront);
                     }
+                    if(front_camera != null)
+                    {
+                        Camera.Parameters parameters;
+                        try {
+                            parameters = front_camera.getParameters();
+
+                            VideoConfig.instance.defaultStaturation = Integer.parseInt( parameters.get("staturation" ) );
+                            VideoConfig.instance.defaultContrast = Integer.parseInt( parameters.get("contrast" ) );
+                            VideoConfig.instance.defaultBrightness = Integer.parseInt( parameters.get("brightness" ) );
+
+                            parameters.flatten();
+                            front_camera.setParameters(parameters);
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
 
                     Camera back_camera = GetCameraObj(BACK);
+
                     if (back_camera != null && mSurfaceHolderBack != null) {
                         back_camera.stopPreview();
                         initCamera(BACK, mSurfaceHolderBack);
                     }
+
+                    if(back_camera != null)
+                    {
+                        Camera.Parameters parameters;
+                        try {
+                            parameters = back_camera.getParameters();
+                            VideoConfig.instance.defaultStaturation = Integer.parseInt( parameters.get("staturation" ) );
+                            VideoConfig.instance.defaultContrast = Integer.parseInt( parameters.get("contrast" ) );
+                            VideoConfig.instance.defaultBrightness = Integer.parseInt( parameters.get("brightness" ) );
+
+                            parameters.flatten();
+                            back_camera.setParameters(parameters);
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if( VideoConfig.instance.usingCustomConfig == false )
+                    {
+                        VideoConfig.instance.staturation = VideoConfig.instance.defaultStaturation;
+                        VideoConfig.instance.contrast = VideoConfig.instance.defaultContrast;
+                        VideoConfig.instance.brightness =  VideoConfig.instance.defaultBrightness;
+                    }
+
+                    //先更新界面
+                    updateCamUI();
+
+
 
                     //延迟开始推流
                     mHandler.sendEmptyMessageDelayed(MessageType.msgDelayPush.ordinal(), 2000);
@@ -1518,7 +1647,7 @@ public class CameraPublishActivity extends Activity {
                             sendThread.sendMsg(abc);
                         }
                     }
-                   /* else if(net_cmd == 0x99)//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
+                    else if(net_cmd == 0x99)//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
                     {
                         outputInfo("结束，停止录像");
                         stopRecorder();
@@ -1531,7 +1660,7 @@ public class CameraPublishActivity extends Activity {
                             int backCount = GetRecFileList( sdCardPath + backDirName );
                             initRecordUI(sdCardPath, frontCount + backCount);
                         }
-                    }*/
+                    }
                     else//其他命令 转发给串口
                     {
                         String sock_data = ComPort.bytes2HexString(test_data, msg_len);
@@ -1976,9 +2105,26 @@ public class CameraPublishActivity extends Activity {
 						}*/
                 }
                 break;
+                case msgApplyCamparam:
+                    {
+                        ApplyCam3Params();
+                        VideoConfig.instance.usingCustomConfig = true;
+                    }
+                    break;
+                case msgRestoreCamparam:
+                    {
+                        VideoConfig.instance.usingCustomConfig = false;
+                        VideoConfig.instance.staturation =  VideoConfig.instance.defaultStaturation;
+                        VideoConfig.instance.contrast =  VideoConfig.instance.defaultContrast;
+                        VideoConfig.instance.brightness =  VideoConfig.instance.defaultBrightness;
+                        ApplyCam3Params();
+                        updateCamUI();
+                    }
+                    break;
             }
         }
     };
+
 
 
     void SwitchResolution(int position) {
@@ -2609,6 +2755,9 @@ public class CameraPublishActivity extends Activity {
         {
             InitAndSetConfig();
         }
+
+        //应用摄像头参数
+        ApplyCam3Params();
 
         if( VideoConfig.instance.swtichToOne == false)//只有启用双路推流时走这里单路推流需要另外处理
         {

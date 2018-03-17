@@ -1,0 +1,118 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_white"
+    android:orientation="vertical"
+   >
+
+    <RelativeLayout
+        android:id="@+id/item_parent1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+
+        >
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="饱和度"
+            android:layout_marginLeft="15dp"
+            android:textColor="#606060"
+            android:textSize="14sp"
+            />
+
+        <SeekBar
+            android:id="@+id/sbStaturation"
+            android:layout_toRightOf="@+id/item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:max="255"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/item_parent2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+
+        >
+        <TextView
+            android:id="@+id/txC"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="对比度"
+            android:layout_marginLeft="15dp"
+            android:textColor="#606060"
+            android:textSize="14sp"
+            />
+
+        <SeekBar
+            android:id="@+id/sbContrast"
+            android:layout_toRightOf="@+id/txC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:max="255"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/item_parent3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        >
+        <TextView
+            android:id="@+id/txB"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="亮度"
+            android:layout_marginLeft="15dp"
+            android:textColor="#606060"
+            android:textSize="14sp"
+            />
+
+        <SeekBar
+            android:id="@+id/sbBrightness"
+            android:layout_toRightOf="@+id/txB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:max="510"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_parent4"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        >
+
+        <Button
+        android:id="@+id/button_applyCam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="应用设置" />
+
+        <Button
+            android:id="@+id/button_restoreCam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/button_applyCam"
+            android:text="恢复默认" />
+
+        </RelativeLayout>
+
+
+
+</LinearLayout>

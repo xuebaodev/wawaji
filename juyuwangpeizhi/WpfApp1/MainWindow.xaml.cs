@@ -51,7 +51,7 @@ namespace WpfApp1
 
         //string playUrl;
         int playNowNum = 1;
-        int playUrlMode = 1;
+        int playUrlMode = 0;
         string playUrlNow_1;
         string playUrlNow_2;
 
@@ -93,8 +93,9 @@ namespace WpfApp1
             savaApplyButton.IsEnabled = false;
             btn_play.IsEnabled = false;
             swithCamera.IsEnabled = false;
-            playModeRadio_ali.IsChecked = true;
-            RadioButton_Checked_1(null, null);
+            // playModeRadio_ali.IsChecked = true;
+            playModeRadio_same.IsChecked = true;
+            RadioButton_Checked(null, null);
 
             localIp = GetLocalIP();
             ipPre = localIp.Substring(0, localIp.LastIndexOf('.') + 1);
@@ -575,7 +576,6 @@ namespace WpfApp1
             }
             else
             {
-
                 ////Console.WriteLine("%%%%%%%%%%%" + selectAndroidClient.autoResolutionIndex);
                 resolutionInput.SelectedIndex = selectAndroidClient.autoResolutionIndex;
                 ////Console.WriteLine("%%%%%%%%%%%____   " + resolutionInput.SelectedIndex);
@@ -630,6 +630,14 @@ namespace WpfApp1
             switchToOneCheckBox.IsChecked = selectAndroidClient.swtichToOne;
 
             containAudioCheckBox.IsChecked = selectAndroidClient.containAudio;
+
+            staturationSlider.Value = selectAndroidClient.staturation;
+
+            contrastSlider.Value = selectAndroidClient.contrast;
+
+            brightnessSlider.Value = selectAndroidClient.brightness;
+
+            usingCustomConfigCheck.IsChecked = selectAndroidClient.usingCustomConfig;
 
         }
 
@@ -1561,6 +1569,30 @@ namespace WpfApp1
             selectAndroidClient.containAudio = containAudioCheckBox.IsChecked.Value;
         }
 
+        private void staturationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            selectAndroidClient.staturation =(int) staturationSlider.Value;            
+        }
+
+        private void usingCustomConfigCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            selectAndroidClient.usingCustomConfig = usingCustomConfigCheck.IsChecked.Value;
+        }
+
+        private void contrastSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            selectAndroidClient.contrast = (int)contrastSlider.Value;
+        }
+
+        private void brightnessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            selectAndroidClient.brightness = (int)brightnessSlider.Value;
+        }
+
+
+
+
+
 
 
 
@@ -1647,6 +1679,12 @@ namespace WpfApp1
         public bool enableConfigServer { set; get; }
         public bool swtichToOne { set; get; }
         public bool containAudio { set; get; }
+
+        public bool usingCustomConfig { set; get; }
+        public int staturation { set; get; }
+        public int contrast { set; get; }
+        public int brightness { set; get; }
+
 
 
         public AndroidClient(string _ip, string _name)

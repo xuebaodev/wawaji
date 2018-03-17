@@ -99,15 +99,15 @@
                         </WindowsFormsHost>
 
 
-                        <RadioButton Content="播放同推流" HorizontalAlignment="Left" Margin="40,422,0,0" VerticalAlignment="Top" GroupName="playerUrlMode"  Checked="RadioButton_Checked"/>
+                        <RadioButton x:Name="playModeRadio_same" Content="播放同推流" HorizontalAlignment="Left" Margin="40,422,0,0" VerticalAlignment="Top" GroupName="playerUrlMode"  Checked="RadioButton_Checked"/>
                         <RadioButton x:Name="playModeRadio_ali" Content="阿里直播格式" HorizontalAlignment="Left" Margin="40,458,0,0" VerticalAlignment="Top" GroupName="playerUrlMode"  Checked="RadioButton_Checked_1"/>
                         <RadioButton Content="自定义" HorizontalAlignment="Left" Margin="40,493,0,0" VerticalAlignment="Top" GroupName="playerUrlMode" Checked="RadioButton_Checked_2"/>
                         <TextBox x:Name="playUrl_1" HorizontalAlignment="Left" Height="23" Margin="40,529,0,0" TextWrapping="Wrap" Text="自定义_1" VerticalAlignment="Top" Width="378" TextChanged="TextBox_TextChanged_1" MaxLines="1" MaxLength="200"/>
                         <TextBox x:Name="playUrl_2" HorizontalAlignment="Left" Height="23" Margin="40,568,0,0" TextWrapping="Wrap" Text="自定义_2" VerticalAlignment="Top" Width="378" TextChanged="TextBox_TextChanged_1" MaxLines="1" MaxLength="200"/>
-                        <Button x:Name="swithCamera" Content="切换镜头" HorizontalAlignment="Left" Margin="705,606,0,0" VerticalAlignment="Top" Width="75" Height="49" Click="Button_Click_2"/>
-                        <Label Content="当前:" HorizontalAlignment="Left" Margin="705,503,0,0" VerticalAlignment="Top" Width="32" Height="26"/>
-                        <Label x:Name="playUrlNum" Content="1" HorizontalAlignment="Left" Margin="743,503,0,0" VerticalAlignment="Top" Width="37"/>
-                        <Button x:Name="btn_play" Content="播放" HorizontalAlignment="Left" Margin="705,546,0,0" VerticalAlignment="Top" Width="75" Height="45" Click="btn_play_Click"/>
+                        <Button x:Name="swithCamera" Content="切换镜头" HorizontalAlignment="Left" Margin="838,606,0,0" VerticalAlignment="Top" Width="75" Height="49" Click="Button_Click_2"/>
+                        <Label Content="当前显示摄像头:" HorizontalAlignment="Left" Margin="348,415,0,0" VerticalAlignment="Top" Width="97" Height="26"/>
+                        <Label x:Name="playUrlNum" Content="1" HorizontalAlignment="Left" Margin="447,414,0,0" VerticalAlignment="Top" Width="23"/>
+                        <Button x:Name="btn_play" Content="播放" HorizontalAlignment="Left" Margin="728,608,0,0" VerticalAlignment="Top" Width="75" Height="45" Click="btn_play_Click"/>
                         <Rectangle Fill="#FF53E012" HorizontalAlignment="Left" Height="6" Margin="0,398,-12,0" Stroke="Black" VerticalAlignment="Top" Width="970"/>
                         <TextBox x:Name="pwdShow" HorizontalAlignment="Left" Height="23" Margin="690,147,0,0" TextWrapping="Wrap" Text="userID" VerticalAlignment="Top" Width="187"  input:InputMethod.IsInputMethodEnabled="False" MaxLines="1" MaxLength="16" TextChanged="pwdShow_TextChanged"/>
                         <Label Content="Log:" HorizontalAlignment="Left" Margin="38,359,0,0" VerticalAlignment="Top"/>
@@ -118,6 +118,13 @@
                         <CheckBox x:Name="enableConfigServerCheckBox" Content="启用配置服务器功能" HorizontalAlignment="Left" Margin="669,248,0,0" VerticalAlignment="Top" Height="19" Width="134" Checked="CheckBox_Checked_3"  Unchecked="CheckBox_Checked_3"/>
                         <CheckBox x:Name="switchToOneCheckBox" Content="切换至一路(不要随意更改此值，除非你清楚)" HorizontalAlignment="Left" Margin="38,330,0,0" VerticalAlignment="Top" Width="268"   Checked="CheckBox_Checked_4" Unchecked="CheckBox_Checked_4" />
                         <CheckBox x:Name="containAudioCheckBox" Content="包含声音" HorizontalAlignment="Left" Margin="345,330,0,0" VerticalAlignment="Top" Width="78" Checked="containAudioCheckBox_Checked" Unchecked="containAudioCheckBox_Checked"/>
+                        <CheckBox x:Name="usingCustomConfigCheck" Content="自定义渲染(需要安卓板支持)" HorizontalAlignment="Left" Margin="715,417,0,0" VerticalAlignment="Top" Checked="usingCustomConfigCheckBox_Checked" Unchecked="usingCustomConfigCheckBox_Checked" Width="181"/>
+                        <Slider x:Name="staturationSlider" HorizontalAlignment="Left" Margin="715,452,0,0" VerticalAlignment="Top" Width="220" Maximum="255" SmallChange="1" ValueChanged="staturationSlider_ValueChanged"/>
+                        <Slider x:Name="contrastSlider" HorizontalAlignment="Left" Margin="715,501,0,0" VerticalAlignment="Top" Width="220" Maximum="255" SmallChange="1" ValueChanged="contrastSlider_ValueChanged"/>
+                        <Slider x:Name="brightnessSlider" HorizontalAlignment="Left" Margin="715,548,0,0" VerticalAlignment="Top" Width="220" Minimum="-255" Maximum="255" SmallChange="1" ValueChanged="brightnessSlider_ValueChanged"/>
+                        <Label Content="饱&#xD;&#xA;和" HorizontalAlignment="Left" Height="44" Margin="686,440,0,0" VerticalAlignment="Top" Width="24"/>
+                        <Label Content="对&#xD;&#xA;比" HorizontalAlignment="Left" Height="44" Margin="687,491,0,0" VerticalAlignment="Top" Width="24" RenderTransformOrigin="0.522,1.834"/>
+                        <Label Content="亮&#xD;&#xA;度" HorizontalAlignment="Left" Height="44" Margin="687,540,0,0" VerticalAlignment="Top" Width="24"/>
 
 
 
