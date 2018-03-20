@@ -64,7 +64,7 @@ export PATH JAVA_HOME CLASSPATH
 
 ```
 然后如图操作
-<br><img src="http://chuantu.biz/t6/216/1517102463x-1404793465.png" alt="SimpleServer编译示意图" />
+<br><img src="https://www.snowstormdoll.cn/images/server_1.png" alt="SimpleServer编译示意图" />
 <br>即：
 <br>切换到SimpleServer/src 输入：javac SimpleApp.java
 <br>然后切换到SimpleServer/bin 输入:java SimpleApp
