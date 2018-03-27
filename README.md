@@ -63,11 +63,9 @@ PATH=$PATH:$JAVA_HOME/bin
 export PATH JAVA_HOME CLASSPATH
 
 ```
-然后如图操作
-<br><img src="https://www.snowstormdoll.cn/images/server_1.png" alt="SimpleServer编译示意图" />
-<br>即：
+然后
 <br>切换到SimpleServer/src 输入：javac SimpleApp.java
-<br>然后切换到SimpleServer/bin 输入:java SimpleApp
+<br>再输入:java SimpleApp
 
 **如何优雅的停止服务器? 只需要在Eclipse的控制台窗口或linux的app所在terminal 输入exit即可。这样才不会因端口资源没法释放，导致短时间不能再启动的情况**
 
