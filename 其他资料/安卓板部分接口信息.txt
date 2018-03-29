@@ -1,0 +1,15 @@
+1.安卓板系统默认开放远程adb端口5555，可直接使用
+2.安卓串口是  /dev/ttyS1
+3.绑定前后摄像头顺序，USB上面的口是前置摄像头，下面的口是后置USB摄像头
+4.前置摄像头的除了索引不一样，其他的都跟后置摄像头一样（不用镜像）
+5.静默安装接口
+关于静默安装，我们在系统中添加了广播，要安装时你们程序发送广播，广播参数是要安装apk的路径，系统接收后开始安装，安装完成后系统自动重启，示例代码如下。
+Intent?intent=new?Intent();
+intent.setAction("ACTION_UPDATE_START");
+intent.putExtra("path","/storage/usbhost1/game.apk");
+sendBroadcast(intent,null);
+6.重启命令
+Intent intent=new Intent();
+intent.setAction("ACTION_RK_REBOOT");
+sendBroadcast(intent,null);
+7.默认的VGA显示输出分辨率为1024*768
