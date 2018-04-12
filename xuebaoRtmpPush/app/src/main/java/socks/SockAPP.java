@@ -19,6 +19,7 @@ import java.util.concurrent.locks.Lock;
 import android_serialport_api.ComPort;
 
 //连接应用服务器的类。包含接收 心跳 和重连
+//20180412 透传心跳消息 并且不再自己启动心跳线程
 public class SockAPP {
 
     private static final String TAG = "SockAPP";
@@ -29,7 +30,7 @@ public class SockAPP {
     private Handler handler;
 
     Thread thSocket = null;
-    Thread thHearbeatTimer = null;
+    //Thread thHearbeatTimer = null;
 
     private boolean ShouldStopNow = false;
     byte heart_beat_msg[] = new byte[21];
@@ -52,14 +53,14 @@ public class SockAPP {
             thSocket = null;
         }
 
-        if (thHearbeatTimer != null) {
-            thHearbeatTimer.interrupt();
-            thHearbeatTimer = null;
-        }
+       //if (thHearbeatTimer != null) {
+       //     thHearbeatTimer.interrupt();
+       //     thHearbeatTimer = null;
+       // }
     }
 
 
-    void FireHeadbeat() {
+   /* void FireHeadbeat() {
         if (thHearbeatTimer != null) {
             thHearbeatTimer.interrupt();
             thHearbeatTimer = null;
@@ -98,7 +99,7 @@ public class SockAPP {
             }
         });
         thHearbeatTimer.start();
-    }
+    }*/
 
     public void StartWokring(Handler handler, String strHost, int dport)//connect and recv
     {
@@ -129,7 +130,7 @@ public class SockAPP {
         thSocket = new Thread(new ReceiveWatchDog());
         thSocket.start();
 
-        FireHeadbeat();
+       // FireHeadbeat();
     }
 
     public void ApplyNewServer(String strHost, int dport) {
@@ -300,6 +301,11 @@ public class SockAPP {
 
             Log.e(TAG, "接收线程退出.");
         }
+    }
+
+    public void  heartBeat()
+    {
+        sendMsg(heart_beat_msg);
     }
 
     public void sendMsg(byte[] msg) {

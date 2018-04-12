@@ -1600,10 +1600,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     byte test_data[] = (byte[]) (msg.obj);
 
                     int net_cmd = (test_data[7] & 0xff);
-                    if (net_cmd == 0x35)//收到心跳 不转发。
-                    {
-
-                    } else if (net_cmd == 0x88)//收到要求重启命令
+                    if (net_cmd == 0x88)//收到要求重启命令
                     {
                         if (sendThread != null) {
                             sendThread.StopNow();
@@ -1817,9 +1814,19 @@ public class CameraPublishActivity extends FragmentActivity {
                         }
                     }
 
+                    if(cmd_value == 0x35)
+                    {
+                        if(sendThread != null)
+                            sendThread.heartBeat();
+
+                        Message me1 = Message.obtain();//心跳消息
+                        me1.what = CameraPublishActivity.MessageType.msgMyFireHeartBeat.ordinal();
+                        if (mHandler != null) mHandler.sendMessage(me1);
+                    }
+
                     if (cmd_value ==   0x35 || cmd_value == 0x34) {
-                        //如果是正常的 0X34 我要透传
-                        if (cmd_value ==  0x34) {
+                        //如果是正常的 0X34  0x35我要透传
+                        if (cmd_value ==  0x34 ) {
                             //queryStateTimeoutTime = 0;
                             if (sendThread != null) {
                                 sendThread.sendMsg(test_data);

@@ -29,9 +29,12 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180317;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180412;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180412
+    //不再主动心跳。透传心跳消息
+
     //20180317
     /*增加 摄像头的调色功能。需要特定的安卓板以及rom支持。
     * */
