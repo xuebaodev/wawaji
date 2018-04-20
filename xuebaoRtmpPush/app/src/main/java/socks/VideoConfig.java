@@ -29,9 +29,13 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180412;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180420;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180420 修改串口接收处理函数的一个bug。该bug会导致收到非法的fe包时，清掉所有收到的数据。而设计的逻辑原本是：清掉该fe，寻找下一个fe
+
+    //20180419 收到串口数据时，未处理前，打印到屏幕上。帮助调试有时候串口无反应的情况。
+
     //20180412
     //不再主动心跳。透传心跳消息
 

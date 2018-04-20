@@ -179,7 +179,7 @@ public class SockAPP {
                     //包长度出错 应该是数据干扰
                     if (showlog) Log.e("~~~", "包长度出错");
                     //丢弃这条指令
-                    readBuffer = readBuffer.substring(0, 2);
+                    readBuffer = readBuffer.substring(2);
                     if (readBuffer.contains("FE")) {
                         readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
                     } else {

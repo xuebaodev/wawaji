@@ -26,7 +26,7 @@ public class FragmentLogTxt extends Fragment {
         return fragment;
     }
 
-    public  void outputInfo(String strTxt)
+    public  void outputInfo(String strTxt, boolean bAppend)
     {
         if( tvi != null)
         {
@@ -34,7 +34,9 @@ public class FragmentLogTxt extends Fragment {
             if (tvi.getLineCount() >= 20)
                 tvi.setText(strTxt);
             else {
-                str_conten += "\r\n";
+                if( bAppend == false)
+                    str_conten += "\r\n";
+
                 str_conten += strTxt;
                 tvi.setText(str_conten);
             }

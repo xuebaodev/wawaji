@@ -140,11 +140,12 @@ public class CameraPublishActivity extends FragmentActivity {
         msgUpdateFreeSpace,
         msgApplyCamparam,//点击摄像头的对比度设置按钮
         msgRestoreCamparam,//点击恢复默认按钮
+        msgComRawDataPrint  //听说会收不到串口数据。我加这个消息，在串口收到任何数据时，即打印在屏幕上
     }
 
     ;
 
-    private static String TAG = "SmartPublisher";
+    private static String TAG = "CameraPublishActivity";
 
     //NTAudioRecord audioRecord_ = null;	//for audio capture
 
@@ -317,7 +318,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
         isShouldRebootSystem = false;
         isTimeReady = false;
-        isWawajiReady =  false;//todo 调试模式下 先让娃娃机就绪 否则连接不了应用服务器
+        isWawajiReady =  false;//note 调试模式下 先让娃娃机就绪 否则连接不了应用服务器
         timeWaitCount = 20;
         //queryStateTimeoutTime = 0;
 
@@ -364,7 +365,7 @@ public class CameraPublishActivity extends FragmentActivity {
             }
 
         if (checkSpaceThread == null) {
-            outputInfo("开始空间检查");
+            outputInfo("开始空间检查", false);
             checkSpaceThread = new CheckSpaceThread(mHandler, sdCardPath);//空循环等待 没事
             checkSpaceThread.start();
         }else
@@ -972,7 +973,7 @@ public class CameraPublishActivity extends FragmentActivity {
             msg_content[msg_content.length - 1] = (byte) (total_c % 100);
             mComPort.SendData(msg_content, msg_content.length);
             String sss = SockAPP.bytesToHexString(msg_content);
-            outputInfo("MaC发往串口" + sss);
+            outputInfo("MaC发往串口" + sss, false);
         }
 
         //ip
@@ -1403,10 +1404,10 @@ public class CameraPublishActivity extends FragmentActivity {
         return true;
     }
 
-    private void outputInfo(String strTxt) {
+    private void outputInfo(String strTxt, boolean append ) {
 
         FragmentLogTxt fc = (FragmentLogTxt) mFragments.get(0);
-        fc.outputInfo( strTxt );
+        fc.outputInfo( strTxt , append);
         /*TextView et = (TextView) findViewById(R.id.txtlog);
         String str_conten = et.getText().toString();
         if (et.getLineCount() >= 20)
@@ -1420,12 +1421,12 @@ public class CameraPublishActivity extends FragmentActivity {
 
     public Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
-            outputInfo("Handle:" + msg.what);
+            //outputInfo("Handle:" + msg.what);
             if (msg.what >= MessageType.values().length)
                 return;
 
             MessageType mt = MessageType.values()[msg.what];
-            outputInfo("Enum is" + mt.toString());
+            //outputInfo("Enum is" + mt.toString());
 
             switch (mt) {
                 case msgWaitIP: {
@@ -1438,7 +1439,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
                 break;
                 case msgIpGOT: {
-                    outputInfo("IP已就绪。配置线程运行。开始检查时间");
+                    outputInfo("IP已就绪。配置线程运行。开始检查时间", false);
                     //Ip已获取。更新界面
                     VideoConfig.instance.hostIP = getLocalIpAddress();
 
@@ -1468,7 +1469,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                         //连接应用服务器
                         if (sendThread == null) {
-                            outputInfo("时间就绪之-开始连接应用服务器.");
+                            outputInfo("时间就绪之-开始连接应用服务器.", false);
                             sendThread = new SockAPP();//空循环等待 没事
                             sendThread.StartWokring(mHandler, VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
                         }
@@ -1503,7 +1504,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
                 break;
                 case msgOnTimeOK: {
-                    outputInfo("时间已就绪.");
+                    outputInfo("时间已就绪.", false);
 
                     //调用摄像头 初始化预览
                     Camera front_camera = GetCameraObj(FRONT);
@@ -1615,7 +1616,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                     }else if(net_cmd == 0x90)
                     {
-                        outputInfo( "立收到要求切流命令");
+                        outputInfo( "立收到要求切流命令", false);
 
                         //收到命令 执行切流
                         if(VideoConfig.instance.curPushWay == 1)
@@ -1646,7 +1647,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                     else if(net_cmd == 0x99)//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
                     {
-                        outputInfo("结束，停止录像");
+                        outputInfo("结束，停止录像", false);
                         stopRecorder();
                         isRecording = false;
 
@@ -1661,19 +1662,19 @@ public class CameraPublishActivity extends FragmentActivity {
                     else//其他命令 转发给串口
                     {
                         String sock_data = ComPort.bytes2HexString(test_data, msg_len);
-                        outputInfo("收到网络数据:" + sock_data + "发往串口");
+                        outputInfo("收到网络数据:" + sock_data + "发往串口", false);
                         //检查如果不是配置IP之类的东西 就往串口发
 
                         //往串口发
                         if (isShouldRebootSystem == true && net_cmd == 0x31)//系统因为摄像头断流的原因要重启。析出开局指令不转发
                         {
-                            outputInfo("检测到设备需要重启。不转发开局指令");
+                            outputInfo("检测到设备需要重启。不转发开局指令", false);
                         } else
                             mComPort.SendData(test_data, msg_len);
 
                         if( net_cmd == 0x31)//开局指令 检查是否需要录像
                         {
-                            outputInfo("开局，开始录像");
+                            outputInfo("开局，开始录像", false);
 
                             if( checkSpaceThread != null)
                             {
@@ -1688,17 +1689,18 @@ public class CameraPublishActivity extends FragmentActivity {
                 break;
                 case msgMyFireHeartBeat: {
                     //心跳调试
-                    outputInfo("发送心跳消息");
+                    outputInfo("发送心跳消息", false);
                 }
                 break;
-                case msgDebugTxt: {
-                    String ss = msg.obj.toString();
-                    outputInfo(ss);
-                }
-                break;
+                case msgComRawDataPrint:
+                    {
+                        String ss = msg.obj.toString();
+                        outputInfo(ss, false);
+                    }
+                    break;
                 case msgConfigData: {
                     //收到配置口过来的数据
-                    outputInfo("应用更改.");
+                    outputInfo("应用更改.", false);
                     UpdateConfigToUI();
                     UIClickStopPush();
 
@@ -1793,15 +1795,15 @@ public class CameraPublishActivity extends FragmentActivity {
                     String com_data = ComPort.bytes2HexString(test_data, data_len);
                     //if( check_com_data( test_data, data_len ) == false )
                     {
-                        Log.e("串口收到", "长度"+ data_len +" 数据:" + com_data);
+                       // Log.e(TAG, "串口 长度:"+ data_len +" 数据:" + com_data);
                     }
 
-                    outputInfo("com recv len:" + data_len + " data" + com_data);
+                    outputInfo("串口数据 长度:" + data_len + " data " + com_data, false);
 
                     int cmd_value = test_data[7]&0xff;
                     if( cmd_value == 0x33)
                     {
-                        outputInfo("结束，停止录像");
+                        outputInfo("结束，停止录像", false);
                         stopRecorder();
                         isRecording = false;
 
@@ -1830,7 +1832,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             //queryStateTimeoutTime = 0;
                             if (sendThread != null) {
                                 sendThread.sendMsg(test_data);
-                                outputInfo("sending to server");
+                                outputInfo(" 发到服务器", true);
                             }
                         }
 
@@ -1858,11 +1860,11 @@ public class CameraPublishActivity extends FragmentActivity {
                         if (isWawajiReady == false)//娃娃机就绪。检查是否需要跟娃娃机获取应用服务器端口 如果不用。则直接生成连接应用服务器的对象
                         {
                             isWawajiReady = true;
-                            outputInfo("娃娃机已就绪.");
+                            outputInfo("娃娃机已就绪.", false);
 
                             //连接应用服务器
                             if (sendThread == null) {
-                                outputInfo("娃机就绪之-开始连接应用服务器.");
+                                outputInfo("娃机就绪之-开始连接应用服务器.", false);
                                 sendThread = new SockAPP();//空循环等待 没事
                                 sendThread.StartWokring(mHandler, VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
                             }
@@ -1893,7 +1895,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         int nPort = e * 256 + f;
 
                         String s_ip = String.format("%d.%d.%d.%d", a, b, c, d);
-                        outputInfo("收到串口配置IP地址" + s_ip + "端口" + nPort);
+                        outputInfo("收到串口配置IP地址" + s_ip + "端口" + nPort, false);
                         Log.e("收到串口配置IP地址", s_ip + "端口" + nPort);
 
                         //if( s_ip.equals("0.0.0.0") == false && nPort != 0)
@@ -1926,7 +1928,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     } else {//透传给服务器
                         if (sendThread != null) {
                             sendThread.sendMsg(test_data);
-                            outputInfo("sending to server");
+                            outputInfo(" 发到服务器", true);
                         }
                     }
                     break;
@@ -2030,7 +2032,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     //Log.i(TAG, "CheckingPreview");
 
                     if (mCameraFront != null) {
-                        outputInfo("isFrontCameraPreviewOK" + isFrontCameraPreviewOK);
+                        outputInfo("isFrontCameraPreviewOK" + isFrontCameraPreviewOK, false);
 
                         if (isFrontCameraPreviewOK)
                             isFrontCameraPreviewOK = false;
@@ -2050,7 +2052,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                     sendThread.sendMsg(abc);
                                 }
 
-                                outputInfo("前置摄像头有效性错误。设备需要重启。");
+                                outputInfo("前置摄像头有效性错误。设备需要重启。", false);
                                 Log.e(TAG, "前置摄像头有效性错误。设备需要重启。");
                                 mHandler.sendEmptyMessage(MessageType.msgQueryWawajiState.ordinal());
                             }
@@ -2058,7 +2060,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
 
                     if (mCameraBack != null) {
-                        outputInfo("isBackCameraPreviewOK" + isBackCameraPreviewOK);
+                        outputInfo("isBackCameraPreviewOK" + isBackCameraPreviewOK, false);
 
                         if (isBackCameraPreviewOK)
                             isBackCameraPreviewOK = false;
@@ -2078,7 +2080,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                     sendThread.sendMsg(abc);
                                 }
 
-                                outputInfo("后置摄像头有效性错误。设备需要重启。");
+                                outputInfo("后置摄像头有效性错误。设备需要重启。", false);
                                 Log.e(TAG, "后置摄像头有效性错误。设备需要重启。");
                                 mHandler.sendEmptyMessage(MessageType.msgQueryWawajiState.ordinal());
                             }
@@ -2752,7 +2754,7 @@ public class CameraPublishActivity extends FragmentActivity {
         if (libPublisher == null)
             return;
 
-        outputInfo("开推.");
+        outputInfo("开推.", false);
 
         Log.i(TAG, "onClick start push..");
 
@@ -2778,7 +2780,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 if (libPublisher.SmartPublisherSetURL(publisherHandleFront, VideoConfig.instance.url1) != 0) {
                     Log.e(TAG, "Failed to set publish stream URL..");
-                    outputInfo("前置推流地址应用失败.");
+                    outputInfo("前置推流地址应用失败.", false);
                 }
 
                 int startRet = libPublisher.SmartPublisherStartPublisher(publisherHandleFront);
@@ -2817,7 +2819,7 @@ public class CameraPublishActivity extends FragmentActivity {
             } else if (isPushing == false) {
                 ConfigControlEnable(true);
                 btnStartPush.setText(" 推送");
-                outputInfo("推送失败。检查推流URL,或摄像头是否已插好");
+                outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
             }
         }else //单路推流
             {
@@ -2839,7 +2841,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     isPushing = false;
                     ConfigControlEnable(true);
                     btnStartPush.setText("推送");
-                    outputInfo("推送失败。检查推流URL,或摄像头是否已插好");
+                    outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
                     Toast.makeText(getApplicationContext(), "都没摄像头。不推", Toast.LENGTH_SHORT).show();
 
                     return;
@@ -2854,7 +2856,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         ConfigControlEnable(true);
 
                         Log.e(TAG, "Failed to set publish stream URL..");
-                        outputInfo("推送失败。检查推流URL,或摄像头是否已插好");
+                        outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
 
                         btnStartPush.setText(" 推送");
                         TextView tvFr = findViewById(R.id.cam1_url_tip);
@@ -2868,7 +2870,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         ConfigControlEnable(true);
 
                         Log.e(TAG, "Failed to start push stream..");
-                        outputInfo("推送失败。检查推流URL,或摄像头是否已插好");
+                        outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
 
                         btnStartPush.setText(" 推送");
                         TextView tvFr = findViewById(R.id.cam1_url_tip);
@@ -2888,7 +2890,7 @@ public class CameraPublishActivity extends FragmentActivity {
     }
 
     void UIClickStopPush() {
-        outputInfo("停推.");
+        outputInfo("停推.", false);
         stopPush();
 
         if (!isRecording) {

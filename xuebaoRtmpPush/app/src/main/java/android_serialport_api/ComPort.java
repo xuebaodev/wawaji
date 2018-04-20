@@ -33,6 +33,8 @@ import android_serialport_api.SerialPort;
 
 public  class ComPort {
 
+	private static String TAG = "ComPort";
+
 	protected SerialPort mSerialPort;
 	protected OutputStream mOutputStream;
 	private InputStream mInputStream;
@@ -147,6 +149,20 @@ public  class ComPort {
 
 	String readBuffer = "";
 	protected void onDataReceived(byte[] buffer, int size) {
+
+		if(mHandler != null)
+		{
+			String raw_data = "RAW COM DATA:";
+			raw_data += bytes2HexString(buffer, size);
+
+			Log.e(TAG, raw_data);
+
+			Message message = Message.obtain();
+			message.what = CameraPublishActivity.MessageType.msgComRawDataPrint.ordinal();
+			message.obj = raw_data;
+			mHandler.sendMessage(message);
+		}
+
 		if(showlog) Log.e("222**", String.valueOf(buffer) + " ##### " + bytes2HexString(buffer, size) + " *** " + readBuffer);
 		readBuffer = readBuffer + bytes2HexString(buffer, size);
 
@@ -169,7 +185,7 @@ public  class ComPort {
 				//包长度出错 应该是数据干扰
 				if(showlog) Log.e("~~~","包长度出错");
 				//丢弃这条指令
-				readBuffer = readBuffer.substring(0,2);
+				readBuffer = readBuffer.substring(2);
 				if (readBuffer.contains("FE")) {
 					readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
 				} else
@@ -186,10 +202,10 @@ public  class ComPort {
 				if (sBegin.equals("FE")) {
 					//开头正确
 					String msgContent = readBuffer.substring(0, len * 2);
-					Log.e("开头正确com", msgContent);
+					if(showlog) Log.e("开头正确com", msgContent);
 					//校验指令
 					if (check_com_data_string(msgContent, len * 2)) {
-						Log.e("指令正确com", msgContent);
+						if(showlog) Log.e("指令正确com", msgContent);
 						readBuffer = readBuffer.substring(len * 2);
 						//指令正确
 						if (mOutputStream != null) {
@@ -200,13 +216,7 @@ public  class ComPort {
 								//这里可以直接传 msgContent 看你们自己的接收端处理参数类型
 								message.obj = hexStringToBytes(msgContent);
 								mHandler.sendMessage(message);
-								Log.e("发送指令", msgContent);
-
-
-								Message msa = Message.obtain();
-								msa.what = CameraPublishActivity.MessageType.msgDebugTxt.ordinal();
-								msa.obj = "发出串口数据";
-								mHandler.sendMessage(msa);
+								Log.e("处理指令com", msgContent);
 							}
 						}
 					} else {
