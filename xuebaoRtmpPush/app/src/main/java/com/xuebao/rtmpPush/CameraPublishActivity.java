@@ -251,6 +251,7 @@ public class CameraPublishActivity extends FragmentActivity {
     private List<Fragment> mFragments;
     private List<String> mTitles;
 
+    private int trySetMACCount = 0;//20180421 当收到心跳的mac为空时，尝试给串口发mac和本机ip。最多重试3次。已重试的次数存储在这
 
 
     static {
@@ -1818,6 +1819,26 @@ public class CameraPublishActivity extends FragmentActivity {
 
                     if(cmd_value == 0x35)
                     {
+                        //检查mac是否是全空 是的话 mac ip 发给串口--add 20180420.防止主板重启而安卓板不重启的情况.
+                        if (trySetMACCount<3 &&
+                                data_len >= 21
+                                && test_data[8] == 0
+                                && test_data[9] == 0
+                                && test_data[10] == 0
+                                && test_data[11] == 0
+                                && test_data[12] == 0
+                                && test_data[13] == 0
+                                &&test_data[14] == 0
+                                && test_data[15] == 0
+                                && test_data[16] == 0
+                                && test_data[17] == 0
+                                && test_data[18] == 0
+                                && test_data[19] == 0)
+                        {
+                            trySetMACCount ++;
+                            ComParamSet(true, true, false);
+                        }
+
                         if(sendThread != null)
                             sendThread.heartBeat();
 
