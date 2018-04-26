@@ -141,9 +141,7 @@ public class CameraPublishActivity extends FragmentActivity {
         msgApplyCamparam,//点击摄像头的对比度设置按钮
         msgRestoreCamparam,//点击恢复默认按钮
         msgComRawDataPrint  //听说会收不到串口数据。我加这个消息，在串口收到任何数据时，即打印在屏幕上
-    }
-
-    ;
+    };
 
     private static String TAG = "CameraPublishActivity";
 
@@ -1137,6 +1135,10 @@ public class CameraPublishActivity extends FragmentActivity {
         EditText eti = findViewById(R.id.push_rate);
         eti.setText(Integer.toString(VideoConfig.instance.GetFPS()));
 
+        //码率
+        EditText etib = findViewById(R.id.push_bitrate);
+        etib.setText(Integer.toString(VideoConfig.instance.encoderKpbs));
+
         //推流地址1
         EditText eti_url1 = findViewById(R.id.cam1_url_edit);
         eti_url1.setText(VideoConfig.instance.url1);
@@ -1322,6 +1324,10 @@ public class CameraPublishActivity extends FragmentActivity {
         EditText eti = findViewById(R.id.push_rate);
         String strFPS = eti.getText().toString().trim();
         VideoConfig.instance.SetFPS(Integer.parseInt(strFPS));
+
+        EditText etib = findViewById(R.id.push_bitrate);
+        String strBitRate = etib.getText().toString().trim();
+        VideoConfig.instance.encoderKpbs = Integer.parseInt(strBitRate);
 
         //保存--推流地址
         EditText cam_front_url = (EditText) findViewById(R.id.cam1_url_edit);
@@ -2606,6 +2612,8 @@ public class CameraPublishActivity extends FragmentActivity {
         findViewById(R.id.cam1_url_edit).setEnabled(isEnable);
         findViewById(R.id.cam2_url_edit).setEnabled(isEnable);
 
+        findViewById(R.id.push_bitrate).setEnabled(isEnable);
+
         findViewById(R.id.server_ip).setEnabled(isEnable);
         findViewById(R.id.server_port).setEnabled(isEnable);
 
@@ -2636,21 +2644,30 @@ public class CameraPublishActivity extends FragmentActivity {
 
         //设置码率
         if (VideoConfig.instance.is_hardware_encoder) {
-            int hwHWKbps = setHardwareEncoderKbps(VideoConfig.instance.GetVideoWidth(), VideoConfig.instance.GetVideoHeight());
+            //设置硬编码的码率
+           // int hwHWKbps = setHardwareEncoderKbps(VideoConfig.instance.GetVideoWidth(), VideoConfig.instance.GetVideoHeight());
 
-            Log.i(TAG, "hwHWKbps: " + hwHWKbps);
+            Log.i(TAG, "Kbps: " +  VideoConfig.instance.encoderKpbs);
 
-            int isSupportHWEncoder = libPublisher.SetSmartPublisherVideoHWEncoder(handle, hwHWKbps);
+            int isSupportHWEncoder = libPublisher.SetSmartPublisherVideoHWEncoder(handle, VideoConfig.instance.encoderKpbs);
 
             if (isSupportHWEncoder == 0) {
                 Log.i(TAG, "Great, it supports hardware encoder!");
             }
+        }else {
+            //设置软编码的码率
+            int maxBitRate = (int)((float)VideoConfig.instance.encoderKpbs*(float)1.5);
+            int bitRateSettingRes = libPublisher.SmartPublisherSetSWVideoBitRate(handle, VideoConfig.instance.encoderKpbs,maxBitRate);
+            if(bitRateSettingRes ==0)
+            {
+                Log.i(TAG, "ok, now bitrate is " + bitRateSettingRes);
+            }
         }
 
-        //硬编码
-        if (VideoConfig.instance.is_hardware_encoder) {
-            libPublisher.SmartPublisherSetFPS(handle, 20);
-        }
+        //硬编码 2018.04.26-fixed.现在帧率可以起作用了
+       // if (VideoConfig.instance.is_hardware_encoder) {
+        libPublisher.SmartPublisherSetFPS(handle, VideoConfig.instance.GetFPS());
+       // }
 
         libPublisher.SetSmartPublisherEventCallbackV2(handle, new EventHandeV2());
 
@@ -3531,6 +3548,7 @@ public class CameraPublishActivity extends FragmentActivity {
         return -1;
     }
 
+    /* 20180426 修改成在界面设置码率。并且软硬都设置
     private int setHardwareEncoderKbps(int width, int height) {
         int hwEncoderKpbs = 560;
 
@@ -3552,7 +3570,7 @@ public class CameraPublishActivity extends FragmentActivity {
         }
 
         return hwEncoderKpbs;
-    }
+    }*/
 
     /**
      * 根据目录创建文件夹

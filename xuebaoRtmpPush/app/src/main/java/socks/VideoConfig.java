@@ -29,9 +29,11 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180421;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180426;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180426 增加码率界面参数 修改一个帧率不起作用的问题。
+
     //20180421 修改并发布，当接收到串口的心跳0x35为空时，发送mac和本机ip给串口,最多重试三次。
 
     //20180420 修改串口接收处理函数的一个bug。该bug会导致收到非法的fe包时，清掉所有收到的数据。而设计的逻辑原本是：清掉该fe，寻找下一个fe
@@ -162,10 +164,10 @@ public class VideoConfig
 
     public boolean is_hardware_encoder = false;//硬编码 软编码
 
-    //硬编码的码率
-    public int hwEncoderKpbs  = 0;//码率
+    //编码的码率
+    public int encoderKpbs  = 0;//码率
 
-    //硬编码-帧率
+    //编码-帧率
     int encodeFPS = 20;
     public void SetFPS(int nFPS)
     {
@@ -283,7 +285,7 @@ public class VideoConfig
         }
 
         is_hardware_encoder  = share.getBoolean("is_hardware_encoder", false);
-        hwEncoderKpbs = share.getInt("hwEncoderKpbs", 560);
+        encoderKpbs = share.getInt("encoderKpbs", 560);
         encodeFPS = share.getInt("encodeFPS", 20);
 
         sw_video_encoder_profile = share.getInt("sw_video_encoder_profile", 1);
@@ -326,6 +328,7 @@ public class VideoConfig
         machine_name = share.getString("machine_name", "可爱小白兔");
 
         swtichToOne = share.getBoolean("swtichToOne", false);
+        encoderKpbs = share.getInt("encoderKpbs", 500);
 
         containAudio = share.getBoolean("containAudio", containAudio);
 
@@ -380,7 +383,7 @@ public class VideoConfig
     }
 
         editor.putBoolean("is_hardware_encoder", is_hardware_encoder);
-        editor.putInt("hwEncoderKpbs", hwEncoderKpbs);
+        editor.putInt("encoderKpbs", encoderKpbs);
         editor.putInt("encodeFPS", encodeFPS);
 
         editor.putInt("sw_video_encoder_profile", sw_video_encoder_profile);
@@ -481,6 +484,8 @@ public class VideoConfig
             inf.put("pushUrlBack", url2);
             inf.put("appVersion", appVersion);
 
+            inf.put("encoderKpbs", encoderKpbs);
+
             inf.put("ip", hostIP);
             inf.put("operateServer", destHost);
             inf.put("operatePort", destPort);
@@ -562,6 +567,8 @@ public class VideoConfig
 
             if(jsonOBJ.has("dhcp")) using_dhcp = jsonOBJ.getBoolean("dhcp");
             if(jsonOBJ.has("containAudio")) containAudio = jsonOBJ.getBoolean("containAudio");
+
+            if(jsonOBJ.has("encoderKpbs")) encoderKpbs = jsonOBJ.getInt("encoderKpbs");
 
             if(jsonOBJ.has("usingCustomConfig")) usingCustomConfig = jsonOBJ.getBoolean("usingCustomConfig");
             if( usingCustomConfig == false)

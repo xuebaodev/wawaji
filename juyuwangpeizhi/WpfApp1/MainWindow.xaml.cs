@@ -617,6 +617,11 @@ namespace WpfApp1
             else
                 fpsInput.Text = "";
 
+            if (selectAndroidClient.encoderKpbs.ToString() != null)
+                kbpsInput.Text = selectAndroidClient.encoderKpbs.ToString();
+            else
+                kbpsInput.Text = "";
+
             recordInput.IsChecked = selectAndroidClient.record;
 
             if (selectAndroidClient.appVersion.ToString() != null)
@@ -903,6 +908,14 @@ namespace WpfApp1
         {
             if (fpsInput.Text.Length != 0)
                 selectAndroidClient.fps = int.Parse(fpsInput.Text);
+            //Console.WriteLine(fpsInput.Text + " ######~~~~###### " + selectAndroidClient.fps);
+        }
+
+        //码率
+        private void kbpsInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (kbpsInput.Text.Length != 0)
+                selectAndroidClient.encoderKpbs = int.Parse(kbpsInput.Text);
             //Console.WriteLine(fpsInput.Text + " ######~~~~###### " + selectAndroidClient.fps);
         }
 
@@ -1684,6 +1697,8 @@ namespace WpfApp1
         public int staturation { set; get; }
         public int contrast { set; get; }
         public int brightness { set; get; }
+
+        public int encoderKpbs { set; get; }
 
 
 

@@ -272,10 +272,20 @@
                 android:hint="15"
                 android:inputType="number"
                 />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="帧率建议在15-20即可。高了后果自负" />
+                android:text="码率:" />
+
+            <EditText
+                android:id="@+id/push_bitrate"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="5000"
+                android:inputType="number"
+                />
 
             <CheckBox
                 android:id="@+id/cbIncludeAudio"
