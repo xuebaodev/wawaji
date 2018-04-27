@@ -144,6 +144,7 @@ public class CameraPublishActivity extends FragmentActivity {
     };
 
     private static String TAG = "CameraPublishActivity";
+    public static final boolean DEBUG = BuildConfig.LOG;
 
     //NTAudioRecord audioRecord_ = null;	//for audio capture
 
@@ -259,10 +260,10 @@ public class CameraPublishActivity extends FragmentActivity {
     BroadcastReceiver mSdcardReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             String path = intent.getData().getPath();
             if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
-                Toast.makeText(context, "path1111:" + intent.getData().getPath(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "U盘插入:" + intent.getData().getPath(), Toast.LENGTH_SHORT).show();
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "U盘插入:" + intent.getData().getPath());
                 Message message = Message.obtain();
                 message.what = MessageType.msgUDiskMount.ordinal();
                 message.obj = path;
@@ -275,15 +276,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 message.obj = path;
                 if (mHandler != null) mHandler.sendMessage(message);
 
-                Log.e("123", "remove ACTION_MEDIA_REMOVED111111111" + path);
-            } else if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
-
-                Message message = Message.obtain();
-                message.what = MessageType.msgUDiskUnMount.ordinal();
-                message.obj = path;
-                if (mHandler != null) mHandler.sendMessage(message);
-
-                Log.e("123", "remove ACTION_MEDIA_REMOVED222222222222" + path);
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "U盘拔出:" + path);
             }
         }
     };
@@ -307,9 +300,7 @@ public class CameraPublishActivity extends FragmentActivity {
         filter = new IntentFilter();
         filter.addAction(Intent.ACTION_MEDIA_MOUNTED);   //接受外媒挂载过滤器
         filter.addAction(Intent.ACTION_MEDIA_REMOVED);   //接受外媒挂载过滤器
-        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);   //接受外媒挂载过滤器
         filter.addDataScheme("file");
-
         registerReceiver(mSdcardReceiver, filter, "android.permission.READ_EXTERNAL_STORAGE", null);
 
         VideoConfig.instance = new VideoConfig();
@@ -354,7 +345,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
                 if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
                 {
-                    Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
                     Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
                     sdCardPath= "";
                     initRecordUI("",0);
@@ -377,14 +368,14 @@ public class CameraPublishActivity extends FragmentActivity {
     {
         if ( recDirPath == null )
         {
-            Log.i(TAG, "recDirPath is null");
+            if(CameraPublishActivity.DEBUG) Log.i(TAG, "recDirPath is null");
             return 0;
         }
 
 
         if ( recDirPath.isEmpty() )
         {
-            Log.i(TAG, "recDirPath is empty");
+            if(CameraPublishActivity.DEBUG) Log.i(TAG, "recDirPath is empty");
             return 0;
         }
 
@@ -403,13 +394,13 @@ public class CameraPublishActivity extends FragmentActivity {
 
         if ( !recDirFile.exists() )
         {
-            Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
+            if(CameraPublishActivity.DEBUG)  Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
             return 0;
         }
 
         if ( !recDirFile.isDirectory() )
         {
-            Log.e(TAG, recDirPath + " is not dir");
+            if(CameraPublishActivity.DEBUG) Log.e(TAG, recDirPath + " is not dir");
             return 0;
         }
 
@@ -496,8 +487,8 @@ public class CameraPublishActivity extends FragmentActivity {
                 long blockSize = sf.getBlockSize();
                 long blockCount = sf.getBlockCount();
                 long availCount = sf.getAvailableBlocks();
-                Log.d(TAG, "block大小:"+ blockSize+",block数目:"+ blockCount+",总大小:"+blockSize*blockCount/1024+"KB");
-                Log.d(TAG, "可用的block数目：:"+ availCount+",剩余空间:"+ (availCount*blockSize>>20)+"MB");
+            if(CameraPublishActivity.DEBUG) Log.d(TAG, "block大小:"+ blockSize+",block数目:"+ blockCount+",总大小:"+blockSize*blockCount/1024+"KB");
+            if(CameraPublishActivity.DEBUG) Log.d(TAG, "可用的block数目：:"+ availCount+",剩余空间:"+ (availCount*blockSize>>20)+"MB");
 
                 TextView tviapptitle = findViewById(R.id.devSpace);
                 tviapptitle.setText( "已有录像个数:" + total + " 剩余可用空间: " +  (availCount*blockSize>>20)+" MB" + "盘符路径" + uPath);
@@ -511,7 +502,7 @@ public class CameraPublishActivity extends FragmentActivity {
         //return PathList;
 
         String firstPath = Environment.getExternalStorageDirectory().getPath();
-        Log.d(TAG,"getAllExternalSdcardPath , firstPath = "+firstPath);
+        if(CameraPublishActivity.DEBUG) Log.d(TAG,"getAllExternalSdcardPath , firstPath = "+firstPath);
 
         try {
             // 运行mount命令，获取命令的输出，得到系统中挂载的所有目录
@@ -540,10 +531,10 @@ public class CameraPublishActivity extends FragmentActivity {
                             if(  path.contains("usb_storage") || path.contains("external_storage"))
                             {
                                 PathList.add(items[1]);
-                                Log.e(TAG,"USB1 PATH:" + path);
+                                if(CameraPublishActivity.DEBUG) Log.e(TAG,"USB1 PATH:" + path);
                             } else
                             {
-                                Log.e(TAG,"ohter PATH:" + path);
+                                if(CameraPublishActivity.DEBUG) Log.e(TAG,"ohter PATH:" + path);
                             }
                         }
                     }
@@ -559,29 +550,29 @@ public class CameraPublishActivity extends FragmentActivity {
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "activity destory!");
+        if(CameraPublishActivity.DEBUG) Log.i(TAG, "activity destory!");
 
         if (confiThread != null) {
-            Log.e("app退出", "配置线程终止");
+            if(CameraPublishActivity.DEBUG) Log.e("app退出", "配置线程终止");
             confiThread.StopNow();
             confiThread = null;
         }
 
         if (sendThread != null) {
-            Log.e("app退出", "应用线程终止");
+            if(CameraPublishActivity.DEBUG) Log.e("app退出", "应用线程终止");
             sendThread.StopNow();
             sendThread = null;
         }
 
         if (lis_server != null) {
-            Log.e("app退出", "监听线程终止");
+            if(CameraPublishActivity.DEBUG) Log.e("app退出", "监听线程终止");
             lis_server.StopNow();
             lis_server = null;
         }
 
         if (isPushing || isRecording) {
             if (audioRecord_ != null) {
-                Log.i(TAG, "surfaceDestroyed, call StopRecording..");
+                if(CameraPublishActivity.DEBUG) Log.i(TAG, "surfaceDestroyed, call StopRecording..");
 
                 //audioRecord_.StopRecording();
                 //audioRecord_ = null;
@@ -629,6 +620,8 @@ public class CameraPublishActivity extends FragmentActivity {
                 checkSpaceThread = null;
             }
         }
+
+        unregisterReceiver(mSdcardReceiver);
 
         super.onDestroy();
         finish();
@@ -765,9 +758,9 @@ public class CameraPublishActivity extends FragmentActivity {
             public void onAutoFocus(boolean success, Camera camera) {
                 if (success)//success表示对焦成功
                 {
-                    Log.i(TAG, "Front onAutoFocus succeed...");
+                    if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Front onAutoFocus succeed...");
                 } else {
-                    Log.i(TAG, "Front onAutoFocus failed...");
+                    if(CameraPublishActivity.DEBUG) Log.i(TAG, "Front onAutoFocus failed...");
                 }
             }
         };
@@ -782,9 +775,9 @@ public class CameraPublishActivity extends FragmentActivity {
             public void onAutoFocus(boolean success, Camera camera) {
                 if (success)//success表示对焦成功
                 {
-                    Log.i(TAG, "Back onAutoFocus succeed...");
+                    if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Back onAutoFocus succeed...");
                 } else {
-                    Log.i(TAG, "Back onAutoFocus failed...");
+                    if(CameraPublishActivity.DEBUG) Log.i(TAG, "Back onAutoFocus failed...");
                 }
             }
         };
@@ -1042,7 +1035,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
             }
         } catch (SocketException ex) {
-            Log.e("adsf", ex.toString());
+            if(CameraPublishActivity.DEBUG)  Log.e("getloaclIp exception", ex.toString());
         }
         return "";
     }
@@ -1377,7 +1370,7 @@ public class CameraPublishActivity extends FragmentActivity {
             if (is_applyok == false) {
                 RestoreConfigAndUpdateVideoUI();
                 Toast.makeText(getApplicationContext(), "无效的视频配置，已恢复原状!", Toast.LENGTH_SHORT).show();
-                Log.e("asdfasdf", "无效的视频配置，已恢复原状");
+                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "无效的视频配置，已恢复原状");
                 //	return false;
             }
         }
@@ -1615,7 +1608,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             sendThread = null;
                         }
 
-                        Log.e(TAG, "收到重启指令，立刻重启");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到重启指令，立刻重启");
 
                         Intent intent = new Intent();
                         intent.setAction("ACTION_RK_REBOOT");
@@ -1756,7 +1749,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
-                            Log.e("返回结果", "失败");
+                            if(CameraPublishActivity.DEBUG)  Log.e("返回结果", "失败");
                         }
                     } else {
                         try {
@@ -1768,7 +1761,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
-                            Log.e("返回结果", "失败");
+                            if(CameraPublishActivity.DEBUG)   Log.e("返回结果", "失败");
                         }
                         UIClickStartPush();
                     }
@@ -1785,7 +1778,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         if (jsonObject.has("versionCode"))
                             versionCode = jsonObject.getInt("versionCode");
 
-                        Log.e("收到更新命令", "url" + url + " 当前版本:" + VideoConfig.instance.appVersion);
+                        if(CameraPublishActivity.DEBUG) Log.e("收到更新命令", "url" + url + " 当前版本:" + VideoConfig.instance.appVersion);
                         SilentInstall upobj = new SilentInstall(getApplicationContext());
                         upobj.startUpdate(url);
                     } catch (JSONException jse) {
@@ -1876,7 +1869,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                     sendThread = null;
                                 }
 
-                                Log.e(TAG, "娃娃机已满足重启要求。立刻重启");
+                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "娃娃机已满足重启要求。立刻重启");
 
                                 Intent intent = new Intent();
                                 intent.setAction("ACTION_RK_REBOOT");
@@ -1923,7 +1916,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                         String s_ip = String.format("%d.%d.%d.%d", a, b, c, d);
                         outputInfo("收到串口配置IP地址" + s_ip + "端口" + nPort, false);
-                        Log.e("收到串口配置IP地址", s_ip + "端口" + nPort);
+                        if(CameraPublishActivity.DEBUG) Log.e("收到串口配置IP地址", s_ip + "端口" + nPort);
 
                         //if( s_ip.equals("0.0.0.0") == false && nPort != 0)
                         //{
@@ -1963,6 +1956,8 @@ public class CameraPublishActivity extends FragmentActivity {
                 case msgUDiskMount://插U盘
                 {
                     String UPath = (String) (msg.obj);
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "msgUDiskMount...........");
+
                     // 获取sd卡的对应的存储目录
                     //获取指定文件对应的输入流
                     try {
@@ -1974,7 +1969,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
                         if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
                         {
-                            Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
                             Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
                             sdCardPath= "";
                             initRecordUI("",0);
@@ -1995,7 +1990,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                         //关闭资源
                         br.close();
-                        Log.e("file content", sb.toString());
+                        if(CameraPublishActivity.DEBUG)  Log.e("file content", sb.toString());
 
                         try {
                             JSONObject jsonOBJ = new JSONObject(sb.toString());
@@ -2015,7 +2010,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                 WifiAutoConnectManager.WifiCipherType ntr = wifiPassword.equals("") ?
                                         WifiAutoConnectManager.WifiCipherType.WIFICIPHER_NOPASS : WifiAutoConnectManager.WifiCipherType.WIFICIPHER_WPA;
 
-                                Log.e("连接wifi", "ssid" + wifiSSID + " pwd " + wifiPassword + "type" + ntype);
+                                if(CameraPublishActivity.DEBUG) Log.e("连接wifi", "ssid" + wifiSSID + " pwd " + wifiPassword + "type" + ntype);
                                 //WifiUtil.createWifiInfo(wifiSSID, wifiPassword, ntype, wifiManager);
 
                                 wifiauto.connect(wifiSSID, wifiPassword, ntr);
@@ -2025,7 +2020,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Log.e("u盘配置文件错误", "Json file Error.");
+                            if(CameraPublishActivity.DEBUG)  Log.e("u盘配置文件错误", "Json file Error.");
                         }
 
                     } catch (IOException e) {
@@ -2080,7 +2075,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                 }
 
                                 outputInfo("前置摄像头有效性错误。设备需要重启。", false);
-                                Log.e(TAG, "前置摄像头有效性错误。设备需要重启。");
+                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "前置摄像头有效性错误。设备需要重启。");
                                 mHandler.sendEmptyMessage(MessageType.msgQueryWawajiState.ordinal());
                             }
                         }
@@ -2108,7 +2103,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                 }
 
                                 outputInfo("后置摄像头有效性错误。设备需要重启。", false);
-                                Log.e(TAG, "后置摄像头有效性错误。设备需要重启。");
+                                if(CameraPublishActivity.DEBUG) Log.e(TAG, "后置摄像头有效性错误。设备需要重启。");
                                 mHandler.sendEmptyMessage(MessageType.msgQueryWawajiState.ordinal());
                             }
                         }
@@ -2119,7 +2114,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 break;
                 case msgCheckWawaNowState: {
                     if (wawajiCurrentState != 1 && wawajiCurrentState != 2) {
-                        Log.e(TAG, "娃娃机状态已满足重启要求，立刻重启");
+                        if(CameraPublishActivity.DEBUG) Log.e(TAG, "娃娃机状态已满足重启要求，立刻重启");
 
                         Intent intent = new Intent();
                         intent.setAction("ACTION_RK_REBOOT");
@@ -2167,7 +2162,7 @@ public class CameraPublishActivity extends FragmentActivity {
         if (isTimeReady == false) return;
         //分辨率配置
         //"960*720", "640*480","640*360", "352*288","320*240"
-        Log.i(TAG, "Current Resolution position: " + position);
+        if(CameraPublishActivity.DEBUG) Log.i(TAG, "Current Resolution position: " + position);
 
         VideoConfig.instance.SetResolutionIndex(position);
 
@@ -2266,27 +2261,27 @@ public class CameraPublishActivity extends FragmentActivity {
                     int ret = libPublisher.SmartPublisherCreateFileDirectory(rec);
                     if (0 == ret) {
                         if (0 != libPublisher.SmartPublisherSetRecorderDirectory(handle, rec)) {
-                            Log.e(TAG, "Set recoder dir failed , path:" + rec);
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Set recoder dir failed , path:" + rec);
                             return;
                         }
 
                         if (0 != libPublisher.SmartPublisherSetRecorder(handle, 1)) {
-                            Log.e(TAG, "SmartPublisherSetRecoder failed.");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "SmartPublisherSetRecoder failed.");
                             return;
                         }
 
                         if (0 != libPublisher.SmartPublisherSetRecorderFileMaxSize(handle, 200)) {
-                            Log.e(TAG, "SmartPublisherSetRecoderFileMaxSize failed.");
+                            if(CameraPublishActivity.DEBUG) Log.e(TAG, "SmartPublisherSetRecoderFileMaxSize failed.");
                             return;
                         }
 
                     } else {
-                        Log.e(TAG, "Create recoder dir failed, path:" + rec);
+                        if(CameraPublishActivity.DEBUG) Log.e(TAG, "Create recoder dir failed, path:" + rec);
                     }
                 }
             } else {
                 if (0 != libPublisher.SmartPublisherSetRecorder(handle, 0)) {
-                    Log.e(TAG, "SmartPublisherSetRecoder failed.");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "SmartPublisherSetRecoder failed.");
                     return;
                 }
             }
@@ -2647,12 +2642,12 @@ public class CameraPublishActivity extends FragmentActivity {
             //设置硬编码的码率
            // int hwHWKbps = setHardwareEncoderKbps(VideoConfig.instance.GetVideoWidth(), VideoConfig.instance.GetVideoHeight());
 
-            Log.i(TAG, "Kbps: " +  VideoConfig.instance.encoderKpbs);
+            if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Kbps: " +  VideoConfig.instance.encoderKpbs);
 
             int isSupportHWEncoder = libPublisher.SetSmartPublisherVideoHWEncoder(handle, VideoConfig.instance.encoderKpbs);
 
             if (isSupportHWEncoder == 0) {
-                Log.i(TAG, "Great, it supports hardware encoder!");
+                if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Great, it supports hardware encoder!");
             }
         }else {
             //设置软编码的码率
@@ -2660,7 +2655,7 @@ public class CameraPublishActivity extends FragmentActivity {
             int bitRateSettingRes = libPublisher.SmartPublisherSetSWVideoBitRate(handle, VideoConfig.instance.encoderKpbs,maxBitRate);
             if(bitRateSettingRes ==0)
             {
-                Log.i(TAG, "ok, now bitrate is " + bitRateSettingRes);
+                if(CameraPublishActivity.DEBUG)  Log.i(TAG, "ok, now bitrate is " + bitRateSettingRes);
             }
         }
 
@@ -2703,7 +2698,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 if (publisherHandleFront != 0) {
                     SetConfig(publisherHandleFront);
-                    Log.e("前置摄像头", "ID" + publisherHandleFront);
+                    if(CameraPublishActivity.DEBUG) Log.e("前置摄像头", "ID" + publisherHandleFront);
                 }
             }
 
@@ -2715,7 +2710,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 if (publisherHandleBack != 0) {
                     SetConfig(publisherHandleBack);
-                    Log.e("后置摄像头", "ID" + publisherHandleBack);
+                    if(CameraPublishActivity.DEBUG)  Log.e("后置摄像头", "ID" + publisherHandleBack);
                 }
             }
         }else
@@ -2725,7 +2720,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 if (publisherHandleCurrent != 0) {
                     SetConfig(publisherHandleCurrent);
-                    Log.e("摄像头", "ID" + publisherHandleCurrent);
+                    if(CameraPublishActivity.DEBUG)  Log.e("摄像头", "ID" + publisherHandleCurrent);
                 }
             }
 
@@ -2767,7 +2762,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
         if( audioRecord_ != null )
         {
-            Log.i(TAG, "CheckInitAudioRecorder call audioRecord_.start()+++...");
+            if(CameraPublishActivity.DEBUG)  Log.i(TAG, "CheckInitAudioRecorder call audioRecord_.start()+++...");
 
             audioRecordCallback_ = new NTAudioRecordV2CallbackImpl();
 
@@ -2775,7 +2770,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
             audioRecord_.Start();
 
-            Log.i(TAG, "CheckInitAudioRecorder call audioRecord_.start()---...");
+            if(CameraPublishActivity.DEBUG)  Log.i(TAG, "CheckInitAudioRecorder call audioRecord_.start()---...");
 
 
             //Log.i(TAG, "onCreate, call executeAudioRecordMethod..");
@@ -2794,7 +2789,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
         outputInfo("开推.", false);
 
-        Log.i(TAG, "onClick start push..");
+        if(CameraPublishActivity.DEBUG) Log.i(TAG, "onClick start push..");
 
         VideoConfig.instance.SaveConfig(this);
 
@@ -2817,14 +2812,14 @@ public class CameraPublishActivity extends FragmentActivity {
             if (front_cam != null) {
 
                 if (libPublisher.SmartPublisherSetURL(publisherHandleFront, VideoConfig.instance.url1) != 0) {
-                    Log.e(TAG, "Failed to set publish stream URL..");
+                    if(CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to set publish stream URL..");
                     outputInfo("前置推流地址应用失败.", false);
                 }
 
                 int startRet = libPublisher.SmartPublisherStartPublisher(publisherHandleFront);
                 if (startRet != 0) {
                     isPushing = false;
-                    Log.e(TAG, "Failed to start push stream..");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Failed to start push stream..");
                     TextView tvFr = findViewById(R.id.cam1_url_tip);
                     if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
                 }
@@ -2832,7 +2827,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
             if ( !isRecording )
             {
-                Log.e(TAG, "CheckInitAudioRecorder");
+                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "CheckInitAudioRecorder");
                 CheckInitAudioRecorder();	//enable pure video publisher..
             }
 
@@ -2840,12 +2835,12 @@ public class CameraPublishActivity extends FragmentActivity {
             if (back_cam != null) {
 
                 if (libPublisher.SmartPublisherSetURL(publisherHandleBack, VideoConfig.instance.url2) != 0) {
-                    Log.e(TAG, "Failed to set publish stream URL..");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Failed to set publish stream URL..");
                 }
                 int startRet = libPublisher.SmartPublisherStartPublisher(publisherHandleBack);
                 if (startRet != 0) {
                     isPushing = false;
-                    Log.e(TAG, "Failed to start push stream back..");
+                    if(CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to start push stream back..");
                     TextView tvFr = findViewById(R.id.cam2_url_tip);
                     if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
                 }
@@ -2868,7 +2863,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 if ( !isRecording )
                 {
-                    Log.e(TAG, "CheckInitAudioRecorder");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "CheckInitAudioRecorder");
                     CheckInitAudioRecorder();	//enable pure video publisher..
                 }
 
@@ -2893,7 +2888,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         isPushing = false;
                         ConfigControlEnable(true);
 
-                        Log.e(TAG, "Failed to set publish stream URL..");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Failed to set publish stream URL..");
                         outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
 
                         btnStartPush.setText(" 推送");
@@ -2907,7 +2902,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         isPushing = false;
                         ConfigControlEnable(true);
 
-                        Log.e(TAG, "Failed to start push stream..");
+                        if(CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to start push stream..");
                         outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
 
                         btnStartPush.setText(" 推送");
@@ -2974,7 +2969,7 @@ public class CameraPublishActivity extends FragmentActivity {
     private void stopPush() {
         if (!isRecording) {
             if (audioRecord_ != null) {
-                Log.i(TAG, "stopPush, call audioRecord_.StopRecording..");
+                if(CameraPublishActivity.DEBUG)  Log.i(TAG, "stopPush, call audioRecord_.StopRecording..");
 
                 audioRecord_.Stop();
 
@@ -3038,7 +3033,7 @@ public class CameraPublishActivity extends FragmentActivity {
             isRecording = false;
         }
 
-        Log.i(TAG, "onClick start recorder..");
+        if(CameraPublishActivity.DEBUG) Log.i(TAG, "onClick start recorder..");
 
         if (libPublisher == null)
             return;
@@ -3073,7 +3068,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 if (startRet != 0) {
                     isRecording = false;
 
-                    Log.e(TAG, "Failed to start front cam recorder.");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Failed to start front cam recorder.");
                     return;
                 }
             }
@@ -3087,7 +3082,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     if (startRet != 0) {
                         isRecording = false;
 
-                        Log.e(TAG, "Failed to start back cam recorder .");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Failed to start back cam recorder .");
                         return;
                     }
                 }
@@ -3101,7 +3096,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     if (startRet != 0) {
                         isRecording = false;
 
-                        Log.e(TAG, "Failed to start front cam recorder.");
+                        if(CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to start front cam recorder.");
                         return;
                     }
                 }
@@ -3121,7 +3116,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
         if (!isPushing) {
             if (audioRecord_ != null) {
-                Log.i(TAG, "stopRecorder, call audioRecord_.StopRecording..");
+                if(CameraPublishActivity.DEBUG) Log.i(TAG, "stopRecorder, call audioRecord_.StopRecording..");
 
                 audioRecord_.Stop();
 
@@ -3193,15 +3188,15 @@ public class CameraPublishActivity extends FragmentActivity {
                 if (range != null
                         && Camera.Parameters.PREVIEW_FPS_MIN_INDEX < range.length
                         && Camera.Parameters.PREVIEW_FPS_MAX_INDEX < range.length) {
-                    Log.i(TAG, "Camera index:" + i + " support min fps:" + range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX]);
+                    if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Camera index:" + i + " support min fps:" + range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX]);
 
-                    Log.i(TAG, "Camera index:" + i + " support max fps:" + range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
+                    if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Camera index:" + i + " support max fps:" + range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
 
                     if (findRange == null) {
                         if (defFPS <= range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]) {
                             findRange = range;
 
-                            Log.i(TAG, "Camera found appropriate fps, min fps:" + range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX]
+                            if(CameraPublishActivity.DEBUG)   Log.i(TAG, "Camera found appropriate fps, min fps:" + range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX]
                                     + " ,max fps:" + range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
                         }
                     }
@@ -3216,20 +3211,20 @@ public class CameraPublishActivity extends FragmentActivity {
 
     /*it will call when surfaceChanged*/
     private boolean initCamera(int camera_type, SurfaceHolder holder) {
-        Log.i(TAG, "initCa11mera..");
+        if(CameraPublishActivity.DEBUG)  Log.i(TAG, "initCa11mera..");
 
         if (isTimeReady == false)
             return false;
 
         Camera camera = GetCameraObj(camera_type);
         if (camera == null) {
-            Log.e(TAG, "initCa111mera camera is null, type=" + camera_type);
+            if(CameraPublishActivity.DEBUG) Log.e(TAG, "initCa111mera camera is null, type=" + camera_type);
             //return false;
         }
 
         int cameraIndex = GetCameraIndex(camera_type);
         if (-1 == cameraIndex) {
-            Log.e(TAG, "initCam11era cameraIndex is -1, type=" + camera_type);
+            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "initCam11era cameraIndex is -1, type=" + camera_type);
             //return false;
         }
 
@@ -3267,11 +3262,11 @@ public class CameraPublishActivity extends FragmentActivity {
 
         if (camera != null) camera.setDisplayOrientation(90);
 
-        Log.e("Cmeraaaa", "apply w:" + VideoConfig.instance.GetVideoWidth() + "h " + VideoConfig.instance.GetVideoHeight());
+        if(CameraPublishActivity.DEBUG)  Log.e("Cmeraaaa", "apply w:" + VideoConfig.instance.GetVideoWidth() + "h " + VideoConfig.instance.GetVideoHeight());
         try {
             if (camera != null) camera.setParameters(parameters);
         } catch (Exception ex) {
-            Log.e("*******", "Apply Camera Config failed.");
+            if(CameraPublishActivity.DEBUG)   Log.e("*******", "Apply Camera Config failed.");
             return false;
         }
 
@@ -3321,7 +3316,7 @@ public class CameraPublishActivity extends FragmentActivity {
         } else if (BACK == type) {
             return curBackCameraIndex;
         } else {
-            Log.i(TAG, "GetCameraIndex type error, type=" + type);
+            if(CameraPublishActivity.DEBUG) Log.i(TAG, "GetCameraIndex type error, type=" + type);
             return -1;
         }
     }
@@ -3332,7 +3327,7 @@ public class CameraPublishActivity extends FragmentActivity {
         } else if (BACK == type) {
             return mCameraBack;
         } else {
-            Log.i(TAG, "GetCameraObj type error, type=" + type);
+            if(CameraPublishActivity.DEBUG)  Log.i(TAG, "GetCameraObj type error, type=" + type);
             return null;
         }
     }
@@ -3343,7 +3338,7 @@ public class CameraPublishActivity extends FragmentActivity {
         } else if (BACK == type) {
             mCameraBack = c;
         } else {
-            Log.i(TAG, "SetCameraObj type error, type=" + type);
+            if(CameraPublishActivity.DEBUG)  Log.i(TAG, "SetCameraObj type error, type=" + type);
         }
     }
 
@@ -3357,10 +3352,10 @@ public class CameraPublishActivity extends FragmentActivity {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
 
-            Log.i(TAG, "surfaceCreated..type_=" + type_);
+            if(CameraPublishActivity.DEBUG)  Log.i(TAG, "surfaceCreated..type_=" + type_);
 
             if (type_ != FRONT && type_ != BACK) {
-                Log.e(TAG, "surfaceCreated type error, type=" + type_);
+                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "surfaceCreated type error, type=" + type_);
                 return;
             }
 
@@ -3369,13 +3364,13 @@ public class CameraPublishActivity extends FragmentActivity {
                 if (type_ == FRONT) {
                     int cammeraIndex = findFrontCamera();
                     if (cammeraIndex == -1) {
-                        Log.e(TAG, "surfaceCreated, There is no front camera!!");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "surfaceCreated, There is no front camera!!");
                         return;
                     }
                 } else if (type_ == BACK) {
                     int cammeraIndex = findBackCamera();
                     if (-1 == cammeraIndex) {
-                        Log.e(TAG, "surfaceCreated, there is no back camera");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "surfaceCreated, there is no back camera");
 
                         return;
                     }
@@ -3393,7 +3388,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            Log.e(TAG, "surfaceChanged..");
+            if(CameraPublishActivity.DEBUG) Log.e(TAG, "surfaceChanged..");
 
             if (type_ != FRONT && type_ != BACK)
                 return;
@@ -3404,7 +3399,7 @@ public class CameraPublishActivity extends FragmentActivity {
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             // TODO Auto-generated method stub
-            Log.i(TAG, "Surface Destroyed");
+            if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Surface Destroyed");
         }
     }
 
@@ -3493,7 +3488,7 @@ public class CameraPublishActivity extends FragmentActivity {
         int frontIndex = -1;
         int backIndex = -1;
         int cameraCount = Camera.getNumberOfCameras();
-        Log.i(TAG, "cameraCount: " + cameraCount);
+        if(CameraPublishActivity.DEBUG) Log.i(TAG, "cameraCount: " + cameraCount);
 
         CameraInfo info = new CameraInfo();
         for (int cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {

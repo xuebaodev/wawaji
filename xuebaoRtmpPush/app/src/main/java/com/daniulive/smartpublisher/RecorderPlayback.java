@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.util.Log;
 import android.widget.MediaController;
 
+import com.xuebao.rtmpPush.CameraPublishActivity;
 import com.xuebao.rtmpPush.R;
 
 public class RecorderPlayback extends Activity {
@@ -45,7 +46,7 @@ public class RecorderPlayback extends Activity {
         }
         else
         {
-        	Log.i(Tag, "recorderFilePath is null");
+            if(CameraPublishActivity.DEBUG) Log.i(Tag, "recorderFilePath is null");
         }
        
            

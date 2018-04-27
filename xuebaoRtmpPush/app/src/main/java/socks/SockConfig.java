@@ -80,7 +80,7 @@ public class SockConfig {
 
                         if( socket != null)
                         {
-                            Log.e(TAG, "心跳.");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "心跳.");
 
                             String strHeadBeat = String.format("{\"userID\":\"%s\",\"mac\":\"%s\",\"cmd\":\"heartbeat\",\"name\":\"%s\"}",
                                     VideoConfig.instance.userID, VideoConfig.instance.my_mac,VideoConfig.instance.machine_name);
@@ -98,7 +98,7 @@ public class SockConfig {
                         }
                     }
 
-                Log.e(TAG, "心跳线程退出");
+                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "心跳线程退出");
             }
         });
         thHearbeatTimer.start();
@@ -151,7 +151,7 @@ public class SockConfig {
                 }
                 else{
                     try {
-                        Log.e(TAG, "try connect====IP:" + hostName + "Port:" + Integer.toString(port));
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "try connect====IP:" + hostName + "Port:" + Integer.toString(port));
 
                         InetAddress addr = InetAddress.getByName(hostName);
                         String domainName = addr.getHostName();//获得主机名
@@ -161,7 +161,7 @@ public class SockConfig {
                         socket.setKeepAlive(true);
                     }catch (IOException e)//连接不成功 重连
                     {
-                        Log.e(TAG,"Connect excetion..retry after 3s");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG,"Connect excetion..retry after 3s");
                         try {
                             Thread.sleep(3000);
                             continue;
@@ -186,7 +186,7 @@ public class SockConfig {
                         int r_len = input.read(jj);
                         if (r_len <= 0)
                         {
-                            Log.e(TAG, "收到数据<=0.断开");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到数据<=0.断开");
                            if(socket!= null) {socket.close(); socket = null;}
                             break;
                         }
@@ -196,11 +196,11 @@ public class SockConfig {
                         if( aa.indexOf('\u0000') != -1 )
                             aa = aa.substring(0,aa.indexOf('\u0000'));
 
-                        Log.e(TAG,"收到:"+ aa);
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG,"收到:"+ aa);
                         JSONObject jsonObject = new JSONObject(aa);
                         if(jsonObject.has("cmd") == false)
                         {
-                            Log.e("没有CMD","关闭此连接");
+                            if(CameraPublishActivity.DEBUG)  Log.e("没有CMD","关闭此连接");
                             if(socket!= null){socket.close(); socket = null;}
                             break;
                         }
@@ -208,7 +208,8 @@ public class SockConfig {
                         String cmd = jsonObject.getString("cmd");
 
                         if( cmd.equals("heartbeat") == false)
-                            Log.e("jsonfrom公网", aa);
+                            if(CameraPublishActivity.DEBUG)
+                                Log.e("jsonfrom公网", aa);
 
                         if(cmd.equals("getconfig"))
                         {
@@ -223,7 +224,7 @@ public class SockConfig {
                                 }
                             }
 
-                            Log.e(TAG, "返回");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "返回");
                             String s = VideoConfig.instance.makeJson();
                             out.write(s.getBytes(), 0, s.getBytes().length);
                             out.flush();
@@ -234,7 +235,7 @@ public class SockConfig {
                                 String req_mac = jsonObject.getString("mac");
                                 if( req_mac.equals( VideoConfig.instance.my_mac) == false)
                                 {
-                                    Log.e(TAG,"MAC不是本机。不响应应用配置命令");
+                                    if(CameraPublishActivity.DEBUG)  Log.e(TAG,"MAC不是本机。不响应应用配置命令");
                                     if(socket!= null){socket.close(); socket = null;}
                                     break;
                                 }
@@ -293,7 +294,7 @@ public class SockConfig {
                 }
             }
 
-            Log.e(TAG, "接收线程退出.");
+            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "接收线程退出.");
         }
     }
 
@@ -302,7 +303,7 @@ public class SockConfig {
         {
             if(socket == null)
             {
-                Log.e(TAG, "发送失败socket是空");
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "发送失败socket是空");
                 return;
             }
 
@@ -313,7 +314,7 @@ public class SockConfig {
                     outputStream.flush();
                 }
                 else {
-                        Log.e(TAG,  "发送失败socket没有连接");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG,  "发送失败socket没有连接");
                     }
             } catch (IOException e) {
                // FireReconnect();

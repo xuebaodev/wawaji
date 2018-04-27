@@ -154,10 +154,10 @@ public class SockAPP {
     class ReceiveWatchDog implements Runnable {
 
         String readBuffer = "";
-        boolean showlog = false;
+
 
         protected void onDataReceived(byte[] buffer, int size) {
-            if (showlog)
+            if(CameraPublishActivity.DEBUG)
                 Log.e("222**", String.valueOf(buffer) + " ##### " + ComPort.bytes2HexString(buffer, size) + " *** " + readBuffer);
             readBuffer = readBuffer + ComPort.bytes2HexString(buffer, size);
 
@@ -166,7 +166,7 @@ public class SockAPP {
                 readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
             } else {
                 readBuffer = "";
-                if (showlog) Log.e("~~~~", "开头可能就不正确 readBuffer = kong ");
+                if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "开头可能就不正确 readBuffer = kong ");
             }
 
             //指令 至少是9位 包长度在第 7位
@@ -177,28 +177,28 @@ public class SockAPP {
                 //包长度最大50
                 if (len > 50) {
                     //包长度出错 应该是数据干扰
-                    if (showlog) Log.e("~~~", "包长度出错");
+                    if(CameraPublishActivity.DEBUG)  Log.e("~~~", "包长度出错");
                     //丢弃这条指令
                     readBuffer = readBuffer.substring(2);
                     if (readBuffer.contains("FE")) {
                         readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
                     } else {
                         readBuffer = "";
-                        if (showlog) Log.e("~~~~", "包长度出错 readBuffer = kong ");
+                        if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "包长度出错 readBuffer = kong ");
                     }
                     continue;
                 }
 
                 if (readBuffer.length() >= len * 2) {
                     String sBegin = readBuffer.substring(0, 2);
-                    if (showlog) Log.e("~~", "sBegin ******" + sBegin);
+                    if(CameraPublishActivity.DEBUG)  Log.e("~~", "sBegin ******" + sBegin);
                     if (sBegin.equals("FE")) {
                         //开头正确
                         String msgContent = readBuffer.substring(0, len * 2);
-                        if (showlog) Log.e("开头正确sock", msgContent);
+                        if(CameraPublishActivity.DEBUG)  Log.e("开头正确sock", msgContent);
                         //校验指令
                         if (ComPort.check_com_data_string(msgContent, len * 2)) {
-                            if (showlog) Log.e(TAG, "收到:" + msgContent);
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到:" + msgContent);
                             readBuffer = readBuffer.substring(len * 2);
                             //指令正确
                             Message message = Message.obtain();
@@ -210,28 +210,28 @@ public class SockAPP {
 
                         } else {
                             //指令不正确
-                            if (showlog) Log.e("指令不正确", msgContent + "***" + readBuffer);
+                            if(CameraPublishActivity.DEBUG)  Log.e("指令不正确", msgContent + "***" + readBuffer);
                             readBuffer = readBuffer.substring(2);
                             if (readBuffer.contains("FE")) {
                                 readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
                             } else {
                                 readBuffer = "";
-                                if (showlog) Log.e("~~~~", "指令不正确 不包含FE readBuffer = kong ");
+                                if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "指令不正确 不包含FE readBuffer = kong ");
                             }
                         }
                     } else {
                         //开头不正确
-                        if (showlog) Log.e("开头不正确", readBuffer);
+                        if(CameraPublishActivity.DEBUG)  Log.e("开头不正确", readBuffer);
                         if (readBuffer.contains("FE")) {
                             readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
                         } else {
                             readBuffer = "";
-                            if (showlog) Log.e("~~~~", "开头不正确 目前不包含FE readBuffer = kong ");
+                            if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "开头不正确 目前不包含FE readBuffer = kong ");
                         }
                     }
                 } else {
                     //等下一次接
-                    if (showlog) Log.e("不够数", "等待" + readBuffer);
+                    if(CameraPublishActivity.DEBUG)  Log.e("不够数", "等待" + readBuffer);
                     break;
                 }
             }
@@ -250,7 +250,7 @@ public class SockAPP {
                     }
                 } else {
                     try {
-                        Log.e(TAG, "try connect====IP:" + hostName + "Port:" + Integer.toString(port));
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "try connect====IP:" + hostName + "Port:" + Integer.toString(port));
 
                         ShouldStopNow = false;
                         InetAddress addr = InetAddress.getByName(hostName);
@@ -260,7 +260,7 @@ public class SockAPP {
                         socket = new Socket(ServerIP, port);
                         socket.setKeepAlive(true);
                     } catch (IOException e) {
-                        Log.e(TAG, "Connect excetion..retry after 3s");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Connect excetion..retry after 3s");
                         try {
                             Thread.sleep(3000);
                             continue;
@@ -281,7 +281,7 @@ public class SockAPP {
                         if (recv_len > 0) {
                             onDataReceived(data_buff, recv_len);
                         } else {
-                            Log.e(TAG, "收到数据<=0.断开");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到数据<=0.断开");
                             if( socket != null)
                             { socket.close();
                             socket = null;}
@@ -299,7 +299,7 @@ public class SockAPP {
                 }
             }
 
-            Log.e(TAG, "接收线程退出.");
+            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "接收线程退出.");
         }
     }
 
@@ -311,7 +311,7 @@ public class SockAPP {
     public void sendMsg(byte[] msg) {
         synchronized (this) {
             if (socket == null) {
-                Log.e(TAG, "socket是空,不发送");
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "socket是空,不发送");
                 return;
             }
 
@@ -321,7 +321,7 @@ public class SockAPP {
                     outputStream.write(msg);
                     outputStream.flush();
                 } else {
-                    Log.e(TAG, "socket没有连接.不发送");
+                    if(CameraPublishActivity.DEBUG)   Log.e(TAG, "socket没有连接.不发送");
                 }
             } catch (IOException e) {
                 // FireReconnect();

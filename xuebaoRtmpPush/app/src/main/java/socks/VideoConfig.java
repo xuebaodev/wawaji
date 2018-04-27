@@ -29,9 +29,11 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180426;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180427;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180427 增加一个开关，release版本减少输出 log.i log.e。在程序退出时 删掉了动态绑定的u盘插入事件receiver 消除警告。
+
     //20180426 增加码率界面参数 修改一个帧率不起作用的问题。
 
     //20180421 修改并发布，当接收到串口的心跳0x35为空时，发送mac和本机ip给串口,最多重试三次。
@@ -285,8 +287,9 @@ public class VideoConfig
         }
 
         is_hardware_encoder  = share.getBoolean("is_hardware_encoder", false);
-        encoderKpbs = share.getInt("encoderKpbs", 560);
+
         encodeFPS = share.getInt("encodeFPS", 20);
+        encoderKpbs = share.getInt("encoderKpbs", 560);
 
         sw_video_encoder_profile = share.getInt("sw_video_encoder_profile", 1);
         sw_video_encoder_speed = share.getInt("sw_video_encoder_speed", 2);
@@ -328,7 +331,7 @@ public class VideoConfig
         machine_name = share.getString("machine_name", "可爱小白兔");
 
         swtichToOne = share.getBoolean("swtichToOne", false);
-        encoderKpbs = share.getInt("encoderKpbs", 500);
+
 
         containAudio = share.getBoolean("containAudio", containAudio);
 

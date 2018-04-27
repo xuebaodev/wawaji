@@ -32,6 +32,7 @@ import java.util.HashMap;
 
 import  android.widget.AdapterView.OnItemClickListener;
 
+import com.xuebao.rtmpPush.CameraPublishActivity;
 import com.xuebao.rtmpPush.R;
 
 public class RecorderManager extends Activity {
@@ -104,7 +105,7 @@ public class RecorderManager extends Activity {
 		
 		if ( filePath != null && !filePath.isEmpty() )
 		{
-			Log.i(Tag, "PlayRecFile name:" + fileName + " path:" + filePath);
+			if(CameraPublishActivity.DEBUG) Log.i(Tag, "PlayRecFile name:" + fileName + " path:" + filePath);
 			
 			 Intent intent = new Intent();
              intent.setClass(RecorderManager.this, RecorderPlayback.class);
@@ -135,14 +136,14 @@ public class RecorderManager extends Activity {
 	{
 		if ( recDirPath == null )
 		{
-			Log.i(Tag, "recDirPath is null");
+			if(CameraPublishActivity.DEBUG) Log.i(Tag, "recDirPath is null");
 			return;
 		}
 			
 		
 		if ( recDirPath.isEmpty() )
 		{
-			Log.i(Tag, "recDirPath is empty");
+			if(CameraPublishActivity.DEBUG) Log.i(Tag, "recDirPath is empty");
 			return;
 		}
 			
@@ -161,13 +162,13 @@ public class RecorderManager extends Activity {
 		
 		if ( !recDirFile.exists() )
 		{
-			Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
+			if(CameraPublishActivity.DEBUG) Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
 			return;
 		}
 		
 		if ( !recDirFile.isDirectory() )
 		{
-			Log.e(Tag, recDirPath + " is not dir");
+			if(CameraPublishActivity.DEBUG) Log.e(Tag, recDirPath + " is not dir");
 			return;
 		}
 		
@@ -232,17 +233,17 @@ public class RecorderManager extends Activity {
 	
 	private void DelAllRecFiles()
 	{
-		Log.i(Tag, "DelAllRecFiles++++");
+		if(CameraPublishActivity.DEBUG) Log.i(Tag, "DelAllRecFiles++++");
 
 		if ( recDirPath == null )
 		{
-			Log.i(Tag, "recDirPath is null");
+			if(CameraPublishActivity.DEBUG) Log.i(Tag, "recDirPath is null");
 			return;
 		}
 
 		if ( recDirPath.isEmpty() )
 		{
-			Log.i(Tag, "recDirPath is empty");
+			if(CameraPublishActivity.DEBUG) Log.i(Tag, "recDirPath is empty");
 			return;
 		}
 
@@ -261,13 +262,13 @@ public class RecorderManager extends Activity {
 
 		if ( !recDirFile.exists() )
 		{
-			Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
+			if(CameraPublishActivity.DEBUG) Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
 			return;
 		}
 
 		if ( !recDirFile.isDirectory() )
 		{
-			Log.e(Tag, recDirPath + " is not dir");
+			if(CameraPublishActivity.DEBUG) Log.e(Tag, recDirPath + " is not dir");
 			return;
 		}
 
@@ -316,11 +317,11 @@ public class RecorderManager extends Activity {
 				{
 					if ( recFile.delete()  )
 					{
-						Log.i(Tag, "Delete file:" + name);
+						if(CameraPublishActivity.DEBUG) Log.i(Tag, "Delete file:" + name);
 					}
 					else
 					{
-						Log.i(Tag, "Delete file failed, " + name);
+						if(CameraPublishActivity.DEBUG) Log.i(Tag, "Delete file failed, " + name);
 					}
 
 				}
@@ -342,7 +343,7 @@ public class RecorderManager extends Activity {
 		recFileListView.setAdapter(ladapter);
 
 
-		Log.i(Tag, "DelAllRecFiles----");
+		if(CameraPublishActivity.DEBUG) Log.i(Tag, "DelAllRecFiles----");
 	}
 	
 	 class ButtonDelAllRecFilesListenser implements OnClickListener

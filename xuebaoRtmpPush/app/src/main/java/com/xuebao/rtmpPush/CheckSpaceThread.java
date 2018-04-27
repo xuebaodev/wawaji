@@ -63,7 +63,7 @@ public class CheckSpaceThread extends Thread {
                     long availCount = sf.getAvailableBlocks();
 
                     //Log.d(TAG, "block大小:"+ blockSize+",block数目:"+ blockCount+",总大小:"+blockSize*blockCount/1024+"KB");
-                    Log.e("CheckSpaceThread", "可用的block数目：:"+ availCount+",剩余空间:"+ (availCount*blockSize>>20)+"MB");
+                    if(CameraPublishActivity.DEBUG) Log.e("CheckSpaceThread", "可用的block数目：:"+ availCount+",剩余空间:"+ (availCount*blockSize>>20)+"MB");
 
                     long leftSpace = (availCount*blockSize>>20); //MB
                     if ( leftSpace < 300) //300
@@ -87,23 +87,23 @@ public class CheckSpaceThread extends Thread {
                 }
             }
 
-            Log.e("CheckSpaceThread", "检查线程退出");
+            if(CameraPublishActivity.DEBUG) Log.e("CheckSpaceThread", "检查线程退出");
         }
     }
 
     private void DelAllRecFiles( String recDirPath )
     {
-        Log.i("CheckFileThread", "触发文件删除逻辑");
+        if(CameraPublishActivity.DEBUG)  Log.i("CheckFileThread", "触发文件删除逻辑");
 
         if ( recDirPath == null )
         {
-            Log.i("CheckFileThread", "recDirPath is null");
+            if(CameraPublishActivity.DEBUG)  Log.i("CheckFileThread", "recDirPath is null");
             return;
         }
 
         if ( recDirPath.isEmpty() )
         {
-            Log.i("CheckFileThread", "recDirPath is empty");
+            if(CameraPublishActivity.DEBUG)  Log.i("CheckFileThread", "recDirPath is empty");
             return;
         }
 
@@ -120,13 +120,13 @@ public class CheckSpaceThread extends Thread {
 
         if ( !recDirFile.exists() )
         {
-            Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
+            if(CameraPublishActivity.DEBUG) Log.e("Tag", "rec dir is not exist, path:" + recDirPath);
             return;
         }
 
         if ( !recDirFile.isDirectory() )
         {
-            Log.e("CheckFileThread", recDirPath + " is not dir");
+            if(CameraPublishActivity.DEBUG)  Log.e("CheckFileThread", recDirPath + " is not dir");
             return;
         }
 
@@ -156,7 +156,7 @@ public class CheckSpaceThread extends Thread {
        // }
 
         int delCount = files.length > 200 ?200 : files.length -2;
-        Log.e("文件检查线程", "即将删除" +delCount +"个文件");
+        if(CameraPublishActivity.DEBUG) Log.e("文件检查线程", "即将删除" +delCount +"个文件");
 
         if( delCount <= 0)
             return;
@@ -196,11 +196,11 @@ public class CheckSpaceThread extends Thread {
                 {
                     if ( recFile.delete()  )
                     {
-                        Log.e("CheckFileThread", "Delete file:" + name);
+                        if(CameraPublishActivity.DEBUG)  Log.e("CheckFileThread", "Delete file:" + name);
                     }
                     else
                     {
-                        Log.e("CheckFileThread", "Delete file failed, " + name);
+                        if(CameraPublishActivity.DEBUG) Log.e("CheckFileThread", "Delete file failed, " + name);
                     }
                 }
             }

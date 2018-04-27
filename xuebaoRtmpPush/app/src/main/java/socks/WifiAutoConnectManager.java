@@ -5,6 +5,8 @@ import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.xuebao.rtmpPush.CameraPublishActivity;
+
 import java.util.List;
 
 public class WifiAutoConnectManager {
@@ -122,15 +124,15 @@ public class WifiAutoConnectManager {
 
             WifiConfiguration wifiConfig = createWifiInfo(ssid, password, type);
             if (wifiConfig == null) {
-                Log.d(TAG, "wifiConfig is null!");
+                if(CameraPublishActivity.DEBUG) Log.d(TAG, "wifiConfig is null!");
                 return;
             }
 
             int netID = wifiManager.addNetwork(wifiConfig);
             boolean enabled = wifiManager.enableNetwork(netID, true);
-            Log.d(TAG, "enableNetwork status enable=" + enabled);
+            if(CameraPublishActivity.DEBUG) Log.d(TAG, "enableNetwork status enable=" + enabled);
             boolean connected = wifiManager.reconnect();
-            Log.d(TAG, "enableNetwork connected=" + connected);
+            if(CameraPublishActivity.DEBUG)  Log.d(TAG, "enableNetwork connected=" + connected);
         }
     }
 

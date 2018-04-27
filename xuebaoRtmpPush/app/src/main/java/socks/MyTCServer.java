@@ -77,11 +77,11 @@ public class MyTCServer {
 
                     String aa = new String(jj,0,r_len, "UTF-8");
 
-                    Log.e("recv json?", aa);
+                    if(CameraPublishActivity.DEBUG) Log.e("recv json?", aa);
                     JSONObject jsonObject = new JSONObject(aa);
                     if(jsonObject.has("cmd") == false)
                     {
-                        Log.e("没有CMD","关闭此连接");
+                        if(CameraPublishActivity.DEBUG) Log.e("没有CMD","关闭此连接");
                         break;
                     }
 
@@ -103,7 +103,7 @@ public class MyTCServer {
                     }else if(cmd.equals("applyconfig"))
                     {
                         boolean apply_ret = VideoConfig.instance.ApplyConfig(aa, socket);
-                        Log.e("收到配置数据", aa);
+                        if(CameraPublishActivity.DEBUG)  Log.e("收到配置数据", aa);
                         /*if(apply_ret)
                         {
                             String s = "{\"result\":\"ok\"}";
