@@ -131,20 +131,20 @@ public class CameraPublishActivity extends FragmentActivity {
         msgComData,//收到串口过来的数据
         msgUDiskMount,//收到U盘插入的消息。会读取里面的txt来配置本机--实际并没有使用场景
         msgQueryWawajiState,//查询娃娃机是否已处于空闲状态。 此命令是预览停止后，准备重启娃娃机时开始查询
-        msgMyFireHeartBeat,//调试信息。。心跳
         msgWaitIP,//等待IP
         msgIpGOT, //IP已得到。开始检查时间
-        msgDebugTxt,
         msgCheckWawaNowState, //检查娃娃机当前状态的循环
         msgUDiskUnMount, //U盘拔掉消息
         msgUpdateFreeSpace,
         msgApplyCamparam,//点击摄像头的对比度设置按钮
         msgRestoreCamparam,//点击恢复默认按钮
-        msgComRawDataPrint  //听说会收不到串口数据。我加这个消息，在串口收到任何数据时，即打印在屏幕上
+        msgOutputLog, //显示调试信息
     };
 
     private static String TAG = "CameraPublishActivity";
     public static final boolean DEBUG = BuildConfig.LOG;
+
+    public static CameraPublishActivity mainInstance = null;
 
     //NTAudioRecord audioRecord_ = null;	//for audio capture
 
@@ -208,7 +208,7 @@ public class CameraPublishActivity extends FragmentActivity {
     private int curBackCameraIndex = -1;
 
     public static ComPort mComPort;
-    public SockAPP sendThread;//应用服务器
+    public static SockAPP sendThread;//应用服务器
     public SockConfig confiThread;//配置服务器
     MyTCServer lis_server = null;//本机监听端口。接受局域网配置工具命令
 
@@ -252,7 +252,6 @@ public class CameraPublishActivity extends FragmentActivity {
 
     private int trySetMACCount = 0;//20180421 当收到心跳的mac为空时，尝试给串口发mac和本机ip。最多重试3次。已重试的次数存储在这
 
-
     static {
         System.loadLibrary("SmartPublisher");
     }
@@ -288,6 +287,7 @@ public class CameraPublishActivity extends FragmentActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);    //屏幕常亮
         setContentView(R.layout.activity_main);
         myContext = this.getApplicationContext();
+        mainInstance = this;
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         wifiauto = new WifiAutoConnectManager(wifiManager);
@@ -944,7 +944,6 @@ public class CameraPublishActivity extends FragmentActivity {
     }
 
     void ComParamSet(boolean includeMAC, boolean includedLocalIP, boolean includeduserID) {
-
         //给娃娃机发送本机的MAC
         if (includeMAC) {
             byte msg_content[] = new byte[21];
@@ -1405,18 +1404,124 @@ public class CameraPublishActivity extends FragmentActivity {
     }
 
     private void outputInfo(String strTxt, boolean append ) {
-
         FragmentLogTxt fc = (FragmentLogTxt) mFragments.get(0);
         fc.outputInfo( strTxt , append);
-        /*TextView et = (TextView) findViewById(R.id.txtlog);
-        String str_conten = et.getText().toString();
-        if (et.getLineCount() >= 20)
-            et.setText(strTxt);
-        else {
-            str_conten += "\r\n";
-            str_conten += strTxt;
-            et.setText(str_conten);
-        }*/
+    }
+
+    //直接处理串口过来的数据。如有必要再sendmesage到主线程处理。否则直接透传。提高处理速度。因为sendmessage调度太慢了。。。20180428
+    public void ThreadHandleCom(byte[] com_data, int len)
+    {
+        //处理从串口过来的消息。只处理相应的部分 其余全部转发
+        //串口过来的 主程序要处理
+        // 0x33 游戏结束
+        // 0x34 娃娃机状态
+        // 0x35 心跳
+        // 0x42 设置ip的通知。其中0x42不透传
+
+        //打印调试输出
+        String str_com_data ="串口数据" + ComPort.bytes2HexString(com_data, len);
+        Message msgLog = Message.obtain();
+        msgLog.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+        msgLog.obj = str_com_data;
+        if(mHandler!= null) mHandler.sendMessage(msgLog);
+
+        int cmd_value = com_data[7]&0xff;
+        if( cmd_value != 0x42 && cmd_value !=0x35) {//先透传
+            if( CameraPublishActivity.sendThread != null)
+                CameraPublishActivity.sendThread.sendMsg( com_data );
+        }
+
+        //主线程选择处理感兴趣的部分
+        if( cmd_value == 0x33
+                ||cmd_value == 0x34
+                ||cmd_value == 0x35
+                ||cmd_value == 0x42)
+        {
+            if( cmd_value == 0x35 )//特殊处理 看看mac为空时给板设置mac。然后发自己的心跳
+            {
+                //检查mac是否是全空 是的话 mac ip 发给串口--add 20180420.防止主板重启而安卓板不重启的情况.
+                if (trySetMACCount<3 &&
+                        len >= 21
+                        && com_data[8] == 0
+                        && com_data[9] == 0
+                        && com_data[10] == 0
+                        && com_data[11] == 0
+                        && com_data[12] == 0
+                        && com_data[13] == 0
+                        && com_data[14] == 0
+                        && com_data[15] == 0
+                        && com_data[16] == 0
+                        && com_data[17] == 0
+                        && com_data[18] == 0
+                        && com_data[19] == 0)
+                {
+                    trySetMACCount ++;
+                    ComParamSet(true, true, false);
+                }
+
+                if(sendThread != null)
+                    sendThread.heartBeat();
+
+                Message me1 = Message.obtain();//心跳消息
+                me1.what = MessageType.msgOutputLog.ordinal();
+                me1.obj = "发出心跳.";
+                if (mHandler != null) mHandler.sendMessage(me1);
+            }
+
+            Message message = Message.obtain();
+            message.what = CameraPublishActivity.MessageType.msgComData.ordinal();
+            message.arg1 = len;
+            message.obj = com_data;
+            if (mHandler != null) mHandler.sendMessage(message);
+        }
+    }
+
+    //同上直接处理socket收到的数据。如果不是主线程必须处理的，则直接透传给串口。提高响应速度
+    public void ThreadHandleSockData(byte[] sock_data, int len)
+    {
+        //打印调试输出
+        String str_com_data ="网络数据" + ComPort.bytes2HexString(sock_data, len);
+        Message msgLog = Message.obtain();
+        msgLog.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+        msgLog.obj = str_com_data;
+        if (mHandler != null) mHandler.sendMessage(msgLog);
+
+        //处理0x88 0x90 0x99 0x31 其他直接透传
+        int cmd_value = sock_data[7]&0xff;
+        if( cmd_value != 0x88
+                && cmd_value !=0x90
+                && cmd_value !=0x99
+                && cmd_value != 0x31) {//先透传
+            if( CameraPublishActivity.mComPort != null)
+                CameraPublishActivity.mComPort.SendData( sock_data , len);
+        }
+
+        //开局指令
+        if ( cmd_value == 0x31)
+        {
+            if(isShouldRebootSystem == true)//系统因为摄像头断流的原因要重启。析出开局指令不转发
+            {
+                Message msgLog1 = Message.obtain();
+                msgLog1.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+                msgLog1.obj = "检测到设备需要重启。不转发开局指令";
+                if (mHandler != null) mHandler.sendMessage(msgLog1);
+            }
+            else
+                if(mComPort != null) mComPort.SendData(sock_data, len);
+        }
+
+        //让主线程处理
+        if( cmd_value == 0x88
+                || cmd_value ==0x90
+                || cmd_value ==0x99
+                || cmd_value == 0x31)
+        {
+            Message message = Message.obtain();
+            message.what = CameraPublishActivity.MessageType.msgNetworkData.ordinal();
+            message.arg1 = len;
+            message.obj = sock_data;
+            if (mHandler != null) mHandler.sendMessage(message);
+        }
     }
 
     public Handler mHandler = new Handler() {
@@ -1564,8 +1669,6 @@ public class CameraPublishActivity extends FragmentActivity {
                     //先更新界面
                     updateCamUI();
 
-
-
                     //延迟开始推流
                     mHandler.sendEmptyMessageDelayed(MessageType.msgDelayPush.ordinal(), 2000);
                 }
@@ -1614,8 +1717,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         intent.setAction("ACTION_RK_REBOOT");
                         sendBroadcast(intent, null);
 
-                    }else if(net_cmd == 0x90)
-                    {
+                    }else if(net_cmd == 0x90) {
                         outputInfo( "立收到要求切流命令", false);
 
                         //收到命令 执行切流
@@ -1644,9 +1746,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         if (sendThread != null) {
                             sendThread.sendMsg(abc);
                         }
-                    }
-                    else if(net_cmd == 0x99)//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
-                    {
+                    } else if(net_cmd == 0x99) {//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
                         outputInfo("结束，停止录像", false);
                         stopRecorder();
                         isRecording = false;
@@ -1659,40 +1759,20 @@ public class CameraPublishActivity extends FragmentActivity {
                             initRecordUI(sdCardPath, frontCount + backCount);
                         }
                     }
-                    else//其他命令 转发给串口
+                    else if( net_cmd == 0x31)//开局指令 检查是否需要录像
                     {
-                        String sock_data = ComPort.bytes2HexString(test_data, msg_len);
-                        outputInfo("收到网络数据:" + sock_data + "发往串口", false);
-                        //检查如果不是配置IP之类的东西 就往串口发
-
-                        //往串口发
-                        if (isShouldRebootSystem == true && net_cmd == 0x31)//系统因为摄像头断流的原因要重启。析出开局指令不转发
+                        outputInfo("开局，开始录像", false);
+                        if( checkSpaceThread != null)
                         {
-                            outputInfo("检测到设备需要重启。不转发开局指令", false);
-                        } else
-                            mComPort.SendData(test_data, msg_len);
-
-                        if( net_cmd == 0x31)//开局指令 检查是否需要录像
-                        {
-                            outputInfo("开局，开始录像", false);
-
-                            if( checkSpaceThread != null)
-                            {
-                                checkSpaceThread.Check( sdCardPath );
-                            }
-
-                            if( VideoConfig.instance.is_need_local_recorder)
-                                BeginRecord();
+                            checkSpaceThread.Check( sdCardPath );
                         }
+
+                        if( VideoConfig.instance.is_need_local_recorder)
+                            BeginRecord();
                     }
                 }
                 break;
-                case msgMyFireHeartBeat: {
-                    //心跳调试
-                    outputInfo("发送心跳消息", false);
-                }
-                break;
-                case msgComRawDataPrint:
+                case msgOutputLog:
                     {
                         String ss = msg.obj.toString();
                         outputInfo(ss, false);
@@ -1788,19 +1868,11 @@ public class CameraPublishActivity extends FragmentActivity {
                 break;
                 case msgComData: //串口过来的消息
                 {
-                    byte test_data[] = (byte[]) (msg.obj);
+                    byte com_data[] = (byte[]) (msg.obj);
                     int data_len = msg.arg1;
 
-                    //处理从串口过来的消息。如果是心跳 不管。如果不是 转发给服务器
-                    String com_data = ComPort.bytes2HexString(test_data, data_len);
-                    //if( check_com_data( test_data, data_len ) == false )
-                    {
-                       // Log.e(TAG, "串口 长度:"+ data_len +" 数据:" + com_data);
-                    }
-
-                    outputInfo("串口数据 长度:" + data_len + " data " + com_data, false);
-
-                    int cmd_value = test_data[7]&0xff;
+                    //处理从串口过来的消息。只处理相应的部分
+                    int cmd_value = com_data[7]&0xff;
                     if( cmd_value == 0x33)
                     {
                         outputInfo("结束，停止录像", false);
@@ -1816,54 +1888,14 @@ public class CameraPublishActivity extends FragmentActivity {
                         }
                     }
 
-                    if(cmd_value == 0x35)
-                    {
-                        //检查mac是否是全空 是的话 mac ip 发给串口--add 20180420.防止主板重启而安卓板不重启的情况.
-                        if (trySetMACCount<3 &&
-                                data_len >= 21
-                                && test_data[8] == 0
-                                && test_data[9] == 0
-                                && test_data[10] == 0
-                                && test_data[11] == 0
-                                && test_data[12] == 0
-                                && test_data[13] == 0
-                                &&test_data[14] == 0
-                                && test_data[15] == 0
-                                && test_data[16] == 0
-                                && test_data[17] == 0
-                                && test_data[18] == 0
-                                && test_data[19] == 0)
-                        {
-                            trySetMACCount ++;
-                            ComParamSet(true, true, false);
-                        }
-
-                        if(sendThread != null)
-                            sendThread.heartBeat();
-
-                        Message me1 = Message.obtain();//心跳消息
-                        me1.what = CameraPublishActivity.MessageType.msgMyFireHeartBeat.ordinal();
-                        if (mHandler != null) mHandler.sendMessage(me1);
-                    }
-
                     if (cmd_value ==   0x35 || cmd_value == 0x34) {
-                        //如果是正常的 0X34  0x35我要透传
-                        if (cmd_value ==  0x34 ) {
-                            //queryStateTimeoutTime = 0;
-                            if (sendThread != null) {
-                                sendThread.sendMsg(test_data);
-                                outputInfo(" 发到服务器", true);
-                            }
-                        }
-
-                        if (cmd_value ==  0x34 && test_data[6] == (byte) 0x0e && isShouldRebootSystem == true) {
-                            wawajiCurrentState = test_data[8] & 0xff;
+                        if (cmd_value ==  0x34 && com_data[6] == (byte) 0x0e && isShouldRebootSystem == true) {
+                            wawajiCurrentState = com_data[8] & 0xff;
                             //fe 00 00 01 ff ff 0e 34 num1 num2 num3 num4 num5 [校验位1] Num1表示机台状态0，1，2是正常状态，其它看 ** [通知]故障上报 **
-                            if (test_data[8] == 1 || test_data[8] == 2)//要求重启的时候，娃娃机正在有人玩.啥事也不做。等待
+                            if (com_data[8] == 1 || com_data[8] == 2)//要求重启的时候，娃娃机正在有人玩.啥事也不做。等待
                             {
 
                             } else {
-
                                 if (sendThread != null) {
                                     sendThread.StopNow();
                                     sendThread = null;
@@ -1905,13 +1937,13 @@ public class CameraPublishActivity extends FragmentActivity {
                     } else if (cmd_value ==   0x42 && data_len > 14)//串口过来的配置服务器IP地址和端口//有一次出现收到0x42但是数据长度不够15位，导致我访问越界这是什么鬼,并且你的校验和是对的？//2018.2.1 add fix add data_len>14
                     {
                         //只要不是空 就重新开启sendThread
-                        int a = test_data[8] & 0xff;
-                        int b = test_data[9] & 0xff;
-                        int c = test_data[10] & 0xff;
-                        int d = test_data[11] & 0xff;
+                        int a = com_data[8] & 0xff;
+                        int b = com_data[9] & 0xff;
+                        int c = com_data[10] & 0xff;
+                        int d = com_data[11] & 0xff;
 
-                        int e = test_data[12] & 0xff;
-                        int f = test_data[13] & 0xff;
+                        int e = com_data[12] & 0xff;
+                        int f = com_data[13] & 0xff;
                         int nPort = e * 256 + f;
 
                         String s_ip = String.format("%d.%d.%d.%d", a, b, c, d);
@@ -1945,14 +1977,9 @@ public class CameraPublishActivity extends FragmentActivity {
                             confiThread.ApplyNewServer(VideoConfig.instance.configHost, VideoConfig.instance.GetConfigPort());
 
                         VideoConfig.instance.SaveConfig(getApplicationContext());
-                    } else {//透传给服务器
-                        if (sendThread != null) {
-                            sendThread.sendMsg(test_data);
-                            outputInfo(" 发到服务器", true);
-                        }
                     }
-                    break;
                 }
+                break;
                 case msgUDiskMount://插U盘
                 {
                     String UPath = (String) (msg.obj);
@@ -2054,7 +2081,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     //Log.i(TAG, "CheckingPreview");
 
                     if (mCameraFront != null) {
-                        outputInfo("isFrontCameraPreviewOK" + isFrontCameraPreviewOK, false);
+                       //outputInfo("isFrontCameraPreviewOK" + isFrontCameraPreviewOK, false);
 
                         if (isFrontCameraPreviewOK)
                             isFrontCameraPreviewOK = false;
@@ -2082,7 +2109,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
 
                     if (mCameraBack != null) {
-                        outputInfo("isBackCameraPreviewOK" + isBackCameraPreviewOK, false);
+                        //outputInfo("isBackCameraPreviewOK" + isBackCameraPreviewOK, false);
 
                         if (isBackCameraPreviewOK)
                             isBackCameraPreviewOK = false;

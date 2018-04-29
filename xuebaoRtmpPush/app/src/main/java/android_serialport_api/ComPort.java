@@ -41,25 +41,20 @@ public  class ComPort {
 	private ReadThread mReadThread;
 	private Handler mHandler= null;
 
-
 	private class ReadThread extends Thread {
-
+		byte[] buffer = new byte[128];
 		@Override
 		public void run() {
 			super.run();
 			while(!isInterrupted()) {
 				int size=0;
 				try {
-					byte[] buffer = new byte[128];
-					for(int k=0;k<128;k++)
-						buffer[k]=0;
-
 					if (mInputStream == null)
 					    return;
+
 					size = mInputStream.read(buffer);
 
 					if (size > 0) {
-
 						if(CameraPublishActivity.DEBUG)  Log.i("com_recv", "size" + size);
 						onDataReceived(buffer, size);
 					}
@@ -77,10 +72,8 @@ public  class ComPort {
 	}
 
 	public void Start() {
-		
 		try {
 			if (mSerialPort == null) {
-
 				mSerialPort = new SerialPort(new File("/dev/ttyS1"), 115200, 0);
 			}
 			mOutputStream = mSerialPort.getOutputStream();
@@ -102,6 +95,7 @@ public  class ComPort {
 	
 	public void SendData(byte[] buffer, int size)
 	{
+		synchronized(this){
 		try {
 			if (mOutputStream != null) {
 				mOutputStream.write(buffer,0, size);
@@ -112,6 +106,7 @@ public  class ComPort {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
+		}
 		}
 	}
 	
@@ -148,18 +143,15 @@ public  class ComPort {
 
 	String readBuffer = "";
 	protected void onDataReceived(byte[] buffer, int size) {
-
 		if(mHandler != null)
 		{
-			String raw_data = "RAW COM DATA:";
-			raw_data += bytes2HexString(buffer, size);
-
-			Log.e(TAG, raw_data);
+			/*StringBuilder raw_data = new StringBuilder("RAW COM DATA:");;
+			raw_data.append(bytes2HexString(buffer, size));
 
 			Message message = Message.obtain();
-			message.what = CameraPublishActivity.MessageType.msgComRawDataPrint.ordinal();
-			message.obj = raw_data;
-			mHandler.sendMessage(message);
+			message.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+			message.obj = raw_data.toString();
+			mHandler.sendMessage(message);*/
 		}
 
 		if(CameraPublishActivity.DEBUG)  Log.e("222**", String.valueOf(buffer) + " ##### " + bytes2HexString(buffer, size) + " *** " + readBuffer);
@@ -209,13 +201,10 @@ public  class ComPort {
 						//指令正确
 						if (mOutputStream != null) {
 							if (mHandler != null) {
-								Message message = Message.obtain();
-								message.what = CameraPublishActivity.MessageType.msgComData.ordinal();
-								message.arg1 = len;
-								//这里可以直接传 msgContent 看你们自己的接收端处理参数类型
-								message.obj = hexStringToBytes(msgContent);
-								mHandler.sendMessage(message);
-								Log.e("处理指令com", msgContent);
+								if(CameraPublishActivity.DEBUG) Log.e("处理指令com", msgContent);
+
+								if( CameraPublishActivity.mainInstance != null)
+									CameraPublishActivity.mainInstance.ThreadHandleCom( hexStringToBytes(msgContent), len );
 							}
 						}
 					} else {

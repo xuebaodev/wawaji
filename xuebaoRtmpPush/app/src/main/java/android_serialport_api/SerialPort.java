@@ -58,9 +58,9 @@ public class SerialPort {
 			}
 		}
 
-		mFd = open(device.getAbsolutePath(), baudrate, flags,50);//2018.2.1 听说串口要开关再开才不会出现bug
+		mFd = open(device.getAbsolutePath(), baudrate, flags,5);//2018.2.1 听说串口要开关再开才不会出现bug
 		close();
-		mFd = open(device.getAbsolutePath(), baudrate, flags,50);
+		mFd = open(device.getAbsolutePath(), baudrate, flags,5);
 		if (mFd == null) {
 			Log.e(TAG, "native open returns null");
 			throw new IOException();

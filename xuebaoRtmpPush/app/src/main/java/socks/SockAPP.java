@@ -200,13 +200,9 @@ public class SockAPP {
                         if (ComPort.check_com_data_string(msgContent, len * 2)) {
                             if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到:" + msgContent);
                             readBuffer = readBuffer.substring(len * 2);
-                            //指令正确
-                            Message message = Message.obtain();
-                            message.what = CameraPublishActivity.MessageType.msgNetworkData.ordinal();
-                            message.arg1 = len;
-                            message.obj = ComPort.hexStringToBytes(msgContent);
-                            ;
-                            if (handler != null) handler.sendMessage(message);
+
+                            if( CameraPublishActivity.mainInstance != null)
+                                CameraPublishActivity.mainInstance.ThreadHandleSockData( ComPort.hexStringToBytes(msgContent), len );
 
                         } else {
                             //指令不正确
