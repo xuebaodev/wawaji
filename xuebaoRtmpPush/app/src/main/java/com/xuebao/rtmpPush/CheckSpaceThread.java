@@ -83,7 +83,7 @@ public class CheckSpaceThread extends Thread {
                 try {
                     wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                //    e.printStackTrace();
                 }
             }
 

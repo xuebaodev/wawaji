@@ -63,8 +63,9 @@ public  class ComPort {
 					return;
 				}
 			}
-		}
-	}
+			Log.e("Comport", "串口读线程退出");
+		}//end of run
+	}//end of class ReadThread
 
 	public ComPort(Handler handler)
 	{

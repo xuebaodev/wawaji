@@ -29,9 +29,11 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180429;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180503;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //21080503 onDestroy时 现在会关掉串口对象，避免覆盖安装有可能引起串口打开失败的问题。
+
     //21080429 修改底层serial_port.so的代码，改善串口接收延迟导致的响应延迟。 修改数据收发逻辑，优先透传，主线程按需处理，提高响应速度(此处延迟主要因为sendmessage调度产生)
 
     //20180427 增加一个开关，release版本减少输出 log.i log.e。在程序退出时 删掉了动态绑定的u盘插入事件receiver 消除警告。

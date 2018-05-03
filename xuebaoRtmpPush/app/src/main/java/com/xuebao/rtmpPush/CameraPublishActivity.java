@@ -621,6 +621,11 @@ public class CameraPublishActivity extends FragmentActivity {
             }
         }
 
+        if( mComPort!= null)
+        {
+            mComPort.Destroy(); mComPort = null;
+        }
+
         unregisterReceiver(mSdcardReceiver);
 
         super.onDestroy();
