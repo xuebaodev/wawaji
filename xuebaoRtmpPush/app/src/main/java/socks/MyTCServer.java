@@ -12,6 +12,7 @@ import socks.VideoConfig;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,6 +24,7 @@ public class MyTCServer {
     private Thread newThread; //声明一个子线程
 
     boolean ShouldStopNow = false;
+    ServerSocket serverSocket;
 
     public void init() {
 
@@ -32,7 +34,7 @@ public class MyTCServer {
             public void run() {
                 //这里写入子线程需要做的工作
                 try {
-                    ServerSocket serverSocket = new ServerSocket(PORT);
+                    serverSocket = new ServerSocket(PORT);
                     while (ShouldStopNow == false) {
                         // 一旦有堵塞, 则表示服务器与客户端获得了连接
                         Socket client = serverSocket.accept();
@@ -42,6 +44,7 @@ public class MyTCServer {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Log.e("MyTCServer", "局域网配置监听线程退出");
             }
         });
         newThread.start(); //启动线程
@@ -49,6 +52,13 @@ public class MyTCServer {
 
     public void StopNow()
     {
+        try{
+            serverSocket.close();
+        }catch (IOException ioe)
+        {
+
+        }
+
         ShouldStopNow = true;
         if( newThread != null)
         {
