@@ -1,5 +1,10 @@
 **雪暴网络娃娃机安卓版**配套测试工程源码及配置工具    <a href="https://github.com/xuebaodev/wawaji/wiki" target="_blank">**点击这里查看本项目的WIKI文档**</a>
 
+相关产品类型
+## 网络娃娃机 ##
+## <a href="https://github.com/xuebaodev/wawaji/tree/master/%E5%BC%B9%E7%8F%A0%E6%9C%BA%E5%AF%B9%E6%8E%A5%E8%B5%84%E6%96%99" target="_blank">线上线下弹珠机</a> ##
+
+
 雪暴网络科技是一家提供网络娃娃机实体机器并提供使用该机器开发网络娃娃机app相关技术支持的公司。
 我们以卖机器为主，附带提供如何开发，部署的一些简单技术支持。方便您购买机器后，能够知道如何开发并运行自己的网络娃娃机项目。
 
