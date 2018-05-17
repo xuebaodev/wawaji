@@ -288,6 +288,7 @@ public class ClientServer {
 						System.out.println("clinet leave room ");
 					} else if (data_cmd == 0x31)// player start play.
 					{
+						System.out.println("clinet start game ");
 						//开局命令--
 						//检查是否可以开局并且回应给客户
 						// check if the room is free .if not reply not ok.

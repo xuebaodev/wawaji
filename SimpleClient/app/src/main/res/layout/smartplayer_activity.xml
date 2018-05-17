@@ -44,6 +44,14 @@
             android:text="模拟结束"
             android:onClick="OnClickFakeEnd"/>
 
+        <Button
+            android:id="@+id/btnFake93"
+            android:layout_toRightOf="@+id/btnFakeEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送0x93"
+            android:onClick="OnClickSend93"/>
+
         <!--ImageView
             android:layout_width="54dp"
             android:layout_height="54dp"

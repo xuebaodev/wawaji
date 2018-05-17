@@ -139,6 +139,7 @@ public class CameraPublishActivity extends FragmentActivity {
         msgApplyCamparam,//点击摄像头的对比度设置按钮
         msgRestoreCamparam,//点击恢复默认按钮
         msgOutputLog, //显示调试信息
+        msgQueryNetworkState,//读超时，发0x92看看有没返回0x92 如无，则表明网络已断开。重连
     };
 
     private static String TAG = "CameraPublishActivity";
@@ -541,7 +542,6 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
             }
         } catch (Exception e){
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -1238,7 +1238,6 @@ public class CameraPublishActivity extends FragmentActivity {
                 parameters.flatten();
                 mCameraFront.setParameters(parameters);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -1255,7 +1254,6 @@ public class CameraPublishActivity extends FragmentActivity {
                 parameters.flatten();
                 mCameraBack.setParameters(parameters);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -1413,6 +1411,10 @@ public class CameraPublishActivity extends FragmentActivity {
         fc.outputInfo( strTxt , append);
     }
 
+    //用来检测拔网线.南软的板拔网线就知道了。老罗的板不行，所以要加这个步骤
+    private boolean network_query_issend = false;
+    private boolean network_query_isrecv = false;
+
     //直接处理串口过来的数据。如有必要再sendmesage到主线程处理。否则直接透传。提高处理速度。因为sendmessage调度太慢了。。。20180428
     public void ThreadHandleCom(byte[] com_data, int len)
     {
@@ -1464,13 +1466,22 @@ public class CameraPublishActivity extends FragmentActivity {
                     ComParamSet(true, true, false);
                 }
 
-                if(sendThread != null)
-                    sendThread.heartBeat();
+                if(sendThread != null) {
+                    if( sendThread.heartBeat() == true)
+                    {
+                        Message me1 = Message.obtain();//心跳消息
+                        me1.what = MessageType.msgOutputLog.ordinal();
+                        me1.obj = "发出心跳.";
+                        if (mHandler != null) mHandler.sendMessage(me1);
 
-                Message me1 = Message.obtain();//心跳消息
-                me1.what = MessageType.msgOutputLog.ordinal();
-                me1.obj = "发出心跳.";
-                if (mHandler != null) mHandler.sendMessage(me1);
+                    }
+                    else {
+                            Message me1 = Message.obtain();//心跳消息
+                            me1.what = MessageType.msgOutputLog.ordinal();
+                            me1.obj = "收到串口心跳，但发送不成功.";
+                            if (mHandler != null) mHandler.sendMessage(me1);
+                        }
+                }
             }
 
             Message message = Message.obtain();
@@ -1491,14 +1502,25 @@ public class CameraPublishActivity extends FragmentActivity {
         msgLog.obj = str_com_data;
         if (mHandler != null) mHandler.sendMessage(msgLog);
 
-        //处理0x88 0x90 0x99 0x31 其他直接透传
+        //处理0x31 0x88 0x92 0x90 0x93 0x99 其他直接透传
         int cmd_value = sock_data[7]&0xff;
-        if( cmd_value != 0x88
-                && cmd_value !=0x90
-                && cmd_value !=0x99
-                && cmd_value != 0x31) {//先透传
+        if( cmd_value != 0x31
+            && cmd_value != 0x88
+            && cmd_value !=0x90
+            && cmd_value != 0x92
+                && cmd_value != 0x93
+            && cmd_value !=0x99 ) {//先透传
             if( CameraPublishActivity.mComPort != null)
                 CameraPublishActivity.mComPort.SendData( sock_data , len);
+        }
+
+        //处理状态查询返回
+        if( cmd_value == 0x92 )
+        {
+            if( network_query_issend )
+            {
+                network_query_isrecv = true;
+            }
         }
 
         //开局指令
@@ -1518,6 +1540,7 @@ public class CameraPublishActivity extends FragmentActivity {
         //让主线程处理
         if( cmd_value == 0x88
                 || cmd_value ==0x90
+                || cmd_value ==0x93
                 || cmd_value ==0x99
                 || cmd_value == 0x31)
         {
@@ -1751,7 +1774,52 @@ public class CameraPublishActivity extends FragmentActivity {
                         if (sendThread != null) {
                             sendThread.sendMsg(abc);
                         }
-                    } else if(net_cmd == 0x99) {//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
+                    }
+                    else if( net_cmd == 0x93 )//收到停止推流或码率变更命令
+                    {
+                        int onOff = (test_data[8] & 0xff);
+                        int newBitRate = (test_data[10] & 0xff) * 256 + (test_data[9] & 0xff);
+
+                        //先回应成功。如果不成功在发失败
+                        byte[] abc = make_cmd(0x93,  test_data[8],test_data[9], test_data[10], 1 );//4位空的预留 0x89命令码 前置状态  后置状态 4位预留。 其中：状态为:00 正常 1 使用中掉线 2摄像头缺失
+                        if (sendThread != null) {
+                            sendThread.sendMsg(abc);
+                        }
+
+                        if( onOff == 0)
+                            UIClickStopPush();
+                        else if(onOff == 1)
+                        {
+                            /*0x93逻辑
+                            收到1，如果当前没在推流，则检查bitrate，不一致则保存并更新。然后开推。
+                            如果当前已在推流，检查bitrate。=0或与当前一致，啥也不做。 仅当不等于0且不与当前一致时，保存并更新。停推。开推。
+                            收到0，直接停推*/
+                            if( isPushing== false ) {
+                                if(newBitRate != 0) {
+                                    if( VideoConfig.instance.encoderKpbs!= newBitRate) {
+                                        VideoConfig.instance.encoderKpbs = newBitRate;
+                                        //更新界面
+                                        EditText etib = findViewById(R.id.push_bitrate);
+                                        etib.setText(Integer.toString(VideoConfig.instance.encoderKpbs));
+                                    }
+                                }
+                                UIClickStartPush();
+                            }else if( isPushing == true)
+                            {
+                                if( newBitRate != 0 && newBitRate != VideoConfig.instance.encoderKpbs)
+                                {
+                                    VideoConfig.instance.encoderKpbs = newBitRate;
+                                    //更新界面
+                                    EditText etib = findViewById(R.id.push_bitrate);
+                                    etib.setText(Integer.toString(VideoConfig.instance.encoderKpbs));
+
+                                    UIClickStopPush();
+                                    UIClickStartPush();
+                                }
+                            }
+                        }
+                    }
+                    else if(net_cmd == 0x99) {//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
                         outputInfo("结束，停止录像", false);
                         stopRecorder();
                         isRecording = false;
@@ -2182,6 +2250,35 @@ public class CameraPublishActivity extends FragmentActivity {
                         VideoConfig.instance.brightness =  VideoConfig.instance.defaultBrightness;
                         ApplyCam3Params();
                         updateCamUI();
+                    }
+                    break;
+                case msgQueryNetworkState:
+                    {
+                        //构造0x92发送
+                        byte[] confirm_data = make_cmd(0x92);
+                        if(sendThread != null)
+                            sendThread.sendMsg( confirm_data );
+
+                        network_query_issend = true;
+
+                        //直接起个计时器。正常来说只要触发读超时，那就没什么好讲了。直接重连都行
+                        new Timer().schedule(new TimerTask() {
+                            public void run() {
+                                if( network_query_issend )
+                                {
+                                    network_query_issend = false;
+                                    if( network_query_isrecv == false)
+                                    {
+                                        Log.e(TAG, "网络检测超时。断网了。启用重连机制.");
+                                        if(sendThread != null) sendThread.CloseFireRetry();
+                                    }
+                                    else
+                                        {
+                                            network_query_isrecv = false;
+                                        }
+                                }
+                            }
+                        }, 3000 );
                     }
                     break;
             }
@@ -2842,7 +2939,6 @@ public class CameraPublishActivity extends FragmentActivity {
 
             Camera front_cam = GetCameraObj(FRONT);
             if (front_cam != null) {
-
                 if (libPublisher.SmartPublisherSetURL(publisherHandleFront, VideoConfig.instance.url1) != 0) {
                     if(CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to set publish stream URL..");
                     outputInfo("前置推流地址应用失败.", false);
@@ -2865,7 +2961,6 @@ public class CameraPublishActivity extends FragmentActivity {
 
             Camera back_cam = GetCameraObj(BACK);
             if (back_cam != null) {
-
                 if (libPublisher.SmartPublisherSetURL(publisherHandleBack, VideoConfig.instance.url2) != 0) {
                     if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Failed to set publish stream URL..");
                 }
@@ -2951,7 +3046,6 @@ public class CameraPublishActivity extends FragmentActivity {
                     btnStartPush.setText(" 停止推送 ");
                 }
             }
-
     }
 
     void UIClickStopPush() {
@@ -3281,7 +3375,6 @@ public class CameraPublishActivity extends FragmentActivity {
             //	Log.e("sadfasdf","camTYpe:" + camera_type + "w:" + ss.get(i).width + " h:" + ss.get(i).height);
             //}
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return false;
         }
@@ -3312,7 +3405,6 @@ public class CameraPublishActivity extends FragmentActivity {
         try {
             if (camera != null) camera.setPreviewDisplay(holder);
         } catch (Exception ex) {
-            // TODO Auto-generated catch block
             if (null != camera) {
                 camera.release();
                 camera = null;
@@ -3430,7 +3522,6 @@ public class CameraPublishActivity extends FragmentActivity {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            // TODO Auto-generated method stub
             if(CameraPublishActivity.DEBUG)  Log.i(TAG, "Surface Destroyed");
         }
     }

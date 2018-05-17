@@ -55,7 +55,7 @@ public  class ComPort {
 					size = mInputStream.read(buffer);
 
 					if (size > 0) {
-						if(CameraPublishActivity.DEBUG)  Log.i("com_recv", "size" + size);
+						//if(CameraPublishActivity.DEBUG)  Log.i("com_recv", "size" + size);
 						onDataReceived(buffer, size);
 					}
 				} catch (IOException e) {
@@ -155,7 +155,6 @@ public  class ComPort {
 			mHandler.sendMessage(message);*/
 		}
 
-		if(CameraPublishActivity.DEBUG)  Log.e("222**", String.valueOf(buffer) + " ##### " + bytes2HexString(buffer, size) + " *** " + readBuffer);
 		readBuffer = readBuffer + bytes2HexString(buffer, size);
 
 		//开头可能就不正确
@@ -190,19 +189,18 @@ public  class ComPort {
 
 			if (readBuffer.length()>= len * 2) {
 				String sBegin = readBuffer.substring(0, 2);
-				if(CameraPublishActivity.DEBUG)  Log.e("~~", "sBegin ******" + sBegin);
 				if (sBegin.equals("FE")) {
 					//开头正确
 					String msgContent = readBuffer.substring(0, len * 2);
-					if(CameraPublishActivity.DEBUG)  Log.e("开头正确com", msgContent);
+					//if(CameraPublishActivity.DEBUG)  Log.e("开头正确com", msgContent);
 					//校验指令
 					if (check_com_data_string(msgContent, len * 2)) {
-						if(CameraPublishActivity.DEBUG)  Log.e("指令正确com", msgContent);
+						//if(CameraPublishActivity.DEBUG)  Log.e("指令正确com", msgContent);
 						readBuffer = readBuffer.substring(len * 2);
 						//指令正确
 						if (mOutputStream != null) {
 							if (mHandler != null) {
-								if(CameraPublishActivity.DEBUG) Log.e("处理指令com", msgContent);
+								if(CameraPublishActivity.DEBUG) Log.e("com收到", msgContent);
 
 								if( CameraPublishActivity.mainInstance != null)
 									CameraPublishActivity.mainInstance.ThreadHandleCom( hexStringToBytes(msgContent), len );
@@ -234,7 +232,7 @@ public  class ComPort {
 			else
 			{
 				//等下一次接
-				if(CameraPublishActivity.DEBUG)  Log.e("不够数", "等待" + readBuffer);
+				//if(CameraPublishActivity.DEBUG)  Log.e("不够数", "等待" + readBuffer);
 				break;
 			}
 		}
@@ -242,6 +240,20 @@ public  class ComPort {
 	
 
 	public void Destroy() {
+		try {
+			if( mOutputStream != null){
+				mOutputStream.close();mOutputStream = null;
+			}
+
+			if( mInputStream != null)
+			{
+				mInputStream.close();mInputStream = null;
+			}
+		}catch (IOException es)
+		{
+
+		}
+
 		if (mReadThread != null)
 			mReadThread.interrupt();
 		

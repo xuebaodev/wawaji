@@ -429,7 +429,7 @@ public class WawaServer {
 						//娃娃机有故障上报。你要标记娃娃机状态为故障-维护中。
 						if( data_cmd == 0x37 )//error happend..do your code.change machine state and etc.
 						{
-							
+							System.out.println("收到娃娃机故障");
 						}
 						
 						if( data_cmd == 0x89 )//摄像头预览故障-推流故障 娃娃机即将重启

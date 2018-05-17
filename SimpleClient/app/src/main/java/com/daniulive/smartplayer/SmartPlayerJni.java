@@ -5,7 +5,7 @@
  * Github: https://github.com/daniulive/SmarterStreaming
  * 
  * Created by DaniuLive on 2015/09/26.
- * Copyright © 2014~2016 DaniuLive. All rights reserved.
+ * Copyright ? 2014~2016 DaniuLive. All rights reserved.
  */
 
 package com.daniulive.smartplayer;
@@ -150,6 +150,25 @@ public class SmartPlayerJni {
 	  */
 	 public native int SmartPlayerSetLowLatencyMode(long handle, int mode);
 	 
+	 
+	 /**
+	  * ???????????, ??????0????? ?????????????????????
+	  * @param handle
+	  * @param degress?? ?????? 0???90??, 180??, 270?? ???
+	  * @return
+	  */
+	 public native int SmartPlayerSetRotation(long handle, int degress);
+	 	 
+	 
+	 /**
+	  * Set report download speed
+	  * 
+	  * @param handle
+	  * @param is_report: if with 1, it will report download speed, it with 0: does not it.
+	  * @param report_interval: report interval, unit is second, it must be greater than 0.
+	  * @return
+	  */
+	 public native int SmartPlayerSetReportDownloadSpeed(long handle, int is_report, int report_interval );
 	  	  	
 	 /**
 	 * Set playback orientation.

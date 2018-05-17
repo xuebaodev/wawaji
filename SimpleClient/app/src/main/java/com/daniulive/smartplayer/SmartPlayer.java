@@ -250,7 +250,7 @@ public class SmartPlayer extends Activity {
 		if(playerHandle == 0)
 		{
 			Log.e(TAG, "surfaceHandle with nil..");
-			return;
+			//return;
 		}
 
 		libPlayer.SetSmartPlayerEventCallback(playerHandle, new EventHande());
@@ -274,7 +274,7 @@ public class SmartPlayer extends Activity {
 
 		if(MainActivity.playbackUrl == null){
 			Log.e(TAG, "playback URL with NULL...");
-			return;
+			//return;
 		}
 
 		int iPlaybackRet = libPlayer.SmartPlayerStartPlayback(playerHandle, MainActivity.playbackUrl);
@@ -282,7 +282,7 @@ public class SmartPlayer extends Activity {
 		if(iPlaybackRet != 0)
 		{
 			Log.e(TAG, "StartPlayback strem failed..");
-			return;
+			//return;
 		}
 
 		Log.e(TAG, "StartPlayback strem " + MainActivity.playbackUrl);
@@ -402,6 +402,16 @@ public class SmartPlayer extends Activity {
 			MainActivity.sendThread.SendOut( com_cmd );
 		}
 	}
+
+    public void OnClickSend93(View v)
+    {
+        byte com_cmd[] = user_uart_sendcom(0x93, 0, 50, 1);
+        Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
+        if(MainActivity.sendThread != null)
+        {
+            MainActivity.sendThread.SendOut( com_cmd );
+        }
+    }
 
 	Handler handler = new Handler() {
 

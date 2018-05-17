@@ -29,9 +29,14 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180510;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180517;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180517 0x93逻辑修正。使逻辑更严谨。
+    //20180516 增加命令0x93 可以在机器长时空闲或无玩家观看时，服务器发送0x93过来使推流停止或降低码率。降低带宽占用。
+
+    //20180514 增加了socket读超时处理，当20秒内收不到任何数据时，发送0x92给服务器，如果3秒内服务器不返回0x92，则socket视为断网(或网线被拔)。尝试重连。
+
     //20180510 退出时，局域网的7777监听线程现在可以正常退出了。
 
     //21080503 onDestroy时 现在会关掉串口对象，避免覆盖安装有可能引起串口打开失败的问题。

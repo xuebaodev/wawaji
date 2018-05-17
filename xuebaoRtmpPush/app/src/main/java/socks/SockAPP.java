@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.locks.Lock;
 
 import android_serialport_api.ComPort;
@@ -59,6 +60,16 @@ public class SockAPP {
        // }
     }
 
+    public void CloseFireRetry()
+    {
+        if (socket != null) {
+            try {
+                socket.close();
+                socket = null;
+            } catch (IOException e) {
+            }
+        }
+    }
 
    /* void FireHeadbeat() {
         if (thHearbeatTimer != null) {
@@ -157,8 +168,6 @@ public class SockAPP {
 
 
         protected void onDataReceived(byte[] buffer, int size) {
-            if(CameraPublishActivity.DEBUG)
-                Log.e("222**", String.valueOf(buffer) + " ##### " + ComPort.bytes2HexString(buffer, size) + " *** " + readBuffer);
             readBuffer = readBuffer + ComPort.bytes2HexString(buffer, size);
 
             //开头可能就不正确
@@ -191,14 +200,12 @@ public class SockAPP {
 
                 if (readBuffer.length() >= len * 2) {
                     String sBegin = readBuffer.substring(0, 2);
-                    if(CameraPublishActivity.DEBUG)  Log.e("~~", "sBegin ******" + sBegin);
                     if (sBegin.equals("FE")) {
                         //开头正确
                         String msgContent = readBuffer.substring(0, len * 2);
-                        if(CameraPublishActivity.DEBUG)  Log.e("开头正确sock", msgContent);
                         //校验指令
                         if (ComPort.check_com_data_string(msgContent, len * 2)) {
-                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到:" + msgContent);
+                            if(CameraPublishActivity.DEBUG)  Log.e("网络收到",  msgContent);
                             readBuffer = readBuffer.substring(len * 2);
 
                             if( CameraPublishActivity.mainInstance != null)
@@ -227,7 +234,7 @@ public class SockAPP {
                     }
                 } else {
                     //等下一次接
-                    if(CameraPublishActivity.DEBUG)  Log.e("不够数", "等待" + readBuffer);
+                    //if(CameraPublishActivity.DEBUG)  Log.e("不够数", "等待" + readBuffer);
                     break;
                 }
             }
@@ -248,6 +255,12 @@ public class SockAPP {
                     try {
                         if(CameraPublishActivity.DEBUG)  Log.e(TAG, "try connect====IP:" + hostName + "Port:" + Integer.toString(port));
 
+                        String strdb = String.format("在尝试连接:%s Port:%d",hostName,  port);
+                        Message mdb = Message.obtain();
+                        mdb.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+                        mdb.obj = strdb;
+                        if (handler != null) handler.sendMessage(mdb);
+
                         ShouldStopNow = false;
                         InetAddress addr = InetAddress.getByName(hostName);
                         String domainName = addr.getHostName();//获得主机名
@@ -255,6 +268,7 @@ public class SockAPP {
 
                         socket = new Socket(ServerIP, port);
                         socket.setKeepAlive(true);
+                        socket.setSoTimeout(20000);//设置读操作超时时间20 s
                     } catch (IOException e) {
                         if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Connect excetion..retry after 3s");
                         try {
@@ -283,8 +297,36 @@ public class SockAPP {
                             socket = null;}
                             break;
                         }
-                    } catch (IOException ea) {
+                    }
+                    catch(SocketTimeoutException s) {
+                        Log.e(TAG,"读超时.发包确认");
+                        String strdb = String.format("读超时.发包确认");
+                        Message mdb = Message.obtain();
+                        mdb.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+                        mdb.obj = strdb;
+                        if (handler != null) handler.sendMessage(mdb);
+
+                        Message mdq = Message.obtain();
+                        mdq.what = CameraPublishActivity.MessageType.msgQueryNetworkState.ordinal();
+                        mdq.obj = strdb;
+                        if (handler != null) handler.sendMessage(mdq);
+
+                       /* try {
+                            if( socket != null){socket.close();
+                                socket = null;}
+                        } catch (IOException aa) {
+                            break;
+                        }
+                        break;*/
+                    }
+                    catch (IOException ea) {
                        // ea.printStackTrace();
+                        Log.e(TAG, "读异常.断开.尝试重连。");
+                        String strdb = String.format("读异常.断开.尝试重连。");
+                        Message mdb = Message.obtain();
+                        mdb.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+                        mdb.obj = strdb;
+                        if (handler != null) handler.sendMessage(mdb);
                         try {
                             if( socket != null){socket.close();
                             socket = null;}
@@ -299,16 +341,16 @@ public class SockAPP {
         }
     }
 
-    public void  heartBeat()
+    public boolean  heartBeat()
     {
-        sendMsg(heart_beat_msg);
+       return  sendMsg(heart_beat_msg);
     }
 
-    public void sendMsg(byte[] msg) {
+    public boolean sendMsg(byte[] msg) {
         synchronized (this) {
             if (socket == null) {
                 if(CameraPublishActivity.DEBUG) Log.e(TAG, "socket是空,不发送");
-                return;
+                return false;
             }
 
             try {
@@ -316,13 +358,19 @@ public class SockAPP {
                     OutputStream outputStream = socket.getOutputStream();
                     outputStream.write(msg);
                     outputStream.flush();
+
+                    return true;
                 } else {
                     if(CameraPublishActivity.DEBUG)   Log.e(TAG, "socket没有连接.不发送");
+                    return false;
                 }
             } catch (IOException e) {
                 // FireReconnect();
+                Log.e(TAG,"发送有异常.");
             }
         }
+
+        return  false;
     }
 
     public static final String bytesToHexString(byte[] buffer) {
