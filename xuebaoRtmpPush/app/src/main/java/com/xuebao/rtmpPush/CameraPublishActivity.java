@@ -1721,6 +1721,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 case msgCheckWawajiReady://每隔一秒给娃娃机发状态查询指令 看看它是否就绪
                 {
                     if (isWawajiReady == false) {
+                        outputInfo("正在发送0x34检查娃娃机是否就绪", false);
                         send_com_data(0x34);
                         mHandler.sendEmptyMessageDelayed(MessageType.msgCheckWawajiReady.ordinal(), 1000);
                     }

@@ -327,11 +327,13 @@ public class SockAPP {
                         mdb.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
                         mdb.obj = strdb;
                         if (handler != null) handler.sendMessage(mdb);
-                        try {
-                            if( socket != null){socket.close();
-                            socket = null;}
-                        } catch (IOException aa) {
-                            break;
+                        if( ShouldStopNow == false ) {
+                            try {
+                                if( socket != null){socket.close();
+                                    socket = null;}
+                            } catch (IOException aa) {
+                                break;
+                            }
                         }
                     }
                 }
