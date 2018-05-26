@@ -167,13 +167,7 @@ export PATH JAVA_HOME CLASSPATH
 微信连接
 https://mp.weixin.qq.com/s/UlOTFWT5IfIxEI3h_PaRNQ
 
-
-<br>
-<br>
 <img src="https://www.snowstormdoll.cn/images/QRScan.jpg" alt="二维码" />
-
-
-
 
 =====================Code Explain============
 <br>1.SimpleClient Main Code Location 
