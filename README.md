@@ -60,7 +60,7 @@ run
 ./SimpleServer
 
 exit
-input exit and press Enter to stop the server normally. Otherwise will failed next time you run it .because you didn't close bind port.
+input exit then press Enter to stop the server normally.
 ```
 
 <br>SimpleServer java版
