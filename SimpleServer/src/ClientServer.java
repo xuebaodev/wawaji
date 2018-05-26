@@ -263,7 +263,13 @@ public class ClientServer {
 							msg_content[6] = (byte) (msg_content.length);
 							msg_content[7] = (byte) 0x1;
 
-							System.arraycopy(strRoomList.getBytes(), 0, msg_content, 9, strRoomList.getBytes().length);
+							System.arraycopy(strRoomList.getBytes(), 0, msg_content, 8, strRoomList.getBytes().length);
+							int total_c = 0;
+							for(int ikk = 6; ikk< data_len-1; ikk++)
+							{
+								total_c += (msg_content[ikk] & 0xff);
+							}
+							msg_content[data_len-1] = (byte)(total_c % 100);
 
 							System.out.println("room list reply:" + strRoomList);
 							out.write(msg_content, 0, msg_content.length);

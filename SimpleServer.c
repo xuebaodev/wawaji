@@ -4,13 +4,13 @@
  * when client connect to server, send a welcome message and timestamp in server.
  */
 
-#include  <stdio.h> 
-#include  <sys/socket.h> 
-#include  <unistd.h> 
-#include  <sys/types.h> 
-#include  <netinet/in.h> 
-#include  <stdlib.h> 
-#include  <time.h> 
+#include <stdio.h> 
+#include <sys/socket.h> 
+#include <unistd.h> 
+#include <sys/types.h> 
+#include <netinet/in.h> 
+#include <stdlib.h> 
+#include <time.h> 
 #include <string.h>
 #include <thread>
 #include <string>
@@ -24,13 +24,12 @@ typedef void(*ext)();
 
 int PLAYER_SOCKET = -1;
 int ROOM_SOCKET = -1;
+char g_wawaji_mac[13];//mac of that doll machine
 
 bool stopRunning = false;
 
-
 //for debug print time only
-void PrintTime() 
-{
+void PrintTime() {
 	time_t t;
 	struct tm * lt;
 	time(&t);//
@@ -38,24 +37,20 @@ void PrintTime()
 	printf("[%d:%d:%d]",  lt->tm_hour, lt->tm_min, lt->tm_sec);
 }
 
-//±£Ö¤ÏûÏ¢½ÓÊÕÍêÕûĞÔ
-bool recv_unti(int socketFD, char* buffer, int len) 
-{
+//ä¿è¯æ¶ˆæ¯æ¥æ”¶å®Œæ•´æ€§
+bool recv_unti(int socketFD, char* buffer, int len) {
 	int total_recved = 0;
 
 	int recv_len = recv(socketFD, buffer + total_recved, len- total_recved, 0);
-	if (recv_len <= 0) 
-	{
+	if (recv_len <= 0) {
 		printf("recv_len<=0:%d\r\n", recv_len);
 		return false;
 	} 
 	total_recved += recv_len;
 
-	while (total_recved < len) 
-	{
+	while (total_recved < len) {
 		recv_len = recv(socketFD, buffer + total_recved, len - total_recved, 0);
-		if (recv_len <= 0)
-		{
+		if (recv_len <= 0){
 			printf("recv_len1<=0");
 			printf("recv_len<=0:%d\r\n", recv_len&0xffff);
 			return false;
@@ -64,7 +59,6 @@ bool recv_unti(int socketFD, char* buffer, int len)
 	}
 
 	return true;
-
 }
 
 bool check_com_data(char* data, int len) {
@@ -90,10 +84,8 @@ bool check_com_data(char* data, int len) {
 	return true;
 }
 
-void player_recv()
-{
-	while (stopRunning == false)
-	{
+void player_recv(){
+	while (stopRunning == false){
 		char bu_len[7] = { 0 };
 		if(recv_unti(PLAYER_SOCKET, bu_len, 7) == false)
 			break;
@@ -107,43 +99,75 @@ void player_recv()
 		memset(pData, 0, data_len);
 		memcpy(pData, bu_len, 7);
 		bool is_ok = recv_unti(PLAYER_SOCKET, pData + 7, data_len - 7);
-		if (is_ok == false) 
-		{
+		if (is_ok == false) {
 			delete[]pData;
 			break;
 		}
 
 		PrintTime();
 		printf("player_data:");
-		for (int i = 0; i < data_len; i++) 
-		{
+		for (int i = 0; i < data_len; i++) {
 			printf("%02X ", pData[i]&0xff);
 		}
 		printf("\r\n");
 
-		if (check_com_data(pData, data_len) == false) 
-		{
+		if (check_com_data(pData, data_len) == false) {
 			printf("data check error.\r\n");
 			delete[]pData;
 			continue;
 		}
 
-		//Íæ¼ÒµãÁË¿ª¾Ö°´Å¥
-		 if (pData[7] == 0x31)// new game recv. you should decide whether to grasp or not. here ,i simply translate to the dool machine.
-		{
+		if( (pData[7]&0xff) == 0x1){//20180526. i heard some people is using this server.so, i add support for the SimpleClient. Cause the SimpleClient-C.apk is out of date, and no sourcecode.
+			//request room list.
+			printf("player request room list ");
+			char room_list[128]= {0};
+			if( strcmp(g_wawaji_mac, "") != 0){
+				sprintf(room_list, "[\"%s\"]", g_wawaji_mac);// only one wawaji is valid to this server. as you know .as simple as possbile.
+				printf("reply roomlist %s\n", room_list);
+			}else{
+				printf("no room. reply empty.\n");
+				sprintf(room_list, "[]");
+			}
+
+			int pack_len = 9 + strlen(room_list);
+			unsigned char* msg_content = new unsigned char[pack_len];
+			msg_content[0] = 0xfe;
+			msg_content[1] =  0;
+			msg_content[2] =  0;
+			msg_content[3] = ~msg_content[0];
+			msg_content[4] = ~msg_content[1];
+			msg_content[5] = ~msg_content[2];
+			msg_content[6] = pack_len;
+			msg_content[7] = 0x1;
+
+			memcpy(msg_content+8, room_list, strlen(room_list));
+			int total_c = 0;
+			for(int ikk = 6; ikk< pack_len-1; ikk++)
+			{
+				total_c += (msg_content[ikk] & 0xff);
+			}
+			msg_content[pack_len-1] = (total_c % 100);
+
+			for( int k = 0; k< pack_len; k++)
+				printf("%02X ", msg_content[k]);
+
+			printf("\n");
+
+			send(PLAYER_SOCKET, msg_content, pack_len, 0);
+
+			delete []msg_content;
+		}else if ( (pData[7]&0xff) == 0x31){// new game recv. you should decide whether to grasp or not. here ,i simply translate to the dool machine.
+			//ç©å®¶ç‚¹äº†å¼€å±€æŒ‰é’®
 			PrintTime();
 			printf("cmd:request new game.tranlating to room ..\r\n");
 
-			if (ROOM_SOCKET != -1) //ÓĞÍŞÍŞ»ú Ö±½Ó×ª·¢µ½ÍŞÍŞ»ú
-			{
+			if (ROOM_SOCKET != -1){ //æœ‰å¨ƒå¨ƒæœº ç›´æ¥è½¬å‘åˆ°å¨ƒå¨ƒæœº
 				send(ROOM_SOCKET, pData, data_len, 0);//send to the doll machine.let it begin!
 			}
 
 			send(PLAYER_SOCKET, pData, data_len, 0);//send back to the player to enable the gui button. 
 			//In fact you should wait the reply from the doll machine . Translate it's replay to player. You should check to make sure the doll machine is ok.
-		}
-		else if (ROOM_SOCKET != -1)//ÈÎºÎÏûÏ¢¶¼Ö±½Ó×ª·¢µ½ÍŞÍŞ»ú.µ«ÊÇÊµ¼Ê³¡¾°ÖĞÒª´¦ÀíµÇÂ¼ »ñÈ¡·¿¼äÁĞ±íµÈµÈÒ»¶Ñ¶«Î÷¡£ÕâĞ©¶«Î÷ÊÇ²»ÄÜ×ª·¢¸øÍŞÍŞ»ú¡£¶øĞèÒªÄã×Ô¼º´¦Àí
-		{
+		}else if (ROOM_SOCKET != -1){//ä»»ä½•æ¶ˆæ¯éƒ½ç›´æ¥è½¬å‘åˆ°å¨ƒå¨ƒæœº.ä½†æ˜¯å®é™…åœºæ™¯ä¸­è¦å¤„ç†ç™»å½• è·å–æˆ¿é—´åˆ—è¡¨ç­‰ç­‰ä¸€å †ä¸œè¥¿ã€‚è¿™äº›ä¸œè¥¿æ˜¯ä¸èƒ½è½¬å‘ç»™å¨ƒå¨ƒæœºã€‚è€Œéœ€è¦ä½ è‡ªå·±å¤„ç†
 			PrintTime();
 			printf(" tranlating to room ..\r\n");
 
@@ -158,30 +182,26 @@ void player_recv()
 	close(PLAYER_SOCKET); PLAYER_SOCKET = -1;
 }
 
-//´¦ÀíÍŞÍŞ»ú¹ıÀ´µÄÏûÏ¢
-void room_recv()
-{
-	while (stopRunning == false)
-	{
+//å¤„ç†å¨ƒå¨ƒæœºè¿‡æ¥çš„æ¶ˆæ¯
+void room_recv(){
+	while (stopRunning == false){
 		char bu_len[7] = { 0 };
-		if (recv_unti(ROOM_SOCKET, bu_len, 7) == false) 
-		{
+		if (recv_unti(ROOM_SOCKET, bu_len, 7) == false) {
 			printf("recv head error.");
 			break;
 		}
 
 
 		printf("room_head:");
-		for (int i = 0; i < 7; i++)
-		{
+		for (int i = 0; i < 7; i++){
 			printf("%02X ", bu_len[i]&0xff);
 		}
 
 		printf("\r\n");
 
 
-        	if((bu_len[0] &0xff) != 0xfe)
-            	break;
+        if((bu_len[0] &0xff) != 0xfe)
+            break;
 
 		int data_len = (unsigned char)bu_len[6];
 
@@ -191,47 +211,41 @@ void room_recv()
 
 
 		bool is_ok = recv_unti(ROOM_SOCKET, pData + 7, data_len - 7);
-		if (is_ok == false)
-		{
+		if (is_ok == false){
 			delete[]pData;
 			break;
 		}
 
 		PrintTime();
 		printf("room_data:");
-		for (int i = 0; i < data_len; i++)
-		{
+		for (int i = 0; i < data_len; i++){
 			printf("%02X ", pData[i]&0xff);
 		}
 
 		printf("\r\n");
+		printf("cmd:%02X\r\n", (pData[7]&0xff)) ;
 
-		printf("cmd:%02X\r\n", pData[7]);
-
-		if (check_com_data(pData, data_len) == false)
-		{
+		if (check_com_data(pData, data_len) == false){
 			printf("data check error.Room Close\r\n");
 			delete[]pData;pData = NULL;
 			break;
 		}
 
-		//Èç¹ûÊÇĞÄÌø¡£Ö±½ÓÔ­Ñù·µ»Ø
-		if (pData[7] == 0x35)//heartbeat msg from the doll machine. you should flag this server as 'live'. More than 30s is dead...
+		//å¦‚æœæ˜¯å¿ƒè·³and 0x92ã€‚ç›´æ¥åŸæ ·è¿”å›
+		if ((pData[7]&0xff) == 0x35)//heartbeat msg from the doll machine. you should flag this server as 'live'. More than 30s is dead...
 		{
-			//pData[8] - pData[19];
-			//pData[20] = 0;
-
-			//char* pStr = pData + 8;
-
-			//printf("mac recv is:%s\r\n", pStr);
-
+			memcpy(g_wawaji_mac,pData + 8, 12);
+			printf("mac recv is:%s\r\n", g_wawaji_mac);
 
 			send(ROOM_SOCKET, pData, data_len, 0);
-
 		}
-		else if (PLAYER_SOCKET != -1)//·ñÔòÈç¹ûÓĞÍæ¼Ò£¬¾Í°ÑÈÎºÎÏûÏ¢×ª·¢¸øÍæ¼Ò
-		{//Êµ¼ÊÓ¦ÓÃÖĞ£¬Äã»¹µÃ´¦Àí¹ÊÕÏºÍÓÎÏ·½áÊøºóµÄ»Øµ÷ÏûÏ¢¡£Èç¹ûÍæ¼Ò×¥µ½ÍŞÍŞ..µÈµÈÏûÏ¢¡£ËùÒÔ²»ÄÜÖ»ÊÇÎŞÄÔ×ª·¢¸øÍæ¼Ò
-			//´ËÀı×ÓÖ»ÊÇÑİÊ¾»ù±¾ºËĞÄÂß¼­
+		else if((pData[7]&0xff) == 0x92)
+		{
+			send(ROOM_SOCKET, pData, data_len, 0);//reply the same to stop fire read timeout.
+		}
+		else if (PLAYER_SOCKET != -1)//å¦åˆ™å¦‚æœæœ‰ç©å®¶ï¼Œå°±æŠŠä»»ä½•æ¶ˆæ¯è½¬å‘ç»™ç©å®¶
+		{//å®é™…åº”ç”¨ä¸­ï¼Œä½ è¿˜å¾—å¤„ç†æ•…éšœå’Œæ¸¸æˆç»“æŸåçš„å›è°ƒæ¶ˆæ¯ã€‚å¦‚æœç©å®¶æŠ“åˆ°å¨ƒå¨ƒ..ç­‰ç­‰æ¶ˆæ¯ã€‚æ‰€ä»¥ä¸èƒ½åªæ˜¯æ— è„‘è½¬å‘ç»™ç©å®¶
+			//æ­¤ä¾‹å­åªæ˜¯æ¼”ç¤ºåŸºæœ¬æ ¸å¿ƒé€»è¾‘
 			printf(" tranlating to client.\n");
 			send(PLAYER_SOCKET, pData, data_len, 0);
 		}
@@ -239,6 +253,7 @@ void room_recv()
 		delete[]pData;
 	}
 
+	memset( g_wawaji_mac, 0, 13);
 	PrintTime();
 	printf("\nRoom close.\r\n");
 	close(ROOM_SOCKET);
@@ -248,13 +263,11 @@ void room_recv()
 int g_doll_listen = -1;
 int g_player_listen = -1;
 
-void Comm(ext func, int Port)
-{
+void Comm(ext func, int Port){
 	int  servfd, clifd;
 	struct  sockaddr_in servaddr, cliaddr;
 
-	if ((servfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-	{
+	if ((servfd = socket(AF_INET, SOCK_STREAM, 0)) < 0){
 		PrintTime();
 		printf("create socket error!\n ");
 		exit(1);
@@ -264,15 +277,16 @@ void Comm(ext func, int Port)
 	servaddr.sin_port = htons(Port);
 	servaddr.sin_addr.s_addr = htons(INADDR_ANY);
 
-	if (bind(servfd, (struct  sockaddr *) & servaddr, sizeof(servaddr)) < 0)
-	{
+	int btrue = 1;
+	setsockopt(servfd,SOL_SOCKET,SO_REUSEADDR,&btrue,sizeof(int));
+
+	if (bind(servfd, (struct  sockaddr *) & servaddr, sizeof(servaddr)) < 0){
 		PrintTime();
 		printf("bind to port %d failure!\n", Port);
 		exit(1);
 	}
 
-	if (listen(servfd, 10) < 0)
-	{
+	if (listen(servfd, 10) < 0){
 		PrintTime();
 		printf("call listen failure!\n");
 		exit(1);
@@ -289,13 +303,7 @@ void Comm(ext func, int Port)
 		long  timestamp;
 		socklen_t length = sizeof(cliaddr);
 		clifd = accept(servfd, (struct  sockaddr *) & cliaddr, &length);
-
-		//int on = 1;
-		//setsockopt(clifd, SOL_SOCKET, SO_KEEPALIVE, (void *)&on, sizeof(on));
-		//setsockopt(clifd, IPPROTO_TCP, TCP_NODELAY, (void *)&on, sizeof(on));
-
-		if (clifd < 0)
-		{
+		if (clifd < 0){
 			PrintTime();
 			printf(" error comes when call accept!\n");
 			break;
@@ -332,8 +340,10 @@ void Comm(ext func, int Port)
 	} // exit 
 
 	close(servfd);
+	printf("listen thread exit\r\n");
 }
 
+//#define PAUSE printf("Press Enter key to continue..."); fgetc(stdin);
 
 int main(int argc, char** argv)
 {
@@ -343,28 +353,30 @@ int main(int argc, char** argv)
 	thread th_listen_player(Comm, player_recv, 7771);
 	th_listen_player.detach();
 
-	while (1)
-	{
+	while (1){
 		char chIn[20] = { 0 };
 
 		fgets(chIn, 20, stdin);
 		printf("input is:%s\n", chIn);
-		if (strstr(chIn, "exit") != NULL)
-		{
-			if (ROOM_SOCKET != -1) 
-			{
+		if (strstr(chIn, "exit") != NULL){
+			if (ROOM_SOCKET != -1) {
+				printf("ROOM_SOCKET:%d close.\n", ROOM_SOCKET);
 				close(ROOM_SOCKET); ROOM_SOCKET = -1;
 			}
 
-			if (PLAYER_SOCKET != -1) 
-			{
+			if (PLAYER_SOCKET != -1) {
+				printf("PLAYER_SOCKET :%d close.\n", PLAYER_SOCKET);
 				close(PLAYER_SOCKET); PLAYER_SOCKET = -1;
 			}
 
-			close(g_doll_listen);
-			close(g_player_listen);
+			printf("g_doll_listen:%d close.\n", g_doll_listen);
+			close(g_doll_listen);g_doll_listen = -1;
+
+			printf("g_player_listen:%d close.\n", g_player_listen);
+			close(g_player_listen);g_player_listen = -1;
 			stopRunning = true;
 			printf(" stop running now");
+			//PAUSE;
 			break;
 		}
 	}

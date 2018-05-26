@@ -232,10 +232,11 @@ public class MainActivity extends Activity {
                     int msg_len = msg.arg1;
                     byte test_data[] = (byte[]) (msg.obj);
                     int cmd = (test_data[7] & 0xff);
-                    String jsonString = new String(test_data, 9, test_data.length - 9);
+                    String jsonString = new String(test_data, 8, msg_len - 9);//从第八位开始，最后一位不要。
                     try {
                         JSONArray A05Result = new JSONArray(jsonString);
-
+                        Log.e(TAG, "房间个数" + A05Result.length());
+                        if( A05Result.length() ==0 )  Toast.makeText(getApplicationContext(), "room list is empty.", Toast.LENGTH_SHORT).show();
                         TableRow cur_row = null;
                         //动态生成界面控件
                         TableLayout v_room = (TableLayout) findViewById(R.id.device_list);
