@@ -50,11 +50,17 @@
 3.运行SimpleServer程序-即开启应用服务器，记录好服务器此时的IP。--如果您已熟知娃娃机的协议，可以忽略本例子代码自行开发您的应用服务器。
 
 ``` 
-SimpleServer.c linux 编译运行方法
+Built SimpleServer.c:
+OS require:linuxmint or ubuntu
+
+type in terminal.
 g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
 
 run
 ./SimpleServer
+
+exit
+input exit and press Enter to stop the server normally. Otherwise will failed next time you run it .because you didn't close bind port.
 ```
 
 <br>SimpleServer java版
@@ -164,7 +170,7 @@ https://mp.weixin.qq.com/s/UlOTFWT5IfIxEI3h_PaRNQ
 
 <br>
 <br>
-<img src="http://chuantu.biz/t6/184/1514020722x-1404793385.jpg" alt="二维码" />
+<img src="https://www.snowstormdoll.cn/images/QRScan.jpg" alt="二维码" />
 
 
 
