@@ -130,8 +130,7 @@ export PATH JAVA_HOME CLASSPATH
 
 * [**prebuild**] 包含了最新的安卓推流程序, 局域网配置工具 公网配置工具 预生成的安卓简单操作客户端.
 	* 安卓版电脑有线部署工具，电脑有线直连安装脚本。
-	* simpleClient-C.apk 配合c版本服务运行的客户端
-	* simpleClient-JAVA.apk 配合java版本服务器运行的客户端
+	* simpleClient.apk 手机玩家简单客户端.也可以自行从SimpleClient编译生成。
 	* xuebaoRtmpPush.apk 由源码编译出来的apk。您也可以自行从源码生成。
 	* 雪暴安卓板局域网批量部署工具--局域网内批量安装xuebaoRtmpPush.apk工具
 	* 雪暴安卓推流应用局域网配置工具--搜索局域网内所有机器，并配置参数或更新推流程序。
@@ -183,11 +182,17 @@ https://mp.weixin.qq.com/s/UlOTFWT5IfIxEI3h_PaRNQ
 <br>SimpleServer.c is a simple translate server running on linux like linuxmint and ubuntu.
 
 <br>to build server SimpleServer.c)
+```
+to compile
 g++ -std=c++11 -pthread ./SimpleServer.c -o SimpleServer
 
-<br>run
-<br>./SimpleServer
+to run
+./SimpleServer
 
+to exit app.
+exit
+
+```
 
 how to control the doll machine from the app?
 <br>1.build the app. then run it in your android phone. Android 5.0 or higher.  
