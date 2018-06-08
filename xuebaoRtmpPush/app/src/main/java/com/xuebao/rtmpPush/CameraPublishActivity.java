@@ -23,6 +23,7 @@ import com.voiceengine.NTAudioUtils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
@@ -49,7 +50,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.Surface;
@@ -140,6 +144,8 @@ public class CameraPublishActivity extends FragmentActivity {
         msgRestoreCamparam,//点击恢复默认按钮
         msgOutputLog, //显示调试信息
         msgQueryNetworkState,//读超时，发0x92看看有没返回0x92 如无，则表明网络已断开。重连
+        msgOutputDetialLog,//显示详细调试信息
+        msgDelayRunInit,//20180529 听说会在启动的瞬间闪退。因此把逻辑延迟几秒以后再做。
     };
 
     private static String TAG = "CameraPublishActivity";
@@ -215,6 +221,9 @@ public class CameraPublishActivity extends FragmentActivity {
 
     private WifiManager wifiManager;
     WifiAutoConnectManager wifiauto;
+    private boolean USB_WIFI_CONFIG_ENABLE = false;//是否启用usb插入后读取并配置wifi的功能
+
+
     private Context myContext;
 
     enum PushState {UNKNOWN, OK, FAILED, CLOSE};
@@ -253,6 +262,11 @@ public class CameraPublishActivity extends FragmentActivity {
 
     private int trySetMACCount = 0;//20180421 当收到心跳的mac为空时，尝试给串口发mac和本机ip。最多重试3次。已重试的次数存储在这
 
+    //日志窗口
+    View mPopupGUI = null;
+    AlertDialog mPopupDlg;
+    boolean bPauseOutput = false;
+
     static {
         System.loadLibrary("SmartPublisher");
     }
@@ -290,13 +304,15 @@ public class CameraPublishActivity extends FragmentActivity {
         myContext = this.getApplicationContext();
         mainInstance = this;
 
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        wifiauto = new WifiAutoConnectManager(wifiManager);
+        if( USB_WIFI_CONFIG_ENABLE )
+        {
+            wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            wifiauto = new WifiAutoConnectManager(wifiManager);
+        }
 
         pst_front = PushState.UNKNOWN;
         pst_back = PushState.UNKNOWN;
 
-        //接受U盘挂载事件
         IntentFilter filter = null;
         filter = new IntentFilter();
         filter.addAction(Intent.ACTION_MEDIA_MOUNTED);   //接受外媒挂载过滤器
@@ -305,7 +321,7 @@ public class CameraPublishActivity extends FragmentActivity {
         registerReceiver(mSdcardReceiver, filter, "android.permission.READ_EXTERNAL_STORAGE", null);
 
         VideoConfig.instance = new VideoConfig();
-        VideoConfig.instance.LoadConfig(this, mHandler);
+        VideoConfig.instance.LoadConfig(mainInstance, mHandler);
 
         isShouldRebootSystem = false;
         isTimeReady = false;
@@ -313,15 +329,17 @@ public class CameraPublishActivity extends FragmentActivity {
         timeWaitCount = 20;
         //queryStateTimeoutTime = 0;
 
-        //串口对象
-        if (mComPort == null) {
-            mComPort = new ComPort(mHandler);
-        }
-        mComPort.Start();
-
         initUI();
 
         UpdateConfigToUI();
+
+        mHandler.sendEmptyMessageDelayed(MessageType.msgDelayRunInit.ordinal(), 5000);
+
+        //串口对象
+        /*if (mComPort == null) {
+            mComPort = new ComPort(mHandler);
+        }
+        mComPort.Start();
 
         if (getLocalIpAddress().equals("")) {
             mHandler.sendEmptyMessage(MessageType.msgWaitIP.ordinal());//网卡尚未就绪 IP地址没有获取。等待IP就绪
@@ -338,31 +356,31 @@ public class CameraPublishActivity extends FragmentActivity {
             initRecordUI( sdCardPath, 0);
         }
         else
-            {
-                sdCardPath = ss.get(0);
-                int frontCount = GetRecFileList( sdCardPath + fronDirName );
-                int backCount = GetRecFileList( sdCardPath + backDirName );
+        {
+            sdCardPath = ss.get(0);
+            int frontCount = GetRecFileList( sdCardPath + fronDirName );
+            int backCount = GetRecFileList( sdCardPath + backDirName );
 
-                //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
-                if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
-                {
-                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
-                    Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
-                    sdCardPath= "";
-                    initRecordUI("",0);
-                }
-                else
-                    initRecordUI(ss.get(0), frontCount + backCount);
+            //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
+            if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
+            {
+                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
+                Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
+                sdCardPath= "";
+                initRecordUI("",0);
             }
+            else
+                initRecordUI(ss.get(0), frontCount + backCount);
+        }
 
         if (checkSpaceThread == null) {
             outputInfo("开始空间检查", false);
             checkSpaceThread = new CheckSpaceThread(mHandler, sdCardPath);//空循环等待 没事
             checkSpaceThread.start();
         }else
-            {
-                checkSpaceThread.Check( sdCardPath );
-            }
+        {
+            checkSpaceThread.Check( sdCardPath );
+        }*/
     }
 
     private int GetRecFileList(String recDirPath)
@@ -628,9 +646,12 @@ public class CameraPublishActivity extends FragmentActivity {
 
         unregisterReceiver(mSdcardReceiver);
 
+        Log.e("xuebaoRtmpPush","onDestroy");
+
         super.onDestroy();
         finish();
         System.exit(0);
+
     }
 
     void initUI() {
@@ -866,6 +887,48 @@ public class CameraPublishActivity extends FragmentActivity {
         mTabLayout.setupWithViewPager(mViewPager);//将TabLayout和ViewPager关联起来
     }
 
+    public void OnClickViewLogDetail(View v)
+    {
+        //20180528 详细日志按钮 。弹出窗口
+        AlertDialog.Builder builder = new AlertDialog.Builder(CameraPublishActivity.this);
+        //通过LayoutInflater来加载一个xml的布局文件作为一个View对象
+        mPopupGUI = LayoutInflater.from(CameraPublishActivity.this).inflate(R.layout.layout_log, null);
+        //设置我们自己定义的布局文件作为弹出框的Content
+
+        //关闭按钮
+        TextView btnCloseDlg = (TextView) mPopupGUI.findViewById(R.id.id_txt_Close);
+        btnCloseDlg.setOnClickListener( new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View vbtn)
+            {
+                bPauseOutput = true;
+                if(mPopupDlg != null){mPopupDlg.dismiss(); mPopupDlg = null;}
+            }
+        });
+
+        //为了捕捉调试瞬间，暂停输出。定位错误。防止滚屏
+        final TextView btnPauseOutput = (TextView) mPopupGUI.findViewById(R.id.id_txt_pausetxt);
+        btnPauseOutput.setOnClickListener( new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View vbtn)
+            {
+                bPauseOutput = !bPauseOutput;
+                if( bPauseOutput == true )
+                {
+                    btnPauseOutput.setText("继续输出");
+                } else
+                    btnPauseOutput.setText("暂停输出");
+            }
+        });
+
+        builder.setCancelable(false);
+        builder.setView(mPopupGUI);
+        mPopupDlg =  builder.show();
+        bPauseOutput = false;
+    }
+
     byte[] strIPtob(String sip) {
         String[] ipb = sip.split("\\.");
         byte[] b = new byte[4];
@@ -926,7 +989,7 @@ public class CameraPublishActivity extends FragmentActivity {
     }
 
     void SaveConfigHostInfoToCom() {
-        if (VideoConfig.instance.enableConfigServer == false)//不启用远程配置的时候，给娃娃机传0
+        /*if (VideoConfig.instance.enableConfigServer == false)//不启用远程配置的时候，给娃娃机传0
         {
             send_com_data(0x40, 0, 0, 0, 0, 0, 0);
             return;
@@ -945,7 +1008,7 @@ public class CameraPublishActivity extends FragmentActivity {
         b[4] = (byte) (VideoConfig.instance.GetConfigPort() / 256);
         b[5] = (byte) (VideoConfig.instance.GetConfigPort() % 256);
 
-        send_com_data(0x40, b[0], b[1], b[2], b[3], b[4], b[5]);
+        send_com_data(0x40, b[0], b[1], b[2], b[3], b[4], b[5]);*/
     }
 
     void ComParamSet(boolean includeMAC, boolean includedLocalIP, boolean includeduserID) {
@@ -1409,6 +1472,28 @@ public class CameraPublishActivity extends FragmentActivity {
     private void outputInfo(String strTxt, boolean append ) {
         FragmentLogTxt fc = (FragmentLogTxt) mFragments.get(0);
         fc.outputInfo( strTxt , append);
+
+        outputDetailLog(strTxt);
+    }
+
+    public void outputDetailLog(String strTxt)
+    {
+        if(mPopupDlg != null && bPauseOutput == false)
+        {
+            EditText et = (EditText) mPopupDlg.findViewById(R.id.txt_recv);
+            String str_conten = et.getText().toString();
+            if(et.getLineCount() >150)
+               et.setText( strTxt );
+            else
+            {
+                str_conten += "\r\n";
+                str_conten += strTxt;
+                et.setText(str_conten);
+            }
+
+            et.setMovementMethod(ScrollingMovementMethod.getInstance());
+            et.setSelection(et.getText().length(), et.getText().length());
+        }
     }
 
     //用来检测拔网线.南软的板拔网线就知道了。老罗的板不行，所以要加这个步骤
@@ -1423,7 +1508,7 @@ public class CameraPublishActivity extends FragmentActivity {
         // 0x33 游戏结束
         // 0x34 娃娃机状态
         // 0x35 心跳
-        // 0x42 设置ip的通知。其中0x42不透传
+        // 0x42 设置ip的通知。其中0x42不透传--20180529已废弃 0x3c 0x42 。因为部分的rom不支持3c
 
         //打印调试输出
         String str_com_data ="串口数据" + ComPort.bytes2HexString(com_data, len);
@@ -1473,7 +1558,6 @@ public class CameraPublishActivity extends FragmentActivity {
                         me1.what = MessageType.msgOutputLog.ordinal();
                         me1.obj = "发出心跳.";
                         if (mHandler != null) mHandler.sendMessage(me1);
-
                     }
                     else {
                             Message me1 = Message.obtain();//心跳消息
@@ -1562,6 +1646,55 @@ public class CameraPublishActivity extends FragmentActivity {
             //outputInfo("Enum is" + mt.toString());
 
             switch (mt) {
+                case msgDelayRunInit:
+                    {
+                        if (mComPort == null) {
+                            mComPort = new ComPort(mHandler);
+                        }
+                        mComPort.Start();
+
+                        if (getLocalIpAddress().equals("")) {
+                            mHandler.sendEmptyMessage(MessageType.msgWaitIP.ordinal());//网卡尚未就绪 IP地址没有获取。等待IP就绪
+                        } else {
+                            mHandler.sendEmptyMessage(MessageType.msgIpGOT.ordinal());
+                        }
+
+                        mHandler.sendEmptyMessage(MessageType.msgCheckWawajiReady.ordinal());//循环检查娃娃机是否就绪
+
+                        List<String> ss = getAllExternalSdcardPath();
+                        if( ss.size() <=0 )
+                        {
+                            sdCardPath = "";
+                            initRecordUI( sdCardPath, 0);
+                        }
+                        else
+                        {
+                            sdCardPath = ss.get(0);
+                            int frontCount = GetRecFileList( sdCardPath + fronDirName );
+                            int backCount = GetRecFileList( sdCardPath + backDirName );
+
+                            //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
+                            if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
+                            {
+                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
+                                Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
+                                sdCardPath= "";
+                                initRecordUI("",0);
+                            }
+                            else
+                                initRecordUI(ss.get(0), frontCount + backCount);
+                        }
+
+                        if (checkSpaceThread == null) {
+                            outputInfo("开始空间检查", false);
+                            checkSpaceThread = new CheckSpaceThread(mHandler, sdCardPath);//空循环等待 没事
+                            checkSpaceThread.start();
+                        }else
+                        {
+                            checkSpaceThread.Check( sdCardPath );
+                        }
+                    }
+                    break;
                 case msgWaitIP: {
                     if (getLocalIpAddress().equals("")) {
                         Toast.makeText(getApplicationContext(), "IP未就绪。等待IP", Toast.LENGTH_SHORT).show();
@@ -1608,9 +1741,9 @@ public class CameraPublishActivity extends FragmentActivity {
                         }
 
                         //本地无配置服务器地址配置 先跟串口要
-                        if (VideoConfig.instance.configHost.equals("") || VideoConfig.instance.GetConfigPort() == 0) {
+                        /*if (VideoConfig.instance.configHost.equals("") || VideoConfig.instance.GetConfigPort() == 0) {
                             send_com_data(0x3c);//跟串口要IP和端口 要到以后 如果合法 它会自己开始连接并心跳
-                        }
+                        }*/
                     }
                 }
                 break;
@@ -1712,7 +1845,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
 
                     //将界面配置好的配置服务器地址传输到串口保存
-                    SaveConfigHostInfoToCom();
+                    //SaveConfigHostInfoToCom();
 
                     //开始推流
                     UIClickStartPush();
@@ -1722,6 +1855,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 {
                     if (isWawajiReady == false) {
                         outputInfo("正在发送0x34检查娃娃机是否就绪", false);
+                        Log.e(TAG, "正在发送0x34检查娃娃机是否就绪");
                         send_com_data(0x34);
                         mHandler.sendEmptyMessageDelayed(MessageType.msgCheckWawajiReady.ordinal(), 1000);
                     }
@@ -1771,7 +1905,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         TextView tee = findViewById(R.id.curWay);
                         tee.setText("当前:" + VideoConfig.instance.curPushWay);
 
-                        byte[] abc = make_cmd(0x91,  VideoConfig.instance.curPushWay);//4位空的预留 0x89命令码 前置状态  后置状态 4位预留。 其中：状态为:00 正常 1 使用中掉线 2摄像头缺失
+                        byte[] abc = make_cmd(0x91,  VideoConfig.instance.curPushWay);
                         if (sendThread != null) {
                             sendThread.sendMsg(abc);
                         }
@@ -1782,7 +1916,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         int newBitRate = (test_data[10] & 0xff) * 256 + (test_data[9] & 0xff);
 
                         //先回应成功。如果不成功在发失败
-                        byte[] abc = make_cmd(0x93,  test_data[8],test_data[9], test_data[10], 1 );//4位空的预留 0x89命令码 前置状态  后置状态 4位预留。 其中：状态为:00 正常 1 使用中掉线 2摄像头缺失
+                        byte[] abc = make_cmd(0x93,  test_data[8],test_data[9], test_data[10], 1 );
                         if (sendThread != null) {
                             sendThread.sendMsg(abc);
                         }
@@ -1852,13 +1986,19 @@ public class CameraPublishActivity extends FragmentActivity {
                         outputInfo(ss, false);
                     }
                     break;
+                case msgOutputDetialLog:
+                    {
+                        String ss = msg.obj.toString();
+                        outputDetailLog(ss);
+                    }
+                    break;
                 case msgConfigData: {
                     //收到配置口过来的数据
                     outputInfo("应用更改.", false);
                     UpdateConfigToUI();
                     UIClickStopPush();
 
-                    SaveConfigHostInfoToCom();
+                    //SaveConfigHostInfoToCom();
 
                     if (sendThread != null)
                         sendThread.ApplyNewServer(VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
@@ -1996,9 +2136,9 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
 
                             //本地无配置服务器地址配置 先跟串口要
-                            if (VideoConfig.instance.configHost.equals("") || VideoConfig.instance.GetConfigPort() == 0) {
+                            /*if (VideoConfig.instance.configHost.equals("") || VideoConfig.instance.GetConfigPort() == 0) {
                                 send_com_data(0x3c);//跟串口要IP和端口 要到以后 如果合法 它会自己开始连接并心跳
-                            }
+                            }*/
 
                             //先发MAC。然后检查ip是否可用。如果有，也要发给他。
                             ComParamSet(true, false, true);//给串口发 MAC 密码
@@ -2008,9 +2148,9 @@ public class CameraPublishActivity extends FragmentActivity {
                         }
 
                         //wawaji is alive
-                    } else if (cmd_value ==   0x42 && data_len > 14)//串口过来的配置服务器IP地址和端口//有一次出现收到0x42但是数据长度不够15位，导致我访问越界这是什么鬼,并且你的校验和是对的？//2018.2.1 add fix add data_len>14
+                    }/* else if (cmd_value ==   0x42 && data_len > 14)//串口过来的配置服务器IP地址和端口//有一次出现收到0x42但是数据长度不够15位，导致我访问越界这是什么鬼,并且你的校验和是对的？//2018.2.1 add fix add data_len>14
                     {
-                        //只要不是空 就重新开启sendThread
+                        //只要不是空 就重新开启confiThread
                         int a = com_data[8] & 0xff;
                         int b = com_data[9] & 0xff;
                         int c = com_data[10] & 0xff;
@@ -2051,7 +2191,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             confiThread.ApplyNewServer(VideoConfig.instance.configHost, VideoConfig.instance.GetConfigPort());
 
                         VideoConfig.instance.SaveConfig(getApplicationContext());
-                    }
+                    }*/
                 }
                 break;
                 case msgUDiskMount://插U盘
@@ -2062,7 +2202,6 @@ public class CameraPublishActivity extends FragmentActivity {
                     // 获取sd卡的对应的存储目录
                     //获取指定文件对应的输入流
                     try {
-
                         sdCardPath = UPath;
                         int frontCount = GetRecFileList( sdCardPath + fronDirName );
                         int backCount = GetRecFileList( sdCardPath + backDirName );
@@ -2078,52 +2217,54 @@ public class CameraPublishActivity extends FragmentActivity {
                         else
                             initRecordUI(sdCardPath, frontCount + backCount);
 
-                        FileInputStream fis = new FileInputStream(UPath + "/config.txt");
-                        //将指定输入流包装成 BufferedReader
-                        BufferedReader br = new BufferedReader(new InputStreamReader(fis, "GBK"));
+                        if( USB_WIFI_CONFIG_ENABLE )
+                        {
+                            FileInputStream fis = new FileInputStream(UPath + "/config.txt");
+                            //将指定输入流包装成 BufferedReader
+                            BufferedReader br = new BufferedReader(new InputStreamReader(fis, "GBK"));
 
-                        StringBuilder sb = new StringBuilder("");
-                        String line = null;
-                        //循环读取文件内容
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-
-                        //关闭资源
-                        br.close();
-                        if(CameraPublishActivity.DEBUG)  Log.e("file content", sb.toString());
-
-                        try {
-                            JSONObject jsonOBJ = new JSONObject(sb.toString());
-                            if (jsonOBJ.has("wifiSSID")) {
-                                String wifiSSID = jsonOBJ.getString("wifiSSID");
-
-                                String wifiPassword = "";
-                                if (jsonOBJ.has("wifiPassword"))
-                                    wifiPassword = jsonOBJ.getString("wifiPassword");
-
-                                //启用wifi
-                                if (!wifiManager.isWifiEnabled())
-                                    wifiManager.setWifiEnabled(true);
-
-                                //连接特定的wifi
-                                int ntype = wifiPassword.equals("") ? 1 : 3;
-                                WifiAutoConnectManager.WifiCipherType ntr = wifiPassword.equals("") ?
-                                        WifiAutoConnectManager.WifiCipherType.WIFICIPHER_NOPASS : WifiAutoConnectManager.WifiCipherType.WIFICIPHER_WPA;
-
-                                if(CameraPublishActivity.DEBUG) Log.e("连接wifi", "ssid" + wifiSSID + " pwd " + wifiPassword + "type" + ntype);
-                                //WifiUtil.createWifiInfo(wifiSSID, wifiPassword, ntype, wifiManager);
-
-                                wifiauto.connect(wifiSSID, wifiPassword, ntr);
+                            StringBuilder sb = new StringBuilder("");
+                            String line = null;
+                            //循环读取文件内容
+                            while ((line = br.readLine()) != null) {
+                                sb.append(line);
                             }
 
-                            boolean apply_ret = VideoConfig.instance.ApplyConfig(sb.toString(), null);
+                            //关闭资源
+                            br.close();
+                            if(CameraPublishActivity.DEBUG)  Log.e("file content", sb.toString());
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            if(CameraPublishActivity.DEBUG)  Log.e("u盘配置文件错误", "Json file Error.");
+                            try {
+                                JSONObject jsonOBJ = new JSONObject(sb.toString());
+                                if (jsonOBJ.has("wifiSSID")) {
+                                    String wifiSSID = jsonOBJ.getString("wifiSSID");
+
+                                    String wifiPassword = "";
+                                    if (jsonOBJ.has("wifiPassword"))
+                                        wifiPassword = jsonOBJ.getString("wifiPassword");
+
+                                    //启用wifi
+                                    if (!wifiManager.isWifiEnabled())
+                                        wifiManager.setWifiEnabled(true);
+
+                                    //连接特定的wifi
+                                    int ntype = wifiPassword.equals("") ? 1 : 3;
+                                    WifiAutoConnectManager.WifiCipherType ntr = wifiPassword.equals("") ?
+                                            WifiAutoConnectManager.WifiCipherType.WIFICIPHER_NOPASS : WifiAutoConnectManager.WifiCipherType.WIFICIPHER_WPA;
+
+                                    if(CameraPublishActivity.DEBUG) Log.e("连接wifi", "ssid" + wifiSSID + " pwd " + wifiPassword + "type" + ntype);
+                                    //WifiUtil.createWifiInfo(wifiSSID, wifiPassword, ntype, wifiManager);
+
+                                    wifiauto.connect(wifiSSID, wifiPassword, ntr);
+                                }
+
+                                boolean apply_ret = VideoConfig.instance.ApplyConfig(sb.toString(), null);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                if(CameraPublishActivity.DEBUG)  Log.e("u盘配置文件错误", "Json file Error.");
+                            }
                         }
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -3072,7 +3213,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 boolean previewOK = SaveConfigFromUI();
 
-                SaveConfigHostInfoToCom();
+                //SaveConfigHostInfoToCom();
 
                 //检查是否需要重连服务器
                 if (sendThread != null)

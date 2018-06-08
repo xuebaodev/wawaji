@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    >
+
+    <TextView
+        android:id="@+id/id_txt_pausetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="80dp"
+        android:text="暂停输出"
+        android:textColor="#000"
+        android:clickable="true"
+        />
+
+    <TextView
+        android:id="@+id/id_txt_Close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:text="关闭"
+        android:textColor="#000"
+        android:clickable="true"
+        />
+
+    <RelativeLayout android:id="@+id/logParent"
+        android:layout_below="@+id/id_txt_Close"
+        android:layout_width="match_parent"
+        android:layout_height="550dp">
+
+        <EditText android:id="@+id/txt_recv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:maxLines="150"
+            android:scrollbars="vertical"
+            android:editable="false"
+            android:focusable="false"
+            android:textSize="16dp"
+            android:background="@color/colorAccent"
+            android:gravity="top"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

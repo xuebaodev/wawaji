@@ -146,13 +146,13 @@ public  class ComPort {
 	protected void onDataReceived(byte[] buffer, int size) {
 		if(mHandler != null)
 		{
-			/*StringBuilder raw_data = new StringBuilder("RAW COM DATA:");;
+			StringBuilder raw_data = new StringBuilder("RAW COM DATA:");;
 			raw_data.append(bytes2HexString(buffer, size));
 
 			Message message = Message.obtain();
-			message.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
+			message.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
 			message.obj = raw_data.toString();
-			mHandler.sendMessage(message);*/
+			mHandler.sendMessage(message);
 		}
 
 		readBuffer = readBuffer + bytes2HexString(buffer, size);
@@ -163,6 +163,11 @@ public  class ComPort {
 		} else {
 			readBuffer = "";
 			if(CameraPublishActivity.DEBUG)  Log.e("~~~~","开头可能就不正确 readBuffer = kong ");
+
+			Message message = Message.obtain();
+			message.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+			message.obj = "开头可能就不正确 readBuffer = kong";
+			mHandler.sendMessage(message);
 		}
 
 		//指令 至少是9位 包长度在第 7位
@@ -175,6 +180,11 @@ public  class ComPort {
 			{
 				//包长度出错 应该是数据干扰
 				if(CameraPublishActivity.DEBUG)  Log.e("~~~","包长度出错");
+				Message message = Message.obtain();
+				message.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+				message.obj = "包长度出错";
+				mHandler.sendMessage(message);
+
 				//丢弃这条指令
 				readBuffer = readBuffer.substring(2);
 				if (readBuffer.contains("FE")) {
@@ -183,6 +193,10 @@ public  class ComPort {
 				{
 					readBuffer = "";
 					if(CameraPublishActivity.DEBUG)  Log.e("~~~~","包长度出错 readBuffer = kong ");
+					Message message1 = Message.obtain();
+					message1.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+					message1.obj = "包长度出错 readBuffer = kong";
+					mHandler.sendMessage(message1);
 				}
 				continue;
 			}
@@ -202,6 +216,11 @@ public  class ComPort {
 							if (mHandler != null) {
 								if(CameraPublishActivity.DEBUG) Log.e("com收到", msgContent);
 
+								Message message1 = Message.obtain();
+								message1.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+								message1.obj = "数据合法";
+								mHandler.sendMessage(message1);
+
 								if( CameraPublishActivity.mainInstance != null)
 									CameraPublishActivity.mainInstance.ThreadHandleCom( hexStringToBytes(msgContent), len );
 							}
@@ -209,23 +228,42 @@ public  class ComPort {
 					} else {
 						//指令不正确
 						if(CameraPublishActivity.DEBUG)  Log.e("指令不正确", msgContent + "***" + readBuffer);
+						Message message2 = Message.obtain();
+						message2.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+						message2.obj = "指令不正确"+ msgContent + readBuffer;
+						mHandler.sendMessage(message2);
+
 						readBuffer = readBuffer.substring(2);
 						if (readBuffer.contains("FE")) {
 							readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
 						} else {
 							readBuffer = "";
 							if(CameraPublishActivity.DEBUG)  Log.e("~~~~","指令不正确 不包含FE readBuffer = kong ");
+							Message message3 = Message.obtain();
+							message3.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+							message3.obj = "指令不正确 不包含FE readBuffer = kong";
+							mHandler.sendMessage(message3);
 						}
 					}
 				} else
 				{
 					//开头不正确
 					if(CameraPublishActivity.DEBUG)  Log.e("开头不正确", readBuffer);
+					Message message4 = Message.obtain();
+					message4.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+					message4.obj = "开头不正确...";
+					mHandler.sendMessage(message4);
+
 					if (readBuffer.contains("FE")) {
 						readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
 					} else {
 						readBuffer = "";
 						if(CameraPublishActivity.DEBUG)  Log.e("~~~~","开头不正确 目前不包含FE readBuffer = kong ");
+
+						Message message5 = Message.obtain();
+						message5.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
+						message5.obj = "开头不正确 目前不包含FE readBuffer = kong...";
+						mHandler.sendMessage(message5);
 					}
 				}
 			}

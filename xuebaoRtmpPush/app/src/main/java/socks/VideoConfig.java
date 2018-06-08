@@ -29,9 +29,11 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180517;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180529;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180529 将所有逻辑放到程序启动后3秒再做。看看启动闪退的问题能不能解决。废弃了0x3c.usb读文件配置wifi功能现在加了个代码开关。并且默认不启用。SerialPort.java 打开串口的部分 添加了一些健壮性的检查
+    //20180528 增加一个详细日志的界面
     //20180517 0x93逻辑修正。使逻辑更严谨。
     //20180516 增加命令0x93 可以在机器长时空闲或无玩家观看时，服务器发送0x93过来使推流停止或降低码率。降低带宽占用。
 

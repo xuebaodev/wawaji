@@ -37,36 +37,52 @@ public class SerialPort {
 	private FileInputStream mFileInputStream;
 	private FileOutputStream mFileOutputStream;
 
+	private  boolean isCheckOK = true;
 	public SerialPort(File device, int baudrate, int flags) throws SecurityException, IOException {
 
 		/* Check access permission */
 		if (!device.canRead() || !device.canWrite()) {
 			try {
+
 				/* Missing read/write permission, trying to chmod the file */
 				Process su;
 				su = Runtime.getRuntime().exec("/system/bin/su");
 				String cmd = "chmod 666 " + device.getAbsolutePath() + "\n"
 						+ "exit\n";
 				su.getOutputStream().write(cmd.getBytes());
+				isCheckOK = true;
 				if ((su.waitFor() != 0) || !device.canRead()
 						|| !device.canWrite()) {
+					isCheckOK = false;
 					throw new SecurityException();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				isCheckOK = false;
 				throw new SecurityException();
+
 			}
 		}
 
-		mFd = open(device.getAbsolutePath(), baudrate, flags,5);//2018.2.1 听说串口要开关再开才不会出现bug
-		close();
-		mFd = open(device.getAbsolutePath(), baudrate, flags,5);
-		if (mFd == null) {
-			Log.e(TAG, "native open returns null");
-			throw new IOException();
+		if( isCheckOK )
+		{
+			try
+			{
+				mFd = open(device.getAbsolutePath(), baudrate, flags,5);//2018.2.1 听说串口要开关再开才不会出现bug
+				if (mFd == null) {
+					Log.e(TAG, "native open returns null");
+					throw new IOException();
+				}
+				mFileInputStream = new FileInputStream(mFd);
+				mFileOutputStream = new FileOutputStream(mFd);
+			}catch (IOException iio)
+			{
+				Log.e(TAG, "串口打开引发异常");
+				iio.printStackTrace();
+			}
 		}
-		mFileInputStream = new FileInputStream(mFd);
-		mFileOutputStream = new FileOutputStream(mFd);
+		else
+			Log.e(TAG, "串口打开失败");
 	}
 
 	// Getters and setters

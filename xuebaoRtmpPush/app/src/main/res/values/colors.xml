@@ -2,4 +2,5 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="bg_white">#FFFFFFFF</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>

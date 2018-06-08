@@ -288,13 +288,20 @@
                 />
 
             <CheckBox
-                android:id="@+id/cbIncludeAudio"
-                android:layout_marginLeft="10dp"
+            android:id="@+id/cbIncludeAudio"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="包含声音"
+            />
+
+            <Button
+                android:id="@+id/button_openlog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="包含声音"
-                />
-
+                android:layout_marginLeft="10dp"
+                android:text="详细日志"
+                android:onClick="OnClickViewLogDetail"/>
         </LinearLayout>
 
         <!--推流地址1-->
