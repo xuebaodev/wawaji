@@ -250,7 +250,7 @@ public class MainActivity extends Activity {
 
                             //生成界面控件
                             if (i % 2 == 0) {
-                                //动态生成界面控件
+                                //动态生成界面控
                                 // TableLayout v_room = (TableLayout) findViewById(R.id.room_list);
                                 final TableRow new_row = new TableRow(getApplicationContext());
                                 cur_row = new_row;

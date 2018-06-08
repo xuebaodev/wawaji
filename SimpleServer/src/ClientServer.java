@@ -274,9 +274,8 @@ public class ClientServer {
 							System.out.println("room list reply:" + strRoomList);
 							out.write(msg_content, 0, msg_content.length);
 							out.flush();
-
 						}
-					} else if (data_cmd == 0x02) // enter room 
+					}else if (data_cmd == 0x02) // enter room 
 					{
 						//玩家进入房间。也就是进入了该娃娃机的列表。该娃娃机状态发生变更时，必须通知这个列表里面的所有人
 						//简单版的服务器不做这个功能。然而你们必须要做。
@@ -284,7 +283,7 @@ public class ClientServer {
 						pi.in_room_mac = strMAC;
 
 						System.out.println("clinet enter room " + strMAC);
-					} else if (data_cmd == 0x03) // leave room
+					}else if (data_cmd == 0x03) // leave room
 					{
 						//玩家离开房间--todo此时wserver必须通知房间里的所有人更新inroom的玩家个数什么的。
 						SimpleApp.wserver.processPlayerLeave(pi.in_room_mac, pi.socket);
@@ -292,7 +291,7 @@ public class ClientServer {
 						
 
 						System.out.println("clinet leave room ");
-					} else if (data_cmd == 0x31)// player start play.
+					}else if (data_cmd == 0x31)// player start play.
 					{
 						System.out.println("clinet start game ");
 						//开局命令--

@@ -257,6 +257,8 @@ public class SockAPP {
 
     public void SendOut(byte[] msg)
     {
+        String ss = bytesToHexString(msg);
+        Log.e("Socket Sendount", ss);
         if( msgThread != null)
             msgThread.putMsg( msg );
     }
