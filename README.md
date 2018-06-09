@@ -90,8 +90,7 @@ export PATH JAVA_HOME CLASSPATH
 6.将prebuild文件夹下的simpleClient.apk(安卓4.4以上)安装到您的手机上。 或者，您可以从simpleClient工程中自行编译出一个apk出来。请将该手机通过wifi连入娃娃机所在的一个局域网。
 <br>然后点开配置按钮(右上角齿轮状图标)，输入应用服务器IP，端口默认为7771 。如您已架设流媒体服务器，请输入之前娃娃机配好的推流地址。点击OK，您就可以开始玩网络抓娃娃了。
 <br>下图是simpleClinet.apk的简单界面示意图。
-
-<img src="https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/client_0.png" alt="客户端运行示意图" /><img src="https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/client_1.png" alt="客户端运行示意图2" />
+![客户端运行示意图](https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/client_0.png)![客户端运行示意图2](https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/client_1.png)
 
 友情提示:建议使用者先运行一个局域网版本的快速测试。因为公网的服务器是需要申请，审核的。部署公网将需要您的技术人员自行购买公网服务安装部署应用服务器及流媒体服务器。
 <br>**当快速搭建局域网流程时，务必确保手机客户端、服务器、娃娃机都在一个网段，以便于他们能够互相访问。**
@@ -167,7 +166,7 @@ export PATH JAVA_HOME CLASSPATH
 微信连接
 https://mp.weixin.qq.com/s/UlOTFWT5IfIxEI3h_PaRNQ
 
-<img src="https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/QRScan.jpg" alt="二维码" />
+![二维码](https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/QRScan.jpg)
 
 =====================Code Explain============
 <br>1.SimpleClient Main Code Location 
