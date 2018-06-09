@@ -3,10 +3,10 @@
 和本套安卓推流方案相关的产品，线上线下弹珠机，兄弟公司昌盛芯独家首创的弹珠机，现在发布啦！
 <br>您只需要在服务器端实现弹珠机操作特有协议,就可以快速的给您的app增添一种新玩法！
 
-<img src="https://www.snowstormdoll.cn/images/real.jpg" alt="实体机器示例图" />
+<img src="https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/real.jpg" alt="实体机器示例图" />
 <br>本图仅供参考，一切以实物为准。
 <br>弹珠机安卓端app游戏图如下：
-<img src="https://www.snowstormdoll.cn/images/app.jpg" alt="app弹珠机示例图" />
+<img src="https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/app.jpg" alt="app弹珠机示例图" />
 <br>截图来自微锦开发的爱趣app。供参考。下载体验地址 aiqu.dx1ydb.com/download
 
 优势:
