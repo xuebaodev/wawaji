@@ -36,8 +36,7 @@
 ***
 
 本项目是雪暴网络娃娃机安卓版使用说明及例子源码。包含RTMP推流端程序及配套的配置工具软件，简单应用服务器示例源码，简单操作客户端示例源码，娃娃机协议文档。
-
-<img src="https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/main_0.jpg" alt="雪暴网络娃娃机安卓结构示意图" />
+![雪暴网络娃娃机安卓结构示意图](https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/main_0.jpg)
 
 
 以下是雪暴网络娃娃机安卓版部署流程: <a href="https://github.com/xuebaodev/wawaji/wiki" target="_blank">**点击这里查看最全面的指南**</a>
