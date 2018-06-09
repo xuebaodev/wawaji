@@ -85,7 +85,7 @@ export PATH JAVA_HOME CLASSPATH
 5.此时，如果在应用服务器看到娃娃机有心跳连接。则表示娃娃机已准备就绪。
 
 正常工作如图
-<img src="https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/server_0.png" alt="服务器运行示意图" />
+![服务器运行示意图1](https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/server_0.png)
 
 6.将prebuild文件夹下的simpleClient.apk(安卓4.4以上)安装到您的手机上。 或者，您可以从simpleClient工程中自行编译出一个apk出来。请将该手机通过wifi连入娃娃机所在的一个局域网。
 <br>然后点开配置按钮(右上角齿轮状图标)，输入应用服务器IP，端口默认为7771 。如您已架设流媒体服务器，请输入之前娃娃机配好的推流地址。点击OK，您就可以开始玩网络抓娃娃了。
