@@ -124,6 +124,8 @@ export PATH JAVA_HOME CLASSPATH
 	* 应用服务器 （默认端口:娃娃机请连接到7770 端口。玩家手机客户端simpleClient.apk请连接到7771）
 	* 配置服务器[可选] （默认端口 对于安卓板xuebaoRtmpPush是7776，对于公网配置工具是7778）--如果不用配置功能。这个相关代码都可以忽略。
 
+* [**xuebaoH5push**] 使用工业主机linux推流mpegts视频的java app，以便H5端也能够玩网络抓娃娃类的游戏。
+
 * [**juyuwangbushu**] 局域网部署工具的源码。该工程编译出来的工具用于批量安装xuebaoRtmpPush.apk.因为我们出厂是不带这个apk的。需要你们自行安装。该工具在prebuild里面有直接编译好的版本。
 
 * [**juyuwangpeizhi**] 局域网批量配置工具的源码。该工程编译出来的工具可以给xuebaoRtmpPush配置推流地址，推流质量，应用服务器地址等。该工具在prebuild里面有直接编译好的版本。
