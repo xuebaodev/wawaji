@@ -7,6 +7,11 @@ https://github.com/xuebaodev/wawaji/tree/master/xuebaoH5push
 请使用部署工具进行app的更新。该工具位于https://github.com/xuebaodev/wawaji/tree/master/prebuild。
 请把xuebaoH5push.zip解压出来的文件夹覆盖掉部署工具底下的xuebaoH5push
 
+或windows命令行输入
+<br>pscp -sftp -pw csx -r xuebaoH5push  csx@192.168.1.136:/home/csx/Desktop 将文件拷贝到linux上面。
+<br>然后进入xuebaoH5push文件夹，打开终端定位到此目录 输入java pusherApp
+<br>pscp在压缩包里面有带。如果要用此方式执行覆盖安装，当然要把pscp复制出来再执行了！不然xuebaoH5push里面的pscp去哪里找xuebaoH5push这个文件夹。
+<br>192.168.1.136此处的IP要变成linux真实机器的IP。ip怎么看？输入ifconfig.
 
 方案参考来自
 https://github.com/phoboslab/jsmpeg
