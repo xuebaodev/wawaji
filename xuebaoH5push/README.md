@@ -3,6 +3,9 @@
 项目更新
 https://github.com/xuebaodev/wawaji/tree/master/xuebaoH5push
 
+升级安装：
+请使用部署工具进行app的更新。
+
 
 方案参考来自
 https://github.com/phoboslab/jsmpeg
@@ -22,3 +25,4 @@ https://github.com/phoboslab/jsmpeg
 
 Change Log:
 20180609 初始提交。-已通过长时稳定性测试。绝大部分与安卓版功能都已实现。录像功能未实现。
+20180612 换串口库。修正每个三分钟都会收到多余的00字节的问题。请慎用JSerial这个库。

@@ -408,7 +408,17 @@ public class WawaServer {
 						} catch (IOException ioe) {
 
 						}
-					}else if(data_cmd== 0xa0) //1.2新增，视频推流成功通知消息
+					}else if(data_cmd == 0x92)//0x92照原样返回
+					{
+						try {
+							DataOutputStream out = new DataOutputStream(me.socket.getOutputStream());
+							out.write(total_data, 0, total_data.length);
+							out.flush();
+						} catch (IOException ioe) {
+
+						}
+					}
+					else if(data_cmd== 0xa0) //1.2新增，视频推流成功通知消息
 					{
 						String strMAC = new String(total_data, 8, 12);
 						if((total_data[20]&0xff)== 0x00 )
