@@ -4,7 +4,8 @@
 https://github.com/xuebaodev/wawaji/tree/master/xuebaoH5push
 
 升级安装：
-请使用部署工具进行app的更新。
+请使用部署工具进行app的更新。该工具位于https://github.com/xuebaodev/wawaji/tree/master/prebuild。
+请把xuebaoH5push.zip解压出来的文件夹覆盖掉部署工具底下的xuebaoH5push
 
 
 方案参考来自
