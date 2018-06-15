@@ -13,7 +13,7 @@ https://github.com/xuebaodev/wawaji/tree/master/xuebaoH5push
 <br>pscp在压缩包里面有带。如果要用此方式执行覆盖安装，当然要把pscp复制出来再执行了！不然xuebaoH5push里面的pscp去哪里找xuebaoH5push这个文件夹。
 <br>192.168.1.136此处的IP要变成linux真实机器的IP。ip怎么看？输入ifconfig.
 
-方案参考来自
+H5播放端和服务器端原型请参考这里.我们只是处理了推流端。
 https://github.com/phoboslab/jsmpeg
 
 
