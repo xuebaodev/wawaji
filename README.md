@@ -68,7 +68,7 @@ input exit then press Enter to stop the server normally.
 
 ```
 JAVA_HOME=/opt/jdk1.8.0_162
-CLASSPATH=.;$JAVA_HOME/lib/dt.jar;$JAVA_HOME/lib/tools.jar;
+CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:
 PATH=$PATH:$JAVA_HOME/bin
 export PATH JAVA_HOME CLASSPATH
 
