@@ -1,5 +1,14 @@
 **昌盛芯开发的线上线下弹珠机**产品说明
 
+项目github:https://github.com/changshenxikf/changshenxiDev
+
+体验地址:http://mmz.csxtech.com.cn/web_wawa_h5/
+
+手机扫码开始体验
+<img width="250" height="250" src="https://raw.githubusercontent.com/changshenxikf/changshenxiDev/master/photo/%E8%90%8C%E8%90%8C%E5%BC%B9%E7%90%83h5%E4%BA%8C%E7%BB%B4%E7%A0%81.png "/>
+
+
+
 和本套安卓推流方案相关的产品，线上线下弹珠机，兄弟公司昌盛芯独家首创的弹珠机，现在发布啦！
 <br>您只需要在服务器端实现弹珠机操作特有协议,就可以快速的给您的app增添一种新玩法！
 
