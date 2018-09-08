@@ -59,6 +59,11 @@ obj/local/armeabi-v7a/objs/serial_port/SerialPort.o: jni/SerialPort.c \
  C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/asm/fcntl.h \
  C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/asm-generic/fcntl.h \
  C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h \
+ C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/stdlib.h \
+ C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/alloca.h \
+ C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/strings.h \
+ C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/memory.h \
+ C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/stdio.h \
  jni/SerialPort.h \
  C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/android/log.h
 
@@ -181,6 +186,16 @@ C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/asm/fcntl.h:
 C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/asm-generic/fcntl.h:
 
 C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/jni.h:
+
+C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/stdlib.h:
+
+C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/alloca.h:
+
+C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/strings.h:
+
+C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/memory.h:
+
+C:/android-ndk-r10e/platforms/android-3/arch-arm/usr/include/stdio.h:
 
 jni/SerialPort.h:
 

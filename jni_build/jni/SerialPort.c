@@ -21,7 +21,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include <jni.h>
-
+#include <stdlib.h>
+#include <stdio.h>
 #include "SerialPort.h"
 
 #include "android/log.h"
@@ -166,5 +167,36 @@ JNIEXPORT void JNICALL Java_android_1serialport_1api_SerialPort_close
 
 	LOGD("close(fd = %d)", descriptor);
 	close(descriptor);
+}
+
+//echo "out" >/sys/class/gpio/gpio111/direction
+//echo "1" >/sys/class/gpio/gpio111/value
+
+JNIEXPORT void JNICALL Java_android_1serialport_1api_SerialPort_gpioset(JNIEnv *env, jclass thiz, jint va)
+{
+	char valueStr[32];
+	memset(valueStr, 0, sizeof(valueStr));
+	sprintf(valueStr, "%d", va);
+
+	//set direction
+	int fda;
+	fda = open("/sys/class/gpio/gpio111/direction", O_RDWR);
+	if(fda < 0)
+	{
+		return ;
+	}
+	int ret = write(fda, "out",3);
+	close(fda);
+
+
+	//set value
+	int fd;
+	fd = open("/sys/class/gpio/gpio111/value", O_RDWR);
+	if(fd < 0)
+	{
+		return ;
+	}
+	ret = write(fd, valueStr, strlen(valueStr));
+	close(fd);
 }
 

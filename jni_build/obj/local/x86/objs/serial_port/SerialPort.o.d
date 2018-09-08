@@ -61,6 +61,11 @@ obj/local/x86/objs/serial_port/SerialPort.o: jni/SerialPort.c \
  C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/asm/fcntl.h \
  C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/asm-generic/fcntl.h \
  C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/jni.h \
+ C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/stdlib.h \
+ C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/alloca.h \
+ C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/strings.h \
+ C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/memory.h \
+ C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/stdio.h \
  jni/SerialPort.h \
  C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/android/log.h
 
@@ -187,6 +192,16 @@ C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/asm/fcntl.h:
 C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/asm-generic/fcntl.h:
 
 C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/jni.h:
+
+C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/stdlib.h:
+
+C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/alloca.h:
+
+C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/strings.h:
+
+C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/memory.h:
+
+C:/android-ndk-r10e/platforms/android-9/arch-x86/usr/include/stdio.h:
 
 jni/SerialPort.h:
 

@@ -1,0 +1,33 @@
+echo pm uninstall com.unity.tuibiji > temp.txt
+echo exit >> temp.txt
+adb shell < temp.txt
+del temp.txt
+adb install tuibiji.apk
+adb shell am start -n com.unity.tuibiji/com.unity.tuibiji.UnityPlayerActivity
+exit
+
+echo "out" >/sys/class/gpio/gpio102/direction
+echo "1" >/sys/class/gpio/gpio102/value
+
+echo "out" >/sys/class/gpio/gpio103/direction
+echo "1" >/sys/class/gpio/gpio103/value
+
+echo "out" >/sys/class/gpio/gpio104/direction
+echo "1" >/sys/class/gpio/gpio104/value
+
+echo "out" >/sys/class/gpio/gpio105/direction
+echo "1" >/sys/class/gpio/gpio105/value
+
+echo "out" >/sys/class/gpio/gpio106/direction
+echo "1" >/sys/class/gpio/gpio106/value
+
+echo "out" >/sys/class/gpio/gpio107/direction
+echo "1" >/sys/class/gpio/gpio107/value
+
+echo "out" >/sys/class/gpio/gpio110/direction
+echo "1" >/sys/class/gpio/gpio110/value
+
+echo "out" >/sys/class/gpio/gpio111/direction
+echo "1" >/sys/class/gpio/gpio111/value
+
+南京软方的板 gpio111是对应第三个管脚。目前上述代码已起作用。

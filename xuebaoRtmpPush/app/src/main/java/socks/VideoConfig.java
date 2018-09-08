@@ -29,9 +29,14 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180529;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20180908;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20180908 废弃A0推流状态错误报告。统一为0x89. 更新工程编辑器到google最新版3.1.4. 修正H5推流时，插了第二路摄像头，但是不设置url导致的闪退。
+    //20180906 修正H5拔掉后置摄像头以后，不停重推的问题。
+    //20180905 修改后置摄像头预览失败时的逻辑，不再重启。而是无视
+    //20180904 添加了gpio某个脚置高置低的支持。0x93时根据推流状态决定亮灭。初始是亮。
+    //20180823 修改了ffmpeg库里面某个av_inter——frame死循环不返回的问题,重编译并使用自己产生的ffmpeg库。 注释ffmpeg_handle关于码率控制方面的一些代码。
     //20180529 将所有逻辑放到程序启动后3秒再做。看看启动闪退的问题能不能解决。废弃了0x3c.usb读文件配置wifi功能现在加了个代码开关。并且默认不启用。SerialPort.java 打开串口的部分 添加了一些健壮性的检查
     //20180528 增加一个详细日志的界面
     //20180517 0x93逻辑修正。使逻辑更严谨。
@@ -113,6 +118,7 @@ public class VideoConfig
     程序现在会在开始时，检查娃娃机是否就绪。因为偶尔会有娃娃机自检比安卓板慢的情况。如就绪，才会开始连接应用并心跳。否则间隔1秒去发送0X34等待娃娃机就绪。
     这种情况是为了防止应用连接服务器后，娃娃机其实还未就绪时，导致玩家第一时间进入此机器后无法开局的问题。*/
 
+   public boolean pushH5 = false;//false 使用RTMP。 true 使用MPEG 2018.0.25
     //分辨率
     int resolution_index = 0;
     public void SetResolutionIndex(int newIndex)
@@ -180,7 +186,7 @@ public class VideoConfig
     public boolean is_hardware_encoder = false;//硬编码 软编码
 
     //编码的码率
-    public int encoderKpbs  = 0;//码率
+    public int encoderKpbs  = 0;//码率.以K为单位
 
     //编码-帧率
     int encodeFPS = 20;
@@ -301,6 +307,8 @@ public class VideoConfig
 
         is_hardware_encoder  = share.getBoolean("is_hardware_encoder", false);
 
+        pushH5 = share.getBoolean("pushH5", false);
+
         encodeFPS = share.getInt("encodeFPS", 20);
         encoderKpbs = share.getInt("encoderKpbs", 560);
 
@@ -314,8 +322,8 @@ public class VideoConfig
         //rtmp://119.29.226.242:1935/hls/229031AA7875_1
 
         my_mac = getMac();
-        url1 = share.getString("url1", "rtmp://videoServerNameOrIP:videoServerPort/catalog/pushID");
-        url2 = share.getString("url2", "rtmp://videoServerNameOrIP:videoServerPort/catalog/pushID");
+        url1 = share.getString("url1", "");
+        url2 = share.getString("url2", "");
 
         using_dhcp = share.getBoolean("using_dhcp", true);
         my_mac  = getMac();
@@ -344,7 +352,6 @@ public class VideoConfig
         machine_name = share.getString("machine_name", "可爱小白兔");
 
         swtichToOne = share.getBoolean("swtichToOne", false);
-
 
         containAudio = share.getBoolean("containAudio", containAudio);
 
@@ -399,6 +406,8 @@ public class VideoConfig
     }
 
         editor.putBoolean("is_hardware_encoder", is_hardware_encoder);
+        editor.putBoolean("pushH5", pushH5);
+
         editor.putInt("encoderKpbs", encoderKpbs);
         editor.putInt("encodeFPS", encodeFPS);
 
@@ -492,6 +501,7 @@ public class VideoConfig
             inf.put("width", videoWidth);
             inf.put("height", videoHeight);
             inf.put("encodeHW", is_hardware_encoder);
+            inf.put("pushH5", pushH5);
             inf.put("encodeQuality", sw_video_encoder_profile);
             inf.put("encodeNum", sw_video_encoder_speed);
             inf.put("fps", encodeFPS);
@@ -561,6 +571,8 @@ public class VideoConfig
             if(jsonOBJ.has("encodeQuality")) sw_video_encoder_profile = jsonOBJ.getInt("encodeQuality");
             if(jsonOBJ.has("encodeNum")) sw_video_encoder_speed = jsonOBJ.getInt("encodeNum");
             if(jsonOBJ.has("fps"))  SetFPS(jsonOBJ.getInt("fps")) ;
+
+            if(jsonOBJ.has("pushH5")) pushH5 = jsonOBJ.getBoolean("pushH5");
 
             if(jsonOBJ.has("record")) is_need_local_recorder = jsonOBJ.getBoolean("record");
             if(jsonOBJ.has("pushUrlFront")) url1 = jsonOBJ.getString("pushUrlFront");

@@ -79,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="自动获取IP"
+                android:visibility="gone"
                />
 
             <TextView
@@ -99,35 +100,39 @@
 
             <TextView
                 android:id="@+id/my_netgate_tip"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="网关:"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/my_gate_addr"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
                 android:textSize="16dip"
                 android:layout_height="wrap_content"
                 android:text="0.0.0.0"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/my_netmask_tip"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="子网掩码:"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/my_netmask_addr"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
                 android:textSize="16dip"
                 android:layout_height="wrap_content"
                 android:text="0.0.0.0"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/USERID_tip"
@@ -223,9 +228,27 @@
                 android:id="@+id/video_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="400dp"
+                android:layout_marginLeft="350dp"
                 android:layout_centerVertical="true"
-                android:text="如无特殊需求,请使用默认推流分辨率。调高分辨率可能导致系统不稳定" />
+                android:text="推流方式" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/video_tip"
+                android:id="@+id/pushH5"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RTMP"
+                    android:id="@+id/rb_rtmp"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MPEG"
+                    android:id="@+id/rb_mpeg"/>
+            </RadioGroup>
 
         </RelativeLayout>
 
@@ -327,8 +350,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/cam1_url_tip"
-                android:hint="rtmp://xxxx"
-                android:text="rtmp://119.29.226.242:1935/hls/stream12345"/>
+                android:hint="rtmp://xxxx or http://xxx"
+                android:text=""/>
         </RelativeLayout>
 
         <!--推流地址2-->
@@ -354,8 +377,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/cam2_url_tip"
-                android:hint="rtmp://xxxx"
-                android:text="rtmp://119.29.226.242:1935/hls/stream12346"/>
+                android:hint="rtmp://xxxx or http://xxx"
+                android:text=""/>
         </RelativeLayout>
 
         <!--IP设置 -->

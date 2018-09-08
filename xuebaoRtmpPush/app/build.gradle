@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.xuebao.rtmpPush"
@@ -11,8 +11,20 @@ android {
         versionCode 5
         versionName "xuebaoRTMP双路推流V"
         buildConfigField("boolean", "LOG", "true")
+        generatedDensities = []
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                abiFilters 'armeabi-v7a'
+            }
+        }
+        ndk {
+            abiFilters 'armeabi-v7a'    //只生成armv7的so
+        }
     }
-
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
     sourceSets {
         main {
            // jniLibs.srcDirs += ['./libs']
@@ -26,18 +38,28 @@ android {
             buildConfigField("boolean", "LOG", "false")
         }
     }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
 }
 
 dependencies {
-    compile files('libs/smartavengine.jar')
+    api files('libs/smartavengine.jar')
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:26.+'
-    compile 'com.android.support:design:26.+'
-    testCompile 'junit:junit:4.12'
+    api 'com.android.support:appcompat-v7:26.+'
+    api 'com.android.support.constraint:constraint-layout:1.0.2'
+    api 'com.android.support:support-v4:26.+'
+    api 'com.android.support:design:26.+'
+    testImplementation 'junit:junit:4.12'
+
+    //compile 'com.github.delonglimin:AndroidUSBCamera:2.2.9'
+    //compile 'com.jakewharton:butterknife:8.8.1'
+   // annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
