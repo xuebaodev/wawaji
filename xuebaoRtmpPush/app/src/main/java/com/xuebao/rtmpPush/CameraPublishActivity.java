@@ -285,6 +285,8 @@ public class CameraPublishActivity extends FragmentActivity {
     int h5_video2_push_state = 0;
     boolean begin_check_h5 = false;//当此变量为真时 h5_push_state要更新
     Timer tm_check_h5 = null;
+    byte[] yuv_cam1;
+    byte[] yuv_cam2;//避免频繁的分配内存
 
     int android_mainboard_type = -1;//0-7130 1-3288
     Gpio3288 gpioPB5 = null;
@@ -1138,7 +1140,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 total_c += (msg_content[i] & 0xff);
             }
             msg_content[msg_content.length - 1] = (byte) (total_c % 100);
-            mComPort.SendData(msg_content, msg_content.length);
+            if(mComPort!=null) mComPort.SendData(msg_content, msg_content.length);
             String sss = SockAPP.bytesToHexString(msg_content);
             outputInfo("MaC发往串口" + sss, false);
         }
@@ -1649,7 +1651,7 @@ public class CameraPublishActivity extends FragmentActivity {
         if(mHandler!= null) mHandler.sendMessage(msgLog);
 
         int cmd_value = com_data[7]&0xff;
-        if( cmd_value != 0x42 && cmd_value !=0x35) {//先透传
+        if( cmd_value != 0x42 && cmd_value !=0x35 ) {//先透传
             if( CameraPublishActivity.sendThread != null)
                 CameraPublishActivity.sendThread.sendMsg( com_data );
         }
@@ -1658,7 +1660,8 @@ public class CameraPublishActivity extends FragmentActivity {
         if( cmd_value == 0x33
                 ||cmd_value == 0x34
                 ||cmd_value == 0x35
-                ||cmd_value == 0x42)
+                ||cmd_value == 0x42
+                ||cmd_value == 0x17 )
         {
             if( cmd_value == 0x35 )//特殊处理 看看mac为空时给板设置mac。然后发自己的心跳
             {
@@ -2237,7 +2240,33 @@ public class CameraPublishActivity extends FragmentActivity {
 
                     //处理从串口过来的消息。只处理相应的部分
                     int cmd_value = com_data[7]&0xff;
-                    if( cmd_value == 0x33)
+                    if(cmd_value == 0x17)
+                    {
+                        //构造mac返回给主板
+                        if(com_data[6] ==0x09)
+                        {
+                            byte msg_content[] = new byte[21];
+                            msg_content[0] = (byte) 0xfe;
+                            msg_content[1] = (byte) (0);
+                            msg_content[2] = (byte) (0);
+                            msg_content[3] = (byte) ~msg_content[0];
+                            msg_content[4] = (byte) ~msg_content[1];
+                            msg_content[5] = (byte) ~msg_content[2];
+                            msg_content[6] = (byte) (msg_content.length);
+                            msg_content[7] = (byte) 0x17;
+                            String strMAC = VideoConfig.instance.getMac();
+                            System.arraycopy(strMAC.getBytes(), 0, msg_content, 8, strMAC.getBytes().length);
+                            int total_c = 0;
+                            for (int i = 6; i < msg_content.length - 1; i++) {
+                                total_c += (msg_content[i] & 0xff);
+                            }
+                            msg_content[msg_content.length - 1] = (byte) (total_c % 100);
+                            if(mComPort!=null) mComPort.SendData(msg_content, msg_content.length);
+                            String sss = SockAPP.bytesToHexString(msg_content);
+                            outputInfo("收到0x17.MaC发往串口" + sss, false);
+                        }
+                    }
+                    else if( cmd_value == 0x33)
                     {
                         outputInfo("结束，停止录像", false);
                         stopRecorder();
@@ -3323,6 +3352,12 @@ public class CameraPublishActivity extends FragmentActivity {
 
         if( VideoConfig.instance.pushH5 == true )
         {
+            if(yuv_cam1 != null) yuv_cam1 = null;
+            if(yuv_cam2 != null) yuv_cam2 = null;
+
+            yuv_cam1 = new byte[VideoConfig.instance.GetVideoWidth() * VideoConfig.instance.GetVideoHeight() * 3 / 2];
+            yuv_cam2 = new byte[VideoConfig.instance.GetVideoWidth() * VideoConfig.instance.GetVideoHeight() * 3 / 2];
+
           if( ffmpegH == null)
               ffmpegH = new FFmpegHandle();
 
@@ -4021,9 +4056,9 @@ public class CameraPublishActivity extends FragmentActivity {
         }
     }
 
-    private byte[] rotateYUVDegree90(byte[] data, int imageWidth, int imageHeight) {
+    private void  rotateYUVDegree90(byte[] data, byte[] yuv, int imageWidth, int imageHeight) {
         //Log.e(TAG, "wwww"+ imageWidth + "hhhhh"+ imageHeight);
-        byte[] yuv = new byte[imageWidth * imageHeight * 3 / 2];
+        //byte[] yuv = new byte[imageWidth * imageHeight * 3 / 2];
         // Rotate the Y luma
         int i = 0;
         for (int x = 0; x < imageWidth; x++) {
@@ -4042,7 +4077,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 i--;
             }
         }
-        return yuv;
+       // return yuv;
     }
 
     //ExecutorService  executor_front = Executors.newSingleThreadExecutor();;//Executors.newFixedThreadPool(5);
@@ -4100,12 +4135,12 @@ public class CameraPublishActivity extends FragmentActivity {
                                    //     public void run() {
                                            // Log.e(TAG,"vilen" + data.length+ "hadnle"+(ffmpegH== null));
 
-                                                byte[] temp;
-                                                temp = rotateYUVDegree90(data,VideoConfig.instance.GetVideoWidth(),VideoConfig.instance.GetVideoHeight());
+
+                                                rotateYUVDegree90(data,yuv_cam1,VideoConfig.instance.GetVideoWidth(),VideoConfig.instance.GetVideoHeight());
 
                                                 int rets =0;
                                                 if( ffmpegH != null)
-                                                    rets = ffmpegH.onFrameCallback1(temp);
+                                                    rets = ffmpegH.onFrameCallback1(yuv_cam1);
 
                                                 //Log.e("FRONTCAM", "onFrameCallback1 ret" + rets);
 
@@ -4131,14 +4166,14 @@ public class CameraPublishActivity extends FragmentActivity {
                                    // executor_back.execute(new Runnable() {
                                     //    @Override
                                    //     public void run() {
-                                            byte[] temp;
-                                            temp = rotateYUVDegree90(data,VideoConfig.instance.GetVideoWidth(),VideoConfig.instance.GetVideoHeight());
+
+                                            rotateYUVDegree90(data,yuv_cam2, VideoConfig.instance.GetVideoWidth(),VideoConfig.instance.GetVideoHeight());
                                             int rets =0;
 
                                             if( ffmpegH != null )
-                                                rets  = ffmpegH.onFrameCallback2(temp);
+                                                rets  = ffmpegH.onFrameCallback2(yuv_cam2);
 
-                                            Log.e(TAG, "onFrameCallback2 ret" + rets);
+                                            //Log.e(TAG, "onFrameCallback2 ret" + rets);
                                             if(rets == 0 && begin_check_h5) {
                                                 h5_video2_push_state = 0;
                                             }
