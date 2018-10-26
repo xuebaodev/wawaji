@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import org.json.*;
 //玩家信息
 class PlayerInfo
 {
@@ -126,7 +126,6 @@ public class ClientServer {
 			try {
 				int recv_len = is.read(datas, readCount, expect_len - readCount);
 				if (recv_len <= 0) {
-
 					return -1;
 				} else
 					readCount += recv_len;
@@ -179,7 +178,112 @@ public class ClientServer {
 			System.out.println("client new DataOutputStream Excepiton");
 		}
 	}
+	
+	//开局成功-通知玩家。且启用玩家的按钮界面
+	public void OnGameStartOK(Socket sock) 
+	{
+		if(sock == null) return;
+		
+		PlayerInfo curClient = null;
+		synchronized (all_clients) {
+			curClient = all_clients.get(sock);
+		}
 
+		if (curClient == null)
+			return;
+		
+		try {
+			JSONObject inf = new JSONObject();
+	        inf.put("cmd", "start_game");
+	        inf.put("ret", 1);
+			
+	        String strRP = inf.toString();
+			int data_len = strRP.getBytes().length;
+
+			byte msg_content[] = new byte[data_len+3];
+			msg_content[0] = (byte) 0xda;
+			msg_content[1] = (byte) ((data_len)/256);
+			msg_content[2] = (byte) ((data_len)%256);
+			System.arraycopy(strRP.getBytes(), 0, msg_content, 3, strRP.getBytes().length);
+
+			try {
+				DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+				out.write(msg_content, 0, msg_content.length);
+				out.flush();
+			} catch (IOException ioe) {
+				System.out.println("client new DataOutputStream Excepiton");
+			}
+		}catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+	}
+	
+	//游戏结束-通知玩家游戏结果
+	public void OnGameEnd(Socket sock, int res) 
+	{
+		if(sock == null) return;
+		
+		PlayerInfo curClient = null;
+		synchronized (all_clients) {
+			curClient = all_clients.get(sock);
+		}
+
+		if (curClient == null)
+			return;
+		
+		try {
+			JSONObject inf = new JSONObject();
+	        inf.put("cmd", "game_ret");
+	        inf.put("ret", res);
+			
+	        String strRP = inf.toString();
+			int data_len = strRP.getBytes().length;
+
+			byte msg_content[] = new byte[data_len+3];
+			msg_content[0] = (byte) 0xda;
+			msg_content[1] = (byte) ((data_len)/256);
+			msg_content[2] = (byte) ((data_len)%256);
+			System.arraycopy(strRP.getBytes(), 0, msg_content, 3, strRP.getBytes().length);
+
+			try {
+				DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+				out.write(msg_content, 0, msg_content.length);
+				out.flush();
+			} catch (IOException ioe) {
+				System.out.println("client new DataOutputStream Excepiton");
+			}
+		}catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+	}
+
+	int g_packget_id = 1;
+	byte[] make_com(int... params) {
+		byte send_buf[] = new byte[8+params.length];
+		send_buf[0] = (byte) 0xfe;
+		send_buf[1] = (byte) (g_packget_id);
+		send_buf[2] = (byte) (g_packget_id >> 8);
+		send_buf[3] = (byte) ~send_buf[0];
+		send_buf[4] = (byte) ~send_buf[1];
+		send_buf[5] = (byte) ~send_buf[2];
+		send_buf[6] = (byte) (8+params.length);
+		for (int i = 0; i < params.length; i++) {
+			send_buf[7+i] = (byte)(params[i]);
+		}
+
+		int sum = 0;
+		for (int i = 6; i < (8+params.length - 1); i++) {
+			sum += (send_buf[i]&0xff);
+		}
+
+		send_buf[8+params.length-1] = (byte)(sum % 100);
+
+		g_packget_id++;
+		return send_buf;
+	}
+	
 	private class HandlerThread implements Runnable {
 		PlayerInfo pi = null;
 		
@@ -207,129 +311,112 @@ public class ClientServer {
 				try {
 					InputStream reader = pi.socket.getInputStream();
 
-					byte[] bHead = new byte[7];
-					int count = ReadDataUnti(bHead, 7, reader);//先接收7个字节。获取到数据长度
-					if (count != 7) {
+					byte[] bHead = new byte[3];
+					int count = ReadDataUnti(bHead, 3, reader);//先接收7个字节。获取到数据长度
+					if (count != 3) {
 						System.out.println("Read head != 7.Socket close.");
 						break;
 					}
-
 					
-					if ((bHead[0] & 0xff) != 0xfe) {//检查数据头是否合法
+					if ((bHead[0] & 0xff) != 0xda) {//检查数据头是否合法
 						System.out.println("Invalid Head.Socket close.");
 						continue;
 					}
 
-					int data_length = bHead[6] & 0xff;// byte2Int(bHead, 6, 7);
-
-					byte datas[] = new byte[data_length - 7];
-					int data_recved_len = ReadDataUnti(datas, data_length - 7, reader);
-					while (data_recved_len != data_length - 7) {
+					int data_length = (bHead[1] & 0xff)*256 + bHead[2] & 0xff;// byte2Int(bHead, 6, 7);
+					byte datas[] = new byte[data_length];
+					int data_recved_len = ReadDataUnti(datas, data_length, reader);
+					if (data_recved_len != data_length) {
 						break;
 					}
-
-					byte total_data[] = new byte[data_length];
-					System.arraycopy(bHead, 0, total_data, 0, 7);
-					System.arraycopy(datas, 0, total_data, 7, data_length - 7);
-
-					if (check_com_data(total_data, data_length) == false) {//数据合法性校验
-						System.out.println("Checksum Data Failed. skip.");
-						continue;
-					}
-
-					//简单的登录消息命令---这个你可以随便自己定义。客户端和服务器配合就行了
-					//在实际的应用场景，你可以给玩家返回任意格式的信息。我这里只默认构造房间列表返回。--方便简单演示
-					int data_cmd = total_data[7]&0xff;
-					
-					if (data_cmd == 0x01) // login and request room list
-					{
-						// make this client login.
-						// just a simple test. should implement by yourself
-						synchronized (all_clients) {
-							all_clients.put(pi.socket, pi);
-						}
-
-						if (SimpleApp.wserver != null) {
-							String strRoomList = SimpleApp.wserver.MakeRoomList();
-							int data_len = 9 + strRoomList.getBytes().length;
-
-							byte msg_content[] = new byte[data_len];
-							msg_content[0] = (byte) 0xfe;
-							msg_content[1] = (byte) (0);
-							msg_content[2] = (byte) (0);
-							msg_content[3] = (byte) ~msg_content[0];
-							msg_content[4] = (byte) ~msg_content[1];
-							msg_content[5] = (byte) ~msg_content[2];
-							msg_content[6] = (byte) (msg_content.length);
-							msg_content[7] = (byte) 0x1;
-
-							System.arraycopy(strRoomList.getBytes(), 0, msg_content, 8, strRoomList.getBytes().length);
-							int total_c = 0;
-							for(int ikk = 6; ikk< data_len-1; ikk++)
-							{
-								total_c += (msg_content[ikk] & 0xff);
+					try {
+						String jsonString = new String(datas, 0, data_length );
+						JSONObject jsCmd = new JSONObject(jsonString);
+						System.out.println("jsstr" + jsonString);
+						String strCmd = jsCmd.getString("cmd");
+						if( strCmd.equals("req_roomlist" )) //获取房间列表--至于其他登录验证什么的，简单服务器就不做了。
+						{
+							synchronized (all_clients) {
+								all_clients.put(pi.socket, pi);
 							}
-							msg_content[data_len-1] = (byte)(total_c % 100);
 
-							System.out.println("room list reply:" + strRoomList);
-							out.write(msg_content, 0, msg_content.length);
-							out.flush();
+							if (SimpleApp.wserver != null) {
+								String strRoomList = SimpleApp.wserver.MakeRoomList();
+								int data_len = strRoomList.getBytes().length;
+
+								byte msg_content[] = new byte[data_len+3];
+								msg_content[0] = (byte) 0xda;
+								msg_content[1] = (byte) ((data_len)/256);
+								msg_content[2] = (byte) ((data_len)%256);
+								System.arraycopy(strRoomList.getBytes(), 0, msg_content, 3, strRoomList.getBytes().length);
+								
+								System.out.println("room list reply:" + strRoomList);
+								out.write(msg_content, 0, msg_content.length);
+								out.flush();
+							}
 						}
-					}else if (data_cmd == 0x02) // enter room 
-					{
-						//玩家进入房间。也就是进入了该娃娃机的列表。该娃娃机状态发生变更时，必须通知这个列表里面的所有人
-						//简单版的服务器不做这个功能。然而你们必须要做。
-						String strMAC = new String(total_data, 8, 12);
-						pi.in_room_mac = strMAC;
-
-						System.out.println("clinet enter room " + strMAC);
-					}else if (data_cmd == 0x03) // leave room
-					{
-						//玩家离开房间--todo此时wserver必须通知房间里的所有人更新inroom的玩家个数什么的。
-						SimpleApp.wserver.processPlayerLeave(pi.in_room_mac, pi.socket);
-						pi.in_room_mac = "";
-						
-
-						System.out.println("clinet leave room ");
-					}else if (data_cmd == 0x31)// player start play.
-					{
-						System.out.println("clinet start game ");
-						//开局命令--
-						//检查是否可以开局并且回应给客户
-						// check if the room is free .if not reply not ok.
-						// else reply ok.--i will skip this step. directly reply ok.
-						boolean bOK = SimpleApp.wserver.processPlayerStartNewGame(pi.in_room_mac, pi.socket);
-						if (bOK == true) {//开局成功
-							// decide should grasp or not. then send to wawaji.
-							// now i skip .directly send to wawaji . you do it.
-							SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, total_data);//发送开局命令到娃娃机
-
-							//返回给客户端，你开始游戏成功。可以显示操作按钮了
-							out.write(total_data, 0, total_data.length);
-							out.flush();
-
-						} else {
-							// should do your logic notify result to client. i skip. you do it.
+						else if( strCmd.equals("enter_room" ) ) 
+						{
+							//玩家进入房间。
+							//todo 通知房间里面的所有人：XX进来了。
+							//todo 加入该房间的玩家列表.该娃娃机状态发生变更时-或XX抓到娃娃时，必须通知这个列表里面的所有人
+							//简单版的服务器不做这个功能。然而你们必须要做。
+							String strRoomMAC =  jsCmd.getString("mac");
+							pi.in_room_mac = strRoomMAC;
+							System.out.println("clinet enter room " + strRoomMAC);
 						}
+						else if(strCmd.equals( "start_game" )) 
+						{
+							System.out.println("clinet start game ");
+							//开局命令--
+							//检查是否可以开局并且回应给客户
+							// check if the room is free .if not reply not ok.
+							// else reply ok.--i will skip this step. directly reply ok.
+							boolean bOK = SimpleApp.wserver.processPlayerStartNewGame(pi.in_room_mac, pi.socket);
+							if (bOK == true) {//娃娃机状态空闲
+								// check if free. if does ,send 0x31
+								
+								//下发开局指令
+								SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, make_com(0x31,60,0,0,0,0,0,0,0,0,0,0));//发送开局命令到娃娃机
 
-					}
-					else{//default translate other data to wawaji. not handle
-						//其他命令。可能是操作命令什么的，我这里默认转发给娃娃机去处理。
-						//实际应用场景中，应该会有其他请求命令过来，比如充值，获取抓取记录什么的，你们要自己处理哈
+							} else {//娃娃机非空闲，开局失败-busy. replay start game failed.
+								JSONObject inf = new JSONObject();
+					            inf.put("cmd", "start_game");
+					            inf.put("ret", 0);
+								
+					            String strRP = inf.toString();
+								int data_len = strRP.getBytes().length;
 
-						SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, total_data);
-					}
-					// cmd from client. maybe get room . enter room .exit room or play operation.
-
-					// if(total_data[7] == 0x35)
-					// {
-					// Send(total_data);
-					// }
-					// else
-					// if(SimpleApp.wserver != null)
-					// {
-					// SimpleApp.wserver.Send(total_data);
-					// }
+								byte msg_content[] = new byte[data_len+3];
+								msg_content[0] = (byte) 0xda;
+								msg_content[1] = (byte) ((data_len)/256);
+								msg_content[2] = (byte) ((data_len)%256);
+								System.arraycopy(strRP.getBytes(), 0, msg_content, 3, strRP.getBytes().length);
+							
+								out.write(msg_content, 0, msg_content.length);
+								out.flush();
+							}
+						}
+						else if(strCmd.equals( "operation" )) 
+						{
+							int optype =  jsCmd.getInt("type");
+							SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, make_com(0x32,optype,136,19));
+						}
+						else if(strCmd.equals( "exit_room" )) 
+						{
+							//玩家离开房间--todo此时wserver必须通知房间里的所有人更新inroom的玩家个数什么的。
+							SimpleApp.wserver.processPlayerLeave(pi.in_room_mac, pi.socket);
+							pi.in_room_mac = "";
+							
+							System.out.println("clinet leave room ");
+						}
+						else{//other cmd you should make by yourself.you should decide what to do.
+							//todo 其他命令。充值啊 获取自己积分啊 获取自己游戏记录啊 抓取记录 设置收获地址啥的。。。自己搭配数据库搞起来
+						}
+					}catch (JSONException e)
+			        {
+			            e.printStackTrace();
+			        }
 
 				} catch (Exception e) {
 					e.printStackTrace();

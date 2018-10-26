@@ -29,10 +29,12 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20180911;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20181026;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20181026 修正一个bug。收到服务器的0x35现在不会再发往串口了。
     //20180911 增加对0x17取mac请求的支持。修改H5推流的rotateYUV90函数，降低gc的频率
+    //         两个推流地址一样时或都是空时，不推。
     //20180908 废弃A0推流状态错误报告。统一为0x89. 更新工程编辑器到google最新版3.1.4. 修正H5推流时，插了第二路摄像头，但是不设置url导致的闪退。
     //20180906 修正H5拔掉后置摄像头以后，不停重推的问题。
     //20180905 修改后置摄像头预览失败时的逻辑，不再重启。而是无视

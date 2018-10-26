@@ -202,6 +202,18 @@ public class SmartPlayer extends Activity {
 		Log.i(TAG, "Run out of onConfigurationChanged--");
 	}
 
+	/* //新版数据命令
+DA
+数据长度2位
+json
+
+{"cmd":"req_roomlist"}
+{"cmd":"enter_room","mac":"XXXX"}
+{"cmd":"exit_room"}
+{"cmd":"start_game"}
+{"cmd":"operation","type":0}
+*/
+
 	@Override
 	protected  void onDestroy()
 	{
@@ -213,10 +225,14 @@ public class SmartPlayer extends Activity {
 			playerHandle = 0;
 		}
 
-		byte com_cmd[]= user_uart_sendcom(3);
-		if(MainActivity.sendThread != null)
-		{
-			MainActivity.sendThread.SendOut( com_cmd );
+		String jsoncmd="{\"cmd\":\"exit_room\"}";
+		byte msg_content[] = new byte[3+jsoncmd.length()];
+		msg_content[0]= (byte)0xda;
+		msg_content[1] = (byte)(jsoncmd.length()/256);
+		msg_content[2] = (byte)(jsoncmd.length()%256);
+		System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+		if(MainActivity.sendThread != null) {
+			MainActivity.sendThread.SendOut( msg_content );
 		}
 
 		super.onDestroy();
@@ -323,98 +339,49 @@ public class SmartPlayer extends Activity {
 		MainActivity.sendThread.SetHandler(handler);
 	}
 
-	//construct the send packet
-	int g_packget_id = 0;
-	byte[] user_uart_sendcom(int... params) {
-		byte send_buf[] = new byte[8+params.length];
-		send_buf[0] = (byte) 0xfe;
-		send_buf[1] = (byte) (g_packget_id);
-		send_buf[2] = (byte) (g_packget_id >> 8);
-		send_buf[3] = (byte) ~send_buf[0];
-		send_buf[4] = (byte) ~send_buf[1];
-		send_buf[5] = (byte) ~send_buf[2];
-		send_buf[6] = (byte) (8+params.length);
-		for (int i = 0; i < params.length; i++) {
-			send_buf[7+i] = (byte)(params[i]);
-		}
-
-		int sum = 0;
-		for (int i = 6; i < (8+params.length - 1); i++) {
-			sum += (send_buf[i]&0xff);
-		}
-
-		send_buf[8+params.length-1] = (byte)(sum % 100);
-
-		g_packget_id++;
-		return send_buf;
-	}
-
-	//check the data is valid or not
-	boolean check_com_data(byte[] data, int len) {
-
-		if (len < 6) return false;
-		int check_total = 0;
-
-		//check sum
-		for (int i = 0; i < len; i++) {
-			if ((i >= 6) && (i < len - 1))
-				check_total += (data[i] & 0xff);
-		}
-
-		if (data[0] != (byte) (~data[3]&0xff) && data[1] != (byte) (~data[4]&0xff) && data[2] != (byte) (~data[5]&0xff))
-			return false;
-
-		if (check_total % 100 != data[len - 1]) {
-			return false;
-		}
-
-		return true;
-	}
-
 	public void OnClickReboot(View v)
     {
-        byte com_cmd[] = user_uart_sendcom(0x88);
-        Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
-        if(MainActivity.sendThread != null)
-        {
-            MainActivity.sendThread.SendOut( com_cmd );
-        }
+		String jsoncmd="{\"cmd\":\"reboot\"}";
+		byte msg_content[] = new byte[3+jsoncmd.length()];
+		msg_content[0]= (byte)0xda;
+		msg_content[1] = (byte)(jsoncmd.length()/256);
+		msg_content[2] = (byte)(jsoncmd.length()%256);
+		System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+		if(MainActivity.sendThread != null) {
+			MainActivity.sendThread.SendOut( msg_content );
+		}
     }
 
     //安卓板特有协议，当推流出于双路单推 模式时，按此按钮发送切流命令
 	public void OnClickSwitchCam(View v)
 	{
-		byte com_cmd[] = user_uart_sendcom(0x90);
-		Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
-		if(MainActivity.sendThread != null)
-		{
-			MainActivity.sendThread.SendOut( com_cmd );
-		}
+
 	}
 
 	//安卓板特有协议。模拟游戏结束。以便可以在不接娃娃机时测试录像逻辑
 	public void OnClickFakeEnd(View v)
 	{
-		byte com_cmd[] = user_uart_sendcom(0x99);
-		Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
-		if(MainActivity.sendThread != null)
-		{
-			MainActivity.sendThread.SendOut( com_cmd );
-		}
+
 	}
 
+	int abs = 0;
     public void OnClickSend93(View v)
     {
-        byte com_cmd[] = user_uart_sendcom(0x93, 0, 50, 1);
-        Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
-        if(MainActivity.sendThread != null)
-        {
-            MainActivity.sendThread.SendOut( com_cmd );
-        }
+		String jsoncmd="";
+		if( abs ==0) {abs =1;jsoncmd="{\"cmd\":\"stop_stream\"}";}
+		else {abs = 0; jsoncmd="{\"cmd\":\"start_stream\"}";}
+
+		byte msg_content[] = new byte[3+jsoncmd.length()];
+		msg_content[0]= (byte)0xda;
+		msg_content[1] = (byte)(jsoncmd.length()/256);
+		msg_content[2] = (byte)(jsoncmd.length()%256);
+		System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+		if(MainActivity.sendThread != null) {
+			MainActivity.sendThread.SendOut( msg_content );
+		}
     }
 
 	Handler handler = new Handler() {
-
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -422,51 +389,50 @@ public class SmartPlayer extends Activity {
 				{
 					int msg_len = msg.arg1;
 					byte test_data[] = (byte[]) (msg.obj);
-					if (check_com_data(test_data, msg_len) == false)
-					{
-						Log.e("=====data recv===", "-----com check error-----");
-						break;
-					}
-					int cmd = (test_data[7] & 0xff);
-					Log.e("==onhandle==", Integer.toString(cmd));
-					switch (cmd)
-					{
-						case 0x31://new game result notify from server.
+					String jsonString = new String(test_data, 0, msg_len );//从第八位开始，最后一位不要。
+					Log.e("PlayerA",jsonString);
+					try {
+						JSONObject jsRet = new JSONObject(jsonString);
+						String strCmd = jsRet.getString("cmd");
+						if( strCmd.equals("start_game" ))
 						{
-							//enable the operation button
-							ImageButton mKaijuButton = (ImageButton)findViewById(R.id.btn_kaiju);
-							mKaijuButton.setVisibility(View.INVISIBLE);
+							int start_ret = jsRet.getInt("ret");
+							if( start_ret ==1)
+							{
+								//enable the operation button
+								ImageButton mKaijuButton = (ImageButton)findViewById(R.id.btn_kaiju);
+								mKaijuButton.setVisibility(View.INVISIBLE);
 
-							ImageButton mUpButton = (ImageButton)findViewById(R.id.btn_up);
-							mUpButton.setVisibility(View.VISIBLE);
+								ImageButton mUpButton = (ImageButton)findViewById(R.id.btn_up);
+								mUpButton.setVisibility(View.VISIBLE);
 
-							ImageButton mDownButton = (ImageButton)findViewById(R.id.btn_down);
-							mDownButton.setVisibility(View.VISIBLE);
+								ImageButton mDownButton = (ImageButton)findViewById(R.id.btn_down);
+								mDownButton.setVisibility(View.VISIBLE);
 
-							ImageButton mLeftButton = (ImageButton)findViewById(R.id.btn_left);
-							mLeftButton.setVisibility(View.VISIBLE);
+								ImageButton mLeftButton = (ImageButton)findViewById(R.id.btn_left);
+								mLeftButton.setVisibility(View.VISIBLE);
 
-							ImageButton mRightButton = (ImageButton)findViewById(R.id.btn_right);
-							mRightButton.setVisibility(View.VISIBLE);
+								ImageButton mRightButton = (ImageButton)findViewById(R.id.btn_right);
+								mRightButton.setVisibility(View.VISIBLE);
 
-							ImageButton mEnterButton = (ImageButton)findViewById(R.id.btn_enter);
-							mEnterButton.setVisibility(View.VISIBLE);
+								ImageButton mEnterButton = (ImageButton)findViewById(R.id.btn_enter);
+								mEnterButton.setVisibility(View.VISIBLE);
+							}
 						}
-						break;
-						case 0x33://when the doll machine is reset to state available. it will notify the grasp result to playing player--and other people in the room.
+						else if(strCmd.equals("game_ret"))
 						{
-							int zhuawawaret = (test_data[8] & 0xff);
-							if( zhuawawaret ==1 )
+							int game_ret = jsRet.getInt("ret");
+							if( game_ret ==1 )
 							{
 								Toast.makeText(getApplicationContext(), "You grasp the doll!", Toast.LENGTH_SHORT).show();
 							}
-							else if(zhuawawaret == 0)
+							else if(game_ret == 0)
 							{
 								Toast.makeText(getApplicationContext(), "You lose", Toast.LENGTH_SHORT).show();
 							}
 							else//other result see in document
 							{
-								Toast.makeText(getApplicationContext(), "other code:" + zhuawawaret, Toast.LENGTH_SHORT).show();
+								Toast.makeText(getApplicationContext(), "other code:" + game_ret, Toast.LENGTH_SHORT).show();
 							}
 
 							//reset the ui to play next game
@@ -488,9 +454,9 @@ public class SmartPlayer extends Activity {
 							ImageButton mEnterButton = (ImageButton)findViewById(R.id.btn_enter);
 							mEnterButton.setVisibility(View.INVISIBLE);
 							Log.e("=====NotifyGameEnd===", "-----------------");
-
 						}
-						break;
+					}catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 				break;
@@ -540,29 +506,30 @@ public class SmartPlayer extends Activity {
 				{
 					b_start_new_game = false;
 
-					int cmd = 0x31;//start a new game
-					int param_timeout = 60;//time out auto fire grasp. in second.
-					int catch_result = 0;//client should send 0 always. the server need to decide this is 1 or 0
-					int power_catch = 0;//0 forever
-					int power_ontop = 0;//0 forever
-					int power_move = 0;//0 forever
-					int power_max = 0;//0 forever
-					int hold_height = 0;//0 forever see detail in document
-					byte com_cmd[] = user_uart_sendcom(0x31, param_timeout, catch_result, power_catch,power_ontop,power_move,power_max,hold_height);
-					Log.e("==sending==", MainActivity.sendThread.bytesToHexString(com_cmd));
+					String jsoncmd="{\"cmd\":\"start_game\"}";
+					byte msg_content[] = new byte[3+jsoncmd.length()];
+					msg_content[0]= (byte)0xda;
+					msg_content[1] = (byte)(jsoncmd.length()/256);
+					msg_content[2] = (byte)(jsoncmd.length()%256);
+					System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
 					if(MainActivity.sendThread != null)
 					{
-						MainActivity.sendThread.SendOut( com_cmd );
+						MainActivity.sendThread.SendOut( msg_content );
 					}
 				}
 			}
 
 			if(v.getId() == R.id.btn_enter)
 			{
-				byte com_cmd[] = user_uart_sendcom(0x32, 4, 0, 0);//下抓
-				if(MainActivity.sendThread != null)
-				{
-					MainActivity.sendThread.SendOut( com_cmd );
+				//{"cmd":"operation","type":4}
+				String jsoncmd = "{\"cmd\":\"operation\",\"type\":4}";
+				byte msg_content[] = new byte[3+jsoncmd.length()];
+				msg_content[0]= (byte)0xda;
+				msg_content[1] = (byte)(jsoncmd.length()/256);
+				msg_content[2] = (byte)(jsoncmd.length()%256);
+				System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+				if(MainActivity.sendThread != null) {
+					MainActivity.sendThread.SendOut( msg_content );
 				}
 			}
 		}
@@ -600,12 +567,17 @@ public class SmartPlayer extends Activity {
 					((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.operation_right_normal));
 				}
 
-				int num2 = 0;
-				int num3 = 0;
-				byte com_cmd[] = user_uart_sendcom(0x32, 0x05, num2, num3);//release pressing button  send cmd 05
-				if(MainActivity.sendThread != null)
+				if(v.getId() != R.id.btn_kaiju && v.getId() != R.id.btn_changeCam && (v.getId() != R.id.btn_enter))
 				{
-					MainActivity.sendThread.SendOut( com_cmd );
+					String jsoncmd = "{\"cmd\":\"operation\",\"type\":5}";
+					byte msg_content[] = new byte[3+jsoncmd.length()];
+					msg_content[0]= (byte)0xda;
+					msg_content[1] = (byte)(jsoncmd.length()/256);
+					msg_content[2] = (byte)(jsoncmd.length()%256);
+					System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+					if(MainActivity.sendThread != null) {
+						MainActivity.sendThread.SendOut( msg_content );
+					}
 				}
 			}
 			if(event.getAction() == MotionEvent.ACTION_DOWN){
@@ -650,12 +622,14 @@ public class SmartPlayer extends Activity {
 						||v.getId() == R.id.btn_right)
 				{
 					//press any operation button .send 0x32 once.
-					int num2 = 136;
-					int num3 = 19;
-					byte com_cmd[] = user_uart_sendcom(0x32, dir, num2, num3);//constant move time 5000 in millisecond. don't change.
-					if(MainActivity.sendThread != null)
-					{
-						MainActivity.sendThread.SendOut( com_cmd );
+					String jsoncmd = String.format("{\"cmd\":\"operation\",\"type\":%d}", dir);
+					byte msg_content[] = new byte[3+jsoncmd.length()];
+					msg_content[0]= (byte)0xda;
+					msg_content[1] = (byte)(jsoncmd.length()/256);
+					msg_content[2] = (byte)(jsoncmd.length()%256);
+					System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+					if(MainActivity.sendThread != null) {
+						MainActivity.sendThread.SendOut( msg_content );
 					}
 				}
 			}

@@ -17,7 +17,6 @@ import java.util.concurrent.locks.Lock;
 
 //连接应用服务器的类。包含接收 心跳 和重连
 public class SockAPP {
-
     private static final String TAG = "SockAPP";
 
     public String hostName = "192.168.4.1";
@@ -97,90 +96,6 @@ public class SockAPP {
 
     class ReceiveWatchDog implements Runnable {
 
-        String readBuffer = "";
-        boolean showlog = false;
-
-        protected void onDataReceived(byte[] buffer, int size) {
-            if (showlog)
-                Log.e("222**", String.valueOf(buffer) + " ##### " + bytes2HexString(buffer, size) + " *** " + readBuffer);
-            readBuffer = readBuffer + bytes2HexString(buffer, size);
-
-            //开头可能就不正确
-            if (readBuffer.contains("FE")) {
-                readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
-            } else {
-                readBuffer = "";
-                if (showlog) Log.e("~~~~", "开头可能就不正确 readBuffer = kong ");
-            }
-
-            //指令 至少是9位 包长度在第 7位
-            while (readBuffer.length() > 9 * 2) {
-                String slen = readBuffer.substring(12, 14);
-                int len = Integer.parseInt(slen, 16);
-
-                //包长度最大50
-                if (len > 50) {
-                    //包长度出错 应该是数据干扰
-                    if (showlog) Log.e("~~~", "包长度出错");
-                    //丢弃这条指令
-                    readBuffer = readBuffer.substring(0, 2);
-                    if (readBuffer.contains("FE")) {
-                        readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
-                    } else {
-                        readBuffer = "";
-                        if (showlog) Log.e("~~~~", "包长度出错 readBuffer = kong ");
-                    }
-                    continue;
-                }
-
-                if (readBuffer.length() >= len * 2) {
-                    String sBegin = readBuffer.substring(0, 2);
-                    if (showlog) Log.e("~~", "sBegin ******" + sBegin);
-                    if (sBegin.equals("FE")) {
-                        //开头正确
-                        String msgContent = readBuffer.substring(0, len * 2);
-                        if (showlog) Log.e("开头正确", msgContent);
-                        //校验指令
-                        if (check_com_data_string(msgContent, len * 2)) {
-                            Log.e(TAG, "收到:" + msgContent);
-                            readBuffer = readBuffer.substring(len * 2);
-                            //指令正确
-                            Message message = Message.obtain();
-                            message.what = 10;
-                            message.arg1 = len;
-                            message.obj = hexStringToBytes(msgContent);
-                            ;
-                            if (handler != null) handler.sendMessage(message);
-
-                        } else {
-                            //指令不正确
-                            if (showlog) Log.e("指令不正确", msgContent + "***" + readBuffer);
-                            readBuffer = readBuffer.substring(2);
-                            if (readBuffer.contains("FE")) {
-                                readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
-                            } else {
-                                readBuffer = "";
-                                if (showlog) Log.e("~~~~", "指令不正确 不包含FE readBuffer = kong ");
-                            }
-                        }
-                    } else {
-                        //开头不正确
-                        if (showlog) Log.e("开头不正确", readBuffer);
-                        if (readBuffer.contains("FE")) {
-                            readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
-                        } else {
-                            readBuffer = "";
-                            if (showlog) Log.e("~~~~", "开头不正确 目前不包含FE readBuffer = kong ");
-                        }
-                    }
-                } else {
-                    //等下一次接
-                    if (showlog) Log.e("不够数", "等待" + readBuffer);
-                    break;
-                }
-            }
-        }
-
         @Override
         public void run() {
             while (ShouldStopNow == false) {
@@ -223,21 +138,52 @@ public class SockAPP {
                     try {
                         InputStream reader = socket.getInputStream();
 
-                        byte data_buff[] = new byte[1024];
-                        int recv_len = reader.read(data_buff, 0, 1024);
-                        if (recv_len > 0) {
+                        byte head[] = new byte[3];
+                        int recv_len = reader.read(head, 0, 3);
+                        if( recv_len<=0)
+                        {
+                            Log.e(TAG, "收到数据<=0.断开");
+                            if( socket != null) {
+                                socket.close();
+                                socket = null;
+                            }
+                            break;
+                        }
+                        int headInt = (head[0]&0xff);
+                        if( headInt==0xda && recv_len ==3)
+                        {
+                            int data_len = (int)(head[1]&0xff)*256 + head[2]&0xff;
+                            byte data_body[] = new byte[data_len];
+
+                            recv_len = reader.read(data_body, 0, data_len);
+                            if( recv_len < data_len )//继续接收
+                            {
+                                Log.e(TAG, "接收不完整 继续接收");
+                                int total_recv_ren = recv_len;
+                                int left_data_len = data_len - recv_len;
+                                while(total_recv_ren <data_len)
+                                {
+                                    recv_len = reader.read(data_body, total_recv_ren, left_data_len);
+                                    if( recv_len<=0)
+                                    {
+                                        Log.e(TAG, "收到数据<=0.断开");
+                                        if( socket != null) {
+                                            socket.close();
+                                            socket = null;
+                                        }
+                                        break;
+                                    }
+                                    total_recv_ren+= recv_len;
+                                    left_data_len -= recv_len;
+                                }
+                            }
+
                             Message message = Message.obtain();
                             message.what = 10;
-                            message.arg1 = recv_len;
-                            message.obj = data_buff;//hexStringToBytes(msgContent);
+                            message.arg1 = data_len;
+                            message.obj = data_body;//hexStringToBytes(msgContent);
                             if (handler != null) handler.sendMessage(message);
-                            //onDataReceived(data_buff, recv_len);
-                        } else {
-                            Log.e(TAG, "收到数据<=0.断开");
-                            if( socket != null)
-                            { socket.close();
-                            socket = null;}
-                            break;
+                                //onDataReceived(data_buff, recv_len);
                         }
                     } catch (IOException ea) {
                        // ea.printStackTrace();
@@ -258,7 +204,7 @@ public class SockAPP {
     public void SendOut(byte[] msg)
     {
         String ss = bytesToHexString(msg);
-        Log.e("Socket Sendount", ss);
+        //Log.e("Socket Sendount", ss);
         if( msgThread != null)
             msgThread.putMsg( msg );
     }
@@ -295,59 +241,5 @@ public class SockAPP {
         }
 
         return sb.toString();
-    }
-
-    public static String bytes2HexString(byte[] b, int len) {
-        String ret = "";
-        for (int i = 0; i < len; i++) {
-            String hex = Integer.toHexString(b[ i ] & 0xFF);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
-            }
-            ret += hex.toUpperCase();
-        }
-        return ret;
-    }
-
-    public static byte[] hexStringToBytes(String hexString) {
-        if (hexString == null || hexString.equals("")) {
-            return null;
-        }
-        hexString = hexString.toUpperCase();
-        int length = hexString.length() / 2;
-        char[] hexChars = hexString.toCharArray();
-        byte[] d = new byte[length];
-        for (int i = 0; i < length; i++) {
-            int pos = i * 2;
-            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-
-        }
-        return d;
-    }
-    private static byte charToByte(char c) {
-        return (byte) "0123456789ABCDEF".indexOf(c);
-    }
-
-    public static boolean check_com_data_string(String data, int len) {
-        if (len < 12) return false;
-        int check_total = 0;
-        //check sum
-        for (int i=6 * 2 ;i < len - 2;i= i+2)
-        {
-            check_total += Integer.parseInt(data.substring(i,i+2),16);
-        }
-        if (check_total % 100 != Integer.parseInt(data.substring(len -2 ,len),16))
-            return false;
-
-        if (Integer.parseInt(data.substring(0,2),16) + Integer.parseInt(data.substring(6,8),16) != 255)
-            return false;
-
-        if (Integer.parseInt(data.substring(2,4),16) + Integer.parseInt(data.substring(8,10),16) != 255)
-            return false;
-
-        if (Integer.parseInt(data.substring(4,6),16) + Integer.parseInt(data.substring(10,12),16) != 255)
-            return false;
-
-        return true;
     }
 }

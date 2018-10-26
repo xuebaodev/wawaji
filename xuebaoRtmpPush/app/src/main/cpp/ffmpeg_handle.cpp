@@ -482,6 +482,7 @@ Java_com_deerlive_usbcamera_ffmpeg_FFmpegHandle_initVideo2(JNIEnv *env, jobject 
 //    pCodecCtx2->keyint_min = 5;
 //    pCodecCtx2->gop_size = 25;
     pCodecCtx2->max_b_frames = 0;
+    //   pCodecCtx2->qmax = 51;
 //
 //    pCodecCtx2->qcompress = 0;
 //    pCodecCtx2->me_range = 64;

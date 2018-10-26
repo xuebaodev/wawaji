@@ -42,6 +42,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -51,7 +52,17 @@ import java.util.TimerTask;
 
 import socks.SockAPP;
 
+/* //新版数据命令
+DA
+数据长度2位
+json
 
+{"cmd":"req_roomlist"}
+{"cmd":"enter_room","mac":"XXXX"}
+{"cmd":"exit_room"}
+{"cmd":"start_game"}
+{"cmd":"operation","type":0}
+*/
 public class MainActivity extends Activity {
     private final String TAG = "MainActivity";
     public static SockAPP sendThread;
@@ -204,25 +215,13 @@ public class MainActivity extends Activity {
                     Log.e("===MainActivity==", "Connect succ.");
                     Toast.makeText(getApplicationContext(), "连接成功", Toast.LENGTH_SHORT).show();
                     //获取场地设备列表
-
-                    byte msg_content[] = new byte[9];
-                    msg_content[0] = (byte) 0xfe;
-                    msg_content[1] = (byte) (0);
-                    msg_content[2] = (byte) (0);
-                    msg_content[3] = (byte) ~msg_content[0];
-                    msg_content[4] = (byte) ~msg_content[1];
-                    msg_content[5] = (byte) ~msg_content[2];
-                    msg_content[6] = (byte) (msg_content.length);
-                    msg_content[7] = (byte) 0x1;
-
-                    int total_c = 0;
-                    for (int i = 6; i < msg_content.length - 1; i++) {
-                        total_c += (msg_content[i] & 0xff);
-                    }
-                    msg_content[msg_content.length - 1] = (byte) (total_c % 100);
-
-                    if(sendThread != null)
-                    {
+                    String jsoncmd="{\"cmd\":\"req_roomlist\"}";
+                    byte msg_content[] = new byte[3+jsoncmd.length()];
+                    msg_content[0]= (byte)0xda;
+                    msg_content[1] = (byte)(jsoncmd.length()/256);
+                    msg_content[2] = (byte)(jsoncmd.length()%256);
+                    System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+                    if(sendThread != null) {
                         sendThread.SendOut( msg_content );
                     }
                 }
@@ -231,10 +230,15 @@ public class MainActivity extends Activity {
                 {
                     int msg_len = msg.arg1;
                     byte test_data[] = (byte[]) (msg.obj);
-                    int cmd = (test_data[7] & 0xff);
-                    String jsonString = new String(test_data, 8, msg_len - 9);//从第八位开始，最后一位不要。
+                    String jsonString = new String(test_data, 0, msg_len );//从第八位开始，最后一位不要。
                     try {
-                        JSONArray A05Result = new JSONArray(jsonString);
+                        JSONObject jsRet = new JSONObject(jsonString);
+                        String strCmd = jsRet.getString("cmd");
+                        JSONArray A05Result =null;
+                        if(strCmd.equals("reply_roomlist"))
+                        {
+                            A05Result = jsRet.getJSONArray("rooms");
+                        }
                         Log.e(TAG, "房间个数" + A05Result.length());
                         if( A05Result.length() ==0 )  Toast.makeText(getApplicationContext(), "room list is empty.", Toast.LENGTH_SHORT).show();
                         TableRow cur_row = null;
@@ -279,33 +283,20 @@ public class MainActivity extends Activity {
                                 public void onClick(View v) {
                                     String amac = (String) v.getTag();
                                     //发送进设备命令-并切换界面
-                                    byte msg_content[] = new byte[9 + amac.getBytes().length];
-                                    msg_content[0] = (byte) 0xfe;
-                                    msg_content[1] = (byte) (0);
-                                    msg_content[2] = (byte) (0);
-                                    msg_content[3] = (byte) ~msg_content[0];
-                                    msg_content[4] = (byte) ~msg_content[1];
-                                    msg_content[5] = (byte) ~msg_content[2];
-                                    msg_content[6] = (byte) (msg_content.length);
-                                    msg_content[7] = (byte) 0x2;
-
-                                    System.arraycopy(amac.getBytes(),0,msg_content,8,amac.getBytes().length);
-
-                                    int total_c = 0;
-                                    for (int i = 6; i < msg_content.length - 1; i++) {
-                                        total_c += (msg_content[i] & 0xff);
-                                    }
-                                    msg_content[msg_content.length - 1] = (byte) (total_c % 100);
-
-                                    if(sendThread != null)
-                                    {
+                                    String jsoncmd = String.format("{\"cmd\":\"enter_room\",\"mac\":\"%s\"}", amac);
+                                    byte msg_content[] = new byte[3+jsoncmd.length()];
+                                    msg_content[0]= (byte)0xda;
+                                    msg_content[1] = (byte)(jsoncmd.length()/256);
+                                    msg_content[2] = (byte)(jsoncmd.length()%256);
+                                    System.arraycopy(jsoncmd.getBytes(),0,msg_content,3,jsoncmd.getBytes().length);
+                                    if(sendThread != null) {
                                         sendThread.SendOut( msg_content );
                                     }
 
-                                    if( playbackUrl.contains("rtmp://119")|| playbackUrl.equals("rtmp://"))
+                                    if( playbackUrl.contains("rtmp://119"))
                                         playbackUrl = "rtmp://119.29.226.242:1935/hls/" + amac + "_1";
 
-                                    if(playbackUrl2.contains("rtmp://119")|| playbackUrl2.equals("rtmp://"))
+                                    if(playbackUrl2.contains("rtmp://119"))
                                         playbackUrl2 = "rtmp://119.29.226.242:1935/hls/" + amac + "_2";
 
                                     Intent intent = new Intent(MainActivity.this, SmartPlayer.class);
@@ -334,9 +325,7 @@ public class MainActivity extends Activity {
                 }
                 break;
             }
-
             super.handleMessage(msg);
         }
     };
-
 }

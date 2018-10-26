@@ -389,6 +389,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
         isShouldRebootSystem = false;
         isTimeReady = false;
+       // isTimeReady = true;
         isWawajiReady =  false;//note 调试模式下 先让娃娃机就绪 否则连接不了应用服务器
         timeWaitCount = 20;
         //queryStateTimeoutTime = 0;
@@ -1727,7 +1728,9 @@ public class CameraPublishActivity extends FragmentActivity {
             && cmd_value !=0x90
             && cmd_value != 0x92
                 && cmd_value != 0x93
-            && cmd_value !=0x99 ) {//先透传
+            && cmd_value !=0x99
+                && cmd_value !=0x35 //20181024
+                ) {//先透传
             if( CameraPublishActivity.mComPort != null)
                 CameraPublishActivity.mComPort.SendData( sock_data , len);
         }
@@ -3312,7 +3315,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             public void run() {
                                 //Log.e(TAG,"check state result" + h5_video1_push_state + "2:" + h5_video2_push_state);
                                 begin_check_h5 = false;//停止检测状态
-                                if( ffmpegH != null) {
+                                if( ffmpegH != null && isPushing) {
                                     if( (mCameraFront != null &&  h5_video1_push_state != 0) || (mCameraBack != null && h5_video2_push_state != 0))
                                     {
                                             //在主线程里面重新推流
@@ -3329,14 +3332,25 @@ public class CameraPublishActivity extends FragmentActivity {
     }
 
     void UIClickStartPush() {
-        Log.e(TAG,"开推");
-        Log.e("HHHHH", "pushing h5 " + VideoConfig.instance.pushH5);
-
         if (getLocalIpAddress().equals(""))
         {
             outputInfo("IP地址是空，不推。可能没插网线",false);
             return;
         }
+
+        if(VideoConfig.instance.url1.equals("") && VideoConfig.instance.url2.equals(""))
+        {
+            outputInfo("推流地址是空，不推。",false);
+            return;
+        }
+
+        if(VideoConfig.instance.url2.equals(VideoConfig.instance.url1))
+        {
+            outputInfo("两个推流地址一样，不推。",false);
+            return;
+        }
+
+        Log.e("HHHHH", "pushing h5 " + VideoConfig.instance.pushH5);
 
         if (VideoConfig.instance.pushH5== false )
         {
@@ -3364,9 +3378,8 @@ public class CameraPublishActivity extends FragmentActivity {
             StartH5CheckTimer();
         }
 
+        Log.e(TAG,"开推");
         outputInfo("开推.", false);
-
-        if(CameraPublishActivity.DEBUG) Log.i(TAG, "onClick start push..");
 
         VideoConfig.instance.SaveConfig(this);
 

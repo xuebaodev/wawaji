@@ -6,12 +6,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import java.applet.AudioClip;
+import java.applet.Applet;
+import java.io.*;
 
 import org.json.JSONArray;  
 import org.json.JSONObject;
@@ -44,6 +50,13 @@ class MachineInfo
 	//上次心跳时间。用来检查心跳超时
 	public long last_heartbeattime = 0;//30s not hear beat. dead. but i don't do this logic to make this code simple.you do it yourself.
 	
+	//为了测试丢包率做的变量
+	//发送给娃娃机的次数
+	public long sendCount = 0;
+	
+	//娃娃机接收到的次数
+	public long recvCount = 0;
+	
 	//当超时或者娃娃机正常下线的时候，我们要做些清理工作。-如果是实际的应用场景，你还应该把在里面的玩家'踢'出来
 	public void Clear() 
 	{
@@ -73,6 +86,7 @@ public class WawaServer {
 
 	ServerSocket listenSocket;
 
+
 	boolean showldStop = false;
 	int nport =0;
 	public void Start(int np) {
@@ -93,6 +107,14 @@ public class WawaServer {
 						String ip = cur_socket.getRemoteSocketAddress().toString();
 						System.out.println("wawaji ip" + ip + "has connected.");
 
+						try {
+							DataOutputStream out = new DataOutputStream(cur_socket.getOutputStream());
+							out.write("aa".getBytes(), 0, 2);
+							out.flush();
+						} catch (IOException ioe) {
+							System.out.println("server new DataOutputStream Failed.");
+						}
+						
 						new HandlerThread(cur_socket);
 					}
 
@@ -105,7 +127,7 @@ public class WawaServer {
 			}
 		});
 		newThread.start();
-
+	    
 		CheckTimeout();
 	}
 
@@ -182,10 +204,10 @@ public class WawaServer {
 		SimpleApp.cserver.TranlsateToPlayer(macInfo.current_player , data);
 	}
 	
-	   //make the room state to playing.--i skip .you do it.
-	   //save the room current player to this socket.
+	//check the room state if it's ready to play
 	//玩家请求开始游戏,设置该娃娃机的当前玩家为该玩家。
-	//todo  检查娃娃机状态是否为空闲并回应。 我这里直接默认为成功
+	//todo  检查娃娃机状态是否为空闲并回应。 我这里直接默认为成功.对于服务器来说
+	//娃娃机的状态分为 离线 故障 游戏中 空闲。服务器应该根据娃娃机心跳情况和故障上报做相应的状态标记。
 	public boolean processPlayerStartNewGame(String MAC, Socket client) 
 	{
 		if (all_machines.size() <= 0)
@@ -228,9 +250,11 @@ public class WawaServer {
 	
 	public String MakeRoomList() 
 	{
-		if (all_machines.size() <= 0)
-			return "[]";
+		//if (all_machines.size() <= 0)
+		//	return "{\"cmd\":\"reply_roomlist\",\"rooms\":[]}";
 		
+		JSONObject inf = new JSONObject();
+        inf.put("cmd", "reply_roomlist");
 		JSONArray jsonArray1 = new JSONArray();
 		
 		synchronized (all_machines) {
@@ -241,8 +265,9 @@ public class WawaServer {
 			}
 		}
 		
-		String jsonStr = jsonArray1.toString();
-		System.out.println("Room list json str" +jsonStr );
+		inf.put("rooms", jsonArray1);
+		String jsonStr = inf.toString();
+		System.out.println("Room list json str" +inf );
 		return jsonStr;
 	}
 
@@ -297,11 +322,7 @@ public class WawaServer {
 			if (i >= 6 && i < len - 1)
 				check_total += (data[i] & 0xff);
 		}
-
-		if (data[0] != (byte) (~data[3] & 0xff) && data[1] != (byte) (~data[4] & 0xff)
-				&& data[2] != (byte) (~data[5] & 0xff))
-			return false;
-
+		
 		if (check_total % 100 != data[len - 1]) {
 			return false;
 		}
@@ -309,6 +330,7 @@ public class WawaServer {
 		return true;
 	}
 
+	//玩家发送给娃娃机
 	public void TranlsateToWawaji(String mac, byte[] da) {
 		
 		MachineInfo dest_mac = all_machines.get(mac);
@@ -322,13 +344,13 @@ public class WawaServer {
 			DataOutputStream out = new DataOutputStream(dest_mac.socket.getOutputStream());
 			out.write(da, 0, da.length);
 			out.flush();
+			dest_mac.sendCount++;
 		} catch (IOException ioe) {
 			System.out.println("server new DataOutputStream Failed.");
 		}
 	}
 
 	private class HandlerThread implements Runnable {
-	
 		MachineInfo me = null;
 
 		public HandlerThread(Socket client) {
@@ -356,8 +378,13 @@ public class WawaServer {
 						break;
 					}
 
+					//头校验不通过。丢弃数据
+					if (bHead[0] != (byte) (~bHead[3] & 0xff) && bHead[1] != (byte) (~bHead[4] & 0xff)
+							&& bHead[2] != (byte) (~bHead[5] & 0xff))
+						continue;
+			
+					//取出长度 继续接收
 					int data_length = bHead[6] & 0xff;// byte2Int(bHead, 6, 7);
-
 					byte datas[] = new byte[data_length - 7];
 					int data_recved_len = ReadDataUnti(datas, data_length - 7, reader);
 					while (data_recved_len != data_length - 7) {
@@ -368,19 +395,48 @@ public class WawaServer {
 					System.arraycopy(bHead, 0, total_data, 0, 7);
 					System.arraycopy(datas, 0, total_data, 7, data_length - 7);
 
+					//数据校验和
 					if (check_com_data(total_data, data_length) == false) {
 						System.out.println("Checksum Data Failed. skip.");
 						continue;
 					}
 					
-					//命令码
+					//根据命令码做相应处理
 					int data_cmd = total_data[7]&0xff;
-					//System.out.println("cmd recv:" + total_data[7]);
-					
-					if (data_cmd == 0x35) {//心跳消息
+					System.out.printf("cmd:%02X\n",data_cmd );
+					/*System.out.print("cmd recv:");
+					for(int kk = 0;kk<data_length;kk++) 
+					{
+						System.out.printf("%02X", total_data[kk] );
+					}
+					System.out.println();*/
+					me.recvCount ++;
+					if(data_cmd == 0x31) {//开局结果返回。通知玩家是否开局成功。由于串口数据有丢失率。因此发0x31给娃娃机的时候，最好起一个超时计时器，未收到开局则隔100ms继续发。
+						//todo-标记娃娃机的状态为不空闲。不再接受其他玩家的开局申请.--服务器必须做。简单服务器就不做了。
+						if(me.current_player != null && me.current_player.isClosed() == false) 
+						{
+							SimpleApp.cserver.OnGameStartOK(me.current_player);
+							me.recvCount ++;
+						}
+					}else if(data_cmd == 0x33) { //游戏结束。通知玩家和在房间里的所有人。游戏结果.
+						//todo 这里，如果玩家有抓到娃娃，你服务器端还要处理的。比如中奖的娃娃ID，玩家ID之类的做中奖记录。
+						//然后通知后台客服发货什么的。。。这个简单版的服务器就没有做。我们怕功能太复杂了，你们会理不清楚核心逻辑
+						if (all_machines.size() <= 0)
+							return ;
+						
+						if(me.current_player != null && me.current_player.isClosed() == false) 
+						{
+							int game_res = total_data[8]&0xff;
+							SimpleApp.cserver.OnGameEnd(me.current_player, game_res);
+						}
+						
+						me.recvCount --;
+						me.current_player = null;
+					}else if (data_cmd == 0x35) {//心跳消息
+						me.recvCount --;//心跳不计入测试丢包统计
 						String strMAC = new String(total_data, 8, 12);
 						long t1=System.currentTimeMillis();
-								
+						
 						System.out.println("["+ t1+"] wawa heartbeat." + strMAC);
 						long now_tw = System.currentTimeMillis();
 						MachineInfo tmp = all_machines.get(strMAC);
@@ -392,7 +448,6 @@ public class WawaServer {
 							me.mac = strMAC;
 							
 							//功能添加 首次登陆
-					
 							synchronized (all_machines) {
 								all_machines.put(strMAC, me);
 							}
@@ -408,8 +463,35 @@ public class WawaServer {
 						} catch (IOException ioe) {
 
 						}
-					}else if(data_cmd == 0x92)//0x92照原样返回
-					{
+					}else if( data_cmd == 0x37 ) {
+						//error happend..do your code.change machine state and etc.
+						//todo 收到故障。通知房间里所有玩家。同时置娃娃机状态为故障-维护中。此时就不能再接受玩家的开局了。我这里没做处理。但正式是必须要做的。
+						me.recvCount --;
+						System.out.println("收到娃娃机故障");
+					}else if( data_cmd == 0x89 ) {
+						//摄像头预览故障-推流故障 通知后台人员查看 具体命令值请看github.com/xuebaodev wiki
+						me.recvCount --;
+						int frontCamstate  = total_data[8]&0xff;
+						int backCamstate = total_data[9]&0xff;
+						String st_txt = "收到即将重启命令.";
+						
+						if(frontCamstate == 0 )
+							st_txt += "前置正常.";
+						else if (frontCamstate == 1)
+							st_txt += "前置推流故障.";
+						else if(frontCamstate == 2)
+							st_txt += "前置缺失.";
+						
+						if(backCamstate == 0 )
+							st_txt += "后置正常.";
+						else if (backCamstate == 1)
+							st_txt += "后置推流故障.";
+						else if(backCamstate == 2)
+							st_txt += "后置缺失.";
+						
+						System.out.println(st_txt);
+					}else if(data_cmd == 0x92) {//0x92照原样返回
+						me.recvCount --;
 						try {
 							DataOutputStream out = new DataOutputStream(me.socket.getOutputStream());
 							out.write(total_data, 0, total_data.length);
@@ -418,8 +500,8 @@ public class WawaServer {
 
 						}
 					}
-					else if(data_cmd== 0xa0) //1.2新增，视频推流成功通知消息
-					{
+					else if(data_cmd== 0xa0){ //1.2新增，视频推流成功通知消息
+						me.recvCount --;
 						String strMAC = new String(total_data, 8, 12);
 						if((total_data[20]&0xff)== 0x00 )
 							System.out.println("娃娃机:" + strMAC +"前置推流失败.");
@@ -433,65 +515,54 @@ public class WawaServer {
 							System.out.println("娃娃机:" + strMAC +"后置推流成功.");
 						else if((total_data[20]&0xff)== 0x12 )
 							System.out.println("娃娃机:" + strMAC +"后置推流关闭.");
-					} 
-					else  {//translate msg to playing player. but you should check if any error happen.
-						
-						//娃娃机有故障上报。你要标记娃娃机状态为故障-维护中。
-						if( data_cmd == 0x37 )//error happend..do your code.change machine state and etc.
-						{
-							System.out.println("收到娃娃机故障");
-						}
-						
-						if( data_cmd == 0x89 )//摄像头预览故障-推流故障 娃娃机即将重启
-						{
-							int frontCamstate  = total_data[8]&0xff;
-							int backCamstate = total_data[9]&0xff;
-							String st_txt = "收到即将重启命令.";
-							
-							if(frontCamstate == 0 )
-								st_txt += "前置正常.";
-							else if (frontCamstate == 1)
-								st_txt += "前置推流故障.";
-							else if(frontCamstate == 2)
-								st_txt += "前置缺失.";
-							
-							if(backCamstate == 0 )
-								st_txt += "后置正常.";
-							else if (backCamstate == 1)
-								st_txt += "后置推流故障.";
-							else if(backCamstate == 2)
-								st_txt += "后置缺失.";
-							
-							System.out.println(st_txt);
-						}
-						
-						//translate to current player
-						//其他消息，一律转发给当前正在玩的玩家(如果有)
-						//todo 这里，如果玩家有抓到娃娃，你服务器端还要处理的。比如中奖的娃娃ID，玩家ID之类的做中奖记录。
-						//然后通知后台客服发货什么的。。。这个简单版的服务器就没有做。我们怕功能太复杂了，你们会理不清楚核心逻辑
-						if(me.current_player != null && me.current_player.isClosed() == false)
-							SimpleApp.cserver.TranlsateToPlayer(me.current_player , total_data);
-						
-						if( data_cmd == 0x33 )//game end.//set wawaji to free.
-						{
-							if (all_machines.size() <= 0)
-								return ;
-							
-							me.current_player = null;
-						}
 					}
-
-					/*
-					 * Message message = Message.obtain(); message.what = 10; message.arg1 =
-					 * data_length; message.obj = total_data; if(handler != null)
-					 * handler.sendMessage(message);
-					 */
-
+					else{
+						//其他消息，视情况进行处理
+						/*System.out.println(me.mac + "发:"+me.sendCount + "收" + me.recvCount + "差值" + (me.recvCount- me.sendCount));
+						if( me.recvCount - me.sendCount >=10) 
+						{
+							String imagePath=System.getProperty("user.dir")+"/";
+						    try {
+					            URL cb;
+					            //File f = new File(imagePath+"mario.midi");
+					            //File f = new File(imagePath+"1000.ogg");
+					            File f = new File(imagePath+"1024.wav");
+					            cb = f.toURL();
+					            AudioClip aau;
+					            aau = Applet.newAudioClip(cb);
+					            aau.play();//循环播放 aau.play() 单曲 aau.stop()停止播放
+					            aau.loop();
+					        } catch (MalformedURLException e) {
+					            e.printStackTrace();
+					        }
+						    
+						    System.out.println("发送0x55");
+							byte send_buf[] = new byte[9];
+							send_buf[0] = (byte)0xfe;
+							send_buf[1] = 0;
+							send_buf[2] = 0;
+							send_buf[3] = (byte)0x01;
+							send_buf[4] = (byte)0xff;
+							send_buf[5] = (byte)0xff;
+							send_buf[6] = (byte)0x09;
+							send_buf[7] = (byte)0x55;
+							send_buf[8] = (byte)0x5e;
+							
+							try {
+								DataOutputStream out = new DataOutputStream(me.current_player.getOutputStream());
+								out.write(send_buf, 0, send_buf.length);
+								out.flush();
+							} catch (IOException ioe) {
+								System.out.println("client new DataOutputStream Excepiton");
+							}
+						}*/
+					}
 				} catch (Exception e) {
 					//e.printStackTrace();
 					System.out.println("[AppServer] Exception!===" + me.mac);
 					break;
 				}
+				
 			}
 
 			synchronized (all_machines) {
