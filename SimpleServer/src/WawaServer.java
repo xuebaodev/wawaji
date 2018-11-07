@@ -241,7 +241,7 @@ public class WawaServer {
 		if( wawaji.current_player == client)
 			wawaji.current_player = null;
 		
-		//do your logic. i skip. you do. like :notify other people  in the room and etc.
+		//do your logic. i skip. you do. like :notify other people in the room and etc.
 		
 	
 		return;

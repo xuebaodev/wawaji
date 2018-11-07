@@ -3267,6 +3267,9 @@ public class CameraPublishActivity extends FragmentActivity {
 
     void CheckInitAudioRecorder()
     {
+        if( VideoConfig.instance.containAudio == false)
+            return;
+
         if ( audioRecord_ == null )
         {
             //audioRecord_ = new NTAudioRecord(this, 1);
@@ -3442,7 +3445,7 @@ public class CameraPublishActivity extends FragmentActivity {
             if ( !isRecording  && VideoConfig.instance.pushH5 == false)
             {
                 if(CameraPublishActivity.DEBUG)  Log.e(TAG, "CheckInitAudioRecorder");
-                CheckInitAudioRecorder();	//enable pure video publisher..
+                CheckInitAudioRecorder();
             }
 
             Camera back_cam = GetCameraObj(BACK);
@@ -3509,7 +3512,7 @@ public class CameraPublishActivity extends FragmentActivity {
             if ( !isRecording && VideoConfig.instance.pushH5 == false)
             {
                 if(CameraPublishActivity.DEBUG)  Log.e(TAG, "CheckInitAudioRecorder");
-                CheckInitAudioRecorder();	//enable pure video publisher..
+                CheckInitAudioRecorder();
             }
 
             Camera front_cam = GetCameraObj(FRONT);
@@ -3966,12 +3969,17 @@ public class CameraPublishActivity extends FragmentActivity {
             }
         }
 
-        if (FRONT == camera_type && camera != null) {
-            camera.autoFocus(myAutoFocusCallbackFront);
-            mPreviewRunningFront = true;
-        } else if (BACK == camera_type && camera != null) {
-            camera.autoFocus(myAutoFocusCallbackBack);
-            mPreviewRunningBack = true;
+        try{
+            if (FRONT == camera_type && camera != null) {
+                camera.autoFocus(myAutoFocusCallbackFront);
+                mPreviewRunningFront = true;
+            } else if (BACK == camera_type && camera != null) {
+                camera.autoFocus(myAutoFocusCallbackBack);
+                mPreviewRunningBack = true;
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         return true;
