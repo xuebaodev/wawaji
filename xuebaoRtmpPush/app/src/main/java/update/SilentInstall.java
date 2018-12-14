@@ -75,7 +75,12 @@ public class SilentInstall {
                 case DownloadManager.STATUS_PENDING:
                     log(">>>下载延迟");
                 case DownloadManager.STATUS_RUNNING:
-                    log(">>>正在下载");
+                    {
+                        int bytes_downloaded = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                        int bytes_total = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                        int progress = (int) ((bytes_downloaded * 100) / bytes_total);
+                        log(">>>正在下载");
+                    }
                     break;
                 case DownloadManager.STATUS_SUCCESSFUL:
                     log(">>>下载完成");

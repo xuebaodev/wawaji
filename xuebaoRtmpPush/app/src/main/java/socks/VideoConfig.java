@@ -29,9 +29,10 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20181102;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20181110;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20181110 不使用录像的情况下，不检测本地sd文件.因为实测发现很多不使用。启用录像后，需要重启
     //20181102 在不使用声音的情况下，不执行CheckInitAudioRecorder.实测某些时候会导致闪退。autofocus添加了try。--未测试
     //20181026 修正一个bug。收到服务器的0x35现在不会再发往串口了。
     //20180911 增加对0x17取mac请求的支持。修改H5推流的rotateYUV90函数，降低gc的频率

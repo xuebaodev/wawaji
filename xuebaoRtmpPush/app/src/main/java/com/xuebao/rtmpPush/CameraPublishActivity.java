@@ -421,52 +421,6 @@ public class CameraPublishActivity extends FragmentActivity {
         }
 
         Log.e(TAG,"主板类型" + android_mainboard_type);
-        //串口对象
-        /*if (mComPort == null) {
-            mComPort = new ComPort(mHandler);
-        }
-        mComPort.Start();
-
-        if (getLocalIpAddress().equals("")) {
-            mHandler.sendEmptyMessage(MessageType.msgWaitIP.ordinal());//网卡尚未就绪 IP地址没有获取。等待IP就绪
-        } else {
-            mHandler.sendEmptyMessage(MessageType.msgIpGOT.ordinal());
-        }
-
-        mHandler.sendEmptyMessage(MessageType.msgCheckWawajiReady.ordinal());//循环检查娃娃机是否就绪
-
-        List<String> ss = getAllExternalSdcardPath();
-        if( ss.size() <=0 )
-        {
-            sdCardPath = "";
-            initRecordUI( sdCardPath, 0);
-        }
-        else
-        {
-            sdCardPath = ss.get(0);
-            int frontCount = GetRecFileList( sdCardPath + fronDirName );
-            int backCount = GetRecFileList( sdCardPath + backDirName );
-
-            //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
-            if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
-            {
-                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
-                Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
-                sdCardPath= "";
-                initRecordUI("",0);
-            }
-            else
-                initRecordUI(ss.get(0), frontCount + backCount);
-        }
-
-        if (checkSpaceThread == null) {
-            outputInfo("开始空间检查", false);
-            checkSpaceThread = new CheckSpaceThread(mHandler, sdCardPath);//空循环等待 没事
-            checkSpaceThread.start();
-        }else
-        {
-            checkSpaceThread.Check( sdCardPath );
-        }*/
     }
 
     private int GetRecFileList(String recDirPath)
@@ -1071,7 +1025,7 @@ public class CameraPublishActivity extends FragmentActivity {
         }
 
         send_buf[8 + params.length - 1] = (byte) (sum % 100);
-        mComPort.SendData(send_buf, send_buf.length);
+        if(mComPort!=null) mComPort.SendData(send_buf, send_buf.length);
         g_packget_id++;
     }
 
@@ -1169,7 +1123,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 total_c += (msg_content[i] & 0xff);
             }
             msg_content[msg_content.length - 1] = (byte) (total_c % 100);
-            mComPort.SendData(msg_content, msg_content.length);
+            if(mComPort!=null) mComPort.SendData(msg_content, msg_content.length);
         }
 
         //userid
@@ -1192,7 +1146,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 total_c += (msg_content[i] & 0xff);
             }
             msg_content[msg_content.length - 1] = (byte) (total_c % 100);
-            mComPort.SendData(msg_content, msg_content.length);
+            if(mComPort!=null) mComPort.SendData(msg_content, msg_content.length);
         }
     }
 
@@ -1785,13 +1739,13 @@ public class CameraPublishActivity extends FragmentActivity {
             switch (mt) {
                 case msgDelayRunInit:
                     {
-                        if (mComPort == null) {
+                       if (mComPort == null) {
                             mComPort = new ComPort(mHandler);
                         }
-                        mComPort.Start();
+                        if(mComPort!=null)
+                            mComPort.Start();
+
                         if( android_mainboard_type ==0) {
-                            // gpioValue = 1;
-                            // mComPort.SetGpio(gpioValue);// 初始是亮
                             gpio7130.GPIO_SetValue(1);
                         }
                         else if(android_mainboard_type == 1) {
@@ -1805,37 +1759,40 @@ public class CameraPublishActivity extends FragmentActivity {
 
                         mHandler.sendEmptyMessage(MessageType.msgCheckWawajiReady.ordinal());//循环检查娃娃机是否就绪
 
-                        List<String> ss = getAllExternalSdcardPath();
-                        if( ss.size() <=0 )
+                        if( VideoConfig.instance.is_need_local_recorder )
                         {
-                            sdCardPath = "";
-                            initRecordUI( sdCardPath, 0);
-                        }
-                        else
-                        {
-                            sdCardPath = ss.get(0);
-                            int frontCount = GetRecFileList( sdCardPath + fronDirName );
-                            int backCount = GetRecFileList( sdCardPath + backDirName );
-
-                            //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
-                            if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
+                            List<String> ss = getAllExternalSdcardPath();
+                            if( ss.size() <=0 )
                             {
-                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
-                                Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
-                                sdCardPath= "";
-                                initRecordUI("",0);
+                                sdCardPath = "";
+                                initRecordUI( sdCardPath, 0);
                             }
                             else
-                                initRecordUI(ss.get(0), frontCount + backCount);
-                        }
+                            {
+                                sdCardPath = ss.get(0);
+                                int frontCount = GetRecFileList( sdCardPath + fronDirName );
+                                int backCount = GetRecFileList( sdCardPath + backDirName );
 
-                        if (checkSpaceThread == null) {
-                            outputInfo("开始空间检查", false);
-                            checkSpaceThread = new CheckSpaceThread(mHandler, sdCardPath);//空循环等待 没事
-                            checkSpaceThread.start();
-                        }else
-                        {
-                            checkSpaceThread.Check( sdCardPath );
+                                //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
+                                if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
+                                {
+                                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
+                                    Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
+                                    sdCardPath= "";
+                                    initRecordUI("",0);
+                                }
+                                else
+                                    initRecordUI(ss.get(0), frontCount + backCount);
+                            }
+
+                            if (checkSpaceThread == null) {
+                                outputInfo("开始空间检查", false);
+                                checkSpaceThread = new CheckSpaceThread(mHandler, sdCardPath);//空循环等待 没事
+                                checkSpaceThread.start();
+                            }else
+                            {
+                                checkSpaceThread.Check( sdCardPath );
+                            }
                         }
                     }
                     break;
@@ -2061,8 +2018,6 @@ public class CameraPublishActivity extends FragmentActivity {
 
                         if( onOff == 0){
                             if( android_mainboard_type ==0) {
-                                //gpioValue = 0;
-                                //mComPort.SetGpio(gpioValue);// 收到0x93 停止推流时灭
                                 gpio7130.GPIO_SetValue(0);
                             }
                             else if(android_mainboard_type == 1) {
@@ -2074,8 +2029,6 @@ public class CameraPublishActivity extends FragmentActivity {
                         {
                             if( android_mainboard_type ==0)
                             {
-                                //gpioValue = 1;
-                                //mComPort.SetGpio(gpioValue);
                                 gpio7130.GPIO_SetValue(1);
                             }else if( android_mainboard_type ==1){
                                 gpioPB5.setDirectionValue(Gpio3288.TYPE_DIRECTION_OUT, Gpio3288.TYPE_VALUE_HIGH);
