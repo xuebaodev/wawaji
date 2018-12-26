@@ -157,10 +157,10 @@ export PATH JAVA_HOME CLASSPATH
 <br>因为您的娃娃机需要配置推流地址。 您需要您的技术人员部署一个流媒体服务器，并设置推流参数为您的流媒体服务器所需要的格式。simpleClinet也需要设置相应的视频推流地址。
 
 版权声明<br>
-此双路推流程序xuebaoRtmpPush由大牛直播授权使用于雪暴公司出品的安卓板。任何人不得将其使用于雪暴提供的安卓板以外的任何其他地方。否则一经发现，雪暴公司和<a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播</a>将有权起诉其侵权。
-<br>源码工程SimpleClient SimpleServer可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持(会有少许的bug更新修复,同时老版本的主板协议变更导致的退出，您可以自行修改源码解决)。
+<br>源码工程xuebaoRtmpPush则可以自由修改，但只限运行于雪暴公司提供的安卓板。**应用的名字不能改动，因为是和推流模块授权绑定的。**此双路推流程序xuebaoRtmpPush由大牛直播授权使用于雪暴公司出品的安卓板。任何人不得将其使用于雪暴提供的安卓板以外的任何其他地方。否则一经发现，雪暴公司和<a href="https://github.com/daniulive/SmarterStreaming" target="_blank">大牛直播</a>将有权起诉其侵权。
+<br>源码工程SimpleClient SimpleServer可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持。
 <br>SimpleClient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。您也可以根据自身团队情况去选择其他播放器端。比如腾讯SDK，开源的IJKPLAYER等等支持解码RTMP视频流的sdk都可以。例子中的播放器授权可能会过期。请自行去大牛的github获取更新。
-<br>源码工程xuebaoRtmpPush则可以自由修改，但只限运行于雪暴公司提供的安卓板。**应用的名字不能改动，因为是和推流模块授权绑定的。**
+
 
 <br>注意事项
 <br>**指令不能太频繁。不建议一秒往娃娃机发送10个以上的指令。**

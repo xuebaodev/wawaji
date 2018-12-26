@@ -480,21 +480,6 @@
             android:id="@+id/lay_record"
             android:layout_below="@+id/lay_ip">
 
-            <CheckBox
-                android:id="@+id/checkSwitchToOne"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="切换至一路"
-                />
-
-            <TextView
-                android:id="@+id/curWay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="当前:推前路"
-                android:textColor="@android:color/black" />
-
             <Button
                 android:id="@+id/button_start_push"
                 android:layout_width="wrap_content"

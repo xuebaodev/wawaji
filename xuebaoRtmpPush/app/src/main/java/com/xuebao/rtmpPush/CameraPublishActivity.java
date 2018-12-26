@@ -172,8 +172,6 @@ public class CameraPublishActivity extends FragmentActivity {
 
     private long publisherHandleFront = 0;
 
-    private long publisherHandleCurrent = 0;//单路推流的时候这个对象去推
-
     private SmartPublisherJniV2 libPublisher = null;
 
     /* 推流分辨率选择
@@ -672,13 +670,6 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
             }
 
-            if (publisherHandleCurrent != 0) {
-                if (libPublisher != null) {
-                    libPublisher.SmartPublisherClose(publisherHandleCurrent);
-                    publisherHandleCurrent = 0;
-                }
-            }
-
             if( checkSpaceThread != null)
             {
                 checkSpaceThread.StopNow();
@@ -914,23 +905,6 @@ public class CameraPublishActivity extends FragmentActivity {
                     VideoConfig.instance.containAudio = true;
                 } else {
                     VideoConfig.instance.containAudio = false;
-                }
-            }
-        });
-
-        //只推一路模式
-        CheckBox cbSwitchToOne = findViewById(R.id.checkSwitchToOne);
-        cbSwitchToOne.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton button, boolean isChecked) {
-                if (isChecked) {
-                    VideoConfig.instance.swtichToOne = true;
-                    findViewById(R.id.curWay).setVisibility(View.VISIBLE);
-                    TextView tv = findViewById(R.id.curWay);
-                    tv.setText("当前:" + VideoConfig.instance.curPushWay);
-                } else {
-                    VideoConfig.instance.swtichToOne = false;
-                    findViewById(R.id.curWay).setVisibility(View.INVISIBLE);
-
                 }
             }
         });
@@ -1327,21 +1301,6 @@ public class CameraPublishActivity extends FragmentActivity {
             cbRecord.setChecked(false);
         }
 
-        CheckBox cbSwitchToOne = findViewById(R.id.checkSwitchToOne);
-        if (VideoConfig.instance.swtichToOne == true)
-        {
-            cbSwitchToOne.setChecked(true);
-            TextView tee = findViewById(R.id.curWay);
-            tee.setVisibility(View.VISIBLE);
-            tee.setText("当前:" + VideoConfig.instance.curPushWay);
-        }
-        else {
-            cbSwitchToOne.setChecked(false);
-            TextView tee = findViewById(R.id.curWay);
-            tee.setVisibility(View.INVISIBLE);
-            tee.setText("当前:" + VideoConfig.instance.curPushWay);
-        }
-
         CheckBox cbIncludeAudio = findViewById(R.id.cbIncludeAudio);
         if( VideoConfig.instance.containAudio == true)
         {
@@ -1544,14 +1503,6 @@ public class CameraPublishActivity extends FragmentActivity {
         else
         {
             VideoConfig.instance.containAudio = false;
-        }
-
-        //是否只推一路
-        CheckBox chSwitchToOne = findViewById(R.id.checkSwitchToOne);
-        if (chSwitchToOne.isChecked()) {
-            VideoConfig.instance.swtichToOne = true;
-        } else {
-            VideoConfig.instance.swtichToOne = false;
         }
 
         return true;
@@ -1975,35 +1926,6 @@ public class CameraPublishActivity extends FragmentActivity {
                         intent.setAction("ACTION_RK_REBOOT");
                         sendBroadcast(intent, null);
 
-                    }else if(net_cmd == 0x90) {
-                        outputInfo( "立收到要求切流命令", false);
-
-                        //收到命令 执行切流
-                        if(VideoConfig.instance.curPushWay == 1)
-                            VideoConfig.instance.curPushWay = 2;
-                        else if( VideoConfig.instance.curPushWay ==2)
-                            VideoConfig.instance.curPushWay = 1;
-
-
-                        if( VideoConfig.instance.curPushWay == 1 && mCameraFront == null)
-                        {
-                            VideoConfig.instance.curPushWay = 2;
-                            Toast.makeText(getApplicationContext(), "前置不存在。拒绝切换到前置", Toast.LENGTH_SHORT).show();
-                        }
-
-                        if( VideoConfig.instance.curPushWay == 2 && mCameraBack == null)
-                        {
-                            VideoConfig.instance.curPushWay = 1;
-                            Toast.makeText(getApplicationContext(), "后置不存在。拒绝切换到后置", Toast.LENGTH_SHORT).show();
-                        }
-
-                        TextView tee = findViewById(R.id.curWay);
-                        tee.setText("当前:" + VideoConfig.instance.curPushWay);
-
-                        byte[] abc = make_cmd(0x91,  VideoConfig.instance.curPushWay);
-                        if (sendThread != null) {
-                            sendThread.sendMsg(abc);
-                        }
                     }
                     else if( net_cmd == 0x93 )//收到停止推流或码率变更命令
                     {
@@ -2229,7 +2151,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         isRecording = false;
 
                         //更新界面
-                        if( sdCardPath.equals("") == false)
+                        if( sdCardPath!= null && sdCardPath.equals("") == false)
                         {
                             int frontCount = GetRecFileList( sdCardPath + fronDirName );
                             int backCount = GetRecFileList( sdCardPath + backDirName );
@@ -2284,50 +2206,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         }
 
                         //wawaji is alive
-                    }/* else if (cmd_value ==   0x42 && data_len > 14)//串口过来的配置服务器IP地址和端口//有一次出现收到0x42但是数据长度不够15位，导致我访问越界这是什么鬼,并且你的校验和是对的？//2018.2.1 add fix add data_len>14
-                    {
-                        //只要不是空 就重新开启confiThread
-                        int a = com_data[8] & 0xff;
-                        int b = com_data[9] & 0xff;
-                        int c = com_data[10] & 0xff;
-                        int d = com_data[11] & 0xff;
-
-                        int e = com_data[12] & 0xff;
-                        int f = com_data[13] & 0xff;
-                        int nPort = e * 256 + f;
-
-                        String s_ip = String.format("%d.%d.%d.%d", a, b, c, d);
-                        outputInfo("收到串口配置IP地址" + s_ip + "端口" + nPort, false);
-                        if(CameraPublishActivity.DEBUG) Log.e("收到串口配置IP地址", s_ip + "端口" + nPort);
-
-                        //if( s_ip.equals("0.0.0.0") == false && nPort != 0)
-                        //{
-                        VideoConfig.instance.configHost = s_ip;
-                        VideoConfig.instance.SetConfigPort(nPort);
-
-                        //配置服务器IP
-                        EditText eti_serverip = findViewById(R.id.config_server_ip);
-                        eti_serverip.setText(VideoConfig.instance.configHost);
-
-                        //配置服务器端口
-                        EditText eti_server_port = findViewById(R.id.config_server_port);
-                        eti_server_port.setText(Integer.toString(VideoConfig.instance.GetConfigPort()));
-
-                        if (s_ip.equals("0.0.0.0") == false && nPort != 0) {
-                            VideoConfig.instance.enableConfigServer = true;
-                            CheckBox cbEnableConfig = findViewById(R.id.enableConfServer);
-                            cbEnableConfig.setChecked(true);
-                        } else {
-                            VideoConfig.instance.enableConfigServer = false;
-                            CheckBox cbEnableConfig = findViewById(R.id.enableConfServer);
-                            cbEnableConfig.setChecked(false);
-                        }
-
-                        if (confiThread != null)
-                            confiThread.ApplyNewServer(VideoConfig.instance.configHost, VideoConfig.instance.GetConfigPort());
-
-                        VideoConfig.instance.SaveConfig(getApplicationContext());
-                    }*/
+                    }
                 }
                 break;
                 case msgUDiskMount://插U盘
@@ -2617,6 +2496,9 @@ public class CameraPublishActivity extends FragmentActivity {
                 case msgDelay2sPush:
                     {
                         UIClickStartPush();
+
+                        if( ffmpegH == null )
+                            mHandler.sendEmptyMessageDelayed(MessageType.msgDelay2sPush.ordinal(), 2000);
                     }
                     break;
             }
@@ -2850,19 +2732,6 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
                         });
                     }
-                    else if(handle == publisherHandleCurrent)
-                    {
-                        VideoConfig.instance.videoPushState_1 = false;
-                        NotifyStreamResult(0, PushState.FAILED);
-                        CameraPublishActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                TextView tvFr = findViewById(R.id.cam1_url_tip);
-                                if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-                                getWindow().getDecorView().postInvalidate();
-                            }
-                        });
-                    }
                     else if (handle == publisherHandleBack) {
                         NotifyStreamResult(1, PushState.FAILED);
                         VideoConfig.instance.videoPushState_2 = false;
@@ -2879,19 +2748,6 @@ public class CameraPublishActivity extends FragmentActivity {
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTED:
                     txt = "连接成功。。";
                     if (handle == publisherHandleFront) {
-                        NotifyStreamResult(0, PushState.OK);
-                        VideoConfig.instance.videoPushState_1 = true;
-                        CameraPublishActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                TextView tvFr = findViewById(R.id.cam1_url_tip);
-                                if (tvFr != null) tvFr.setTextColor(Color.rgb(0, 255, 0));
-                                getWindow().getDecorView().postInvalidate();
-                            }
-                        });
-                    }
-                    else if(handle == publisherHandleCurrent)
-                    {
                         NotifyStreamResult(0, PushState.OK);
                         VideoConfig.instance.videoPushState_1 = true;
                         CameraPublishActivity.this.runOnUiThread(new Runnable() {
@@ -2930,19 +2786,6 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
                         });
                     }
-                    else if( handle == publisherHandleCurrent)
-                    {
-                        VideoConfig.instance.videoPushState_1 = false;
-                        NotifyStreamResult(0, PushState.FAILED);
-                        CameraPublishActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                TextView tvFr = findViewById(R.id.cam1_url_tip);
-                                if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-                                getWindow().getDecorView().postInvalidate();
-                            }
-                        });
-                    }
                     else if (handle == publisherHandleBack) {
                         NotifyStreamResult(1, PushState.FAILED);
                         VideoConfig.instance.videoPushState_2 = false;
@@ -2959,19 +2802,6 @@ public class CameraPublishActivity extends FragmentActivity {
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_STOP:
                     txt = "关闭。。";
                     if (handle == publisherHandleFront) {
-                        NotifyStreamResult(0, PushState.CLOSE);
-                        VideoConfig.instance.videoPushState_1 = false;
-                        CameraPublishActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                TextView tvFr = findViewById(R.id.cam1_url_tip);
-                                if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-                                getWindow().getDecorView().postInvalidate();
-                            }
-                        });
-                    }
-                    else if(handle == publisherHandleCurrent)
-                    {
                         NotifyStreamResult(0, PushState.CLOSE);
                         VideoConfig.instance.videoPushState_1 = false;
                         CameraPublishActivity.this.runOnUiThread(new Runnable() {
@@ -3080,7 +2910,6 @@ public class CameraPublishActivity extends FragmentActivity {
 
 
         findViewById(R.id.checkRecord).setEnabled(isEnable);
-        findViewById(R.id.checkSwitchToOne).setEnabled(isEnable);
         findViewById(R.id.cbIncludeAudio).setEnabled(isEnable);
     }
 
@@ -3147,15 +2976,12 @@ public class CameraPublishActivity extends FragmentActivity {
     }
 
     private void InitAndSetConfig() {
-
         int inCludeAudio = 0;
         if( VideoConfig.instance.containAudio == true)
             inCludeAudio = 1;
         else
             inCludeAudio = 0;
 
-        if(VideoConfig.instance.swtichToOne == false)
-        {
             Camera front_cam = GetCameraObj(FRONT);
             if(front_cam != null)
             {
@@ -3180,16 +3006,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     if(CameraPublishActivity.DEBUG)  Log.e("后置摄像头", "ID" + publisherHandleBack);
                 }
             }
-        }else
-            {
-                publisherHandleCurrent = libPublisher.SmartPublisherOpen(myContext, inCludeAudio, /*video_opt*/1,
-                        VideoConfig.instance.GetVideoWidth(), VideoConfig.instance.GetVideoHeight());
 
-                if (publisherHandleCurrent != 0) {
-                    SetConfig(publisherHandleCurrent);
-                    if(CameraPublishActivity.DEBUG)  Log.e("摄像头", "ID" + publisherHandleCurrent);
-                }
-            }
 
     }
 
@@ -3211,10 +3028,6 @@ public class CameraPublishActivity extends FragmentActivity {
             {
                 libPublisher.SmartPublisherOnPCMData(publisherHandleBack, data, size, sampleRate, channel, per_channel_sample_number);
             }
-
-            if( publisherHandleCurrent != 0)
-                libPublisher.SmartPublisherOnPCMData(publisherHandleCurrent, data, size, sampleRate, channel, per_channel_sample_number);
-
         }
     }
 
@@ -3353,8 +3166,6 @@ public class CameraPublishActivity extends FragmentActivity {
         //应用摄像头参数
         ApplyCam3Params();
 
-        if( VideoConfig.instance.swtichToOne == false)//只有启用双路推流时走这里单路推流需要另外处理
-        {
             isPushing = true;
 
             VideoConfig.instance.videoPushState_1 = false;
@@ -3455,87 +3266,6 @@ public class CameraPublishActivity extends FragmentActivity {
                     outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
                 }
             }
-
-        }else { //单路推流
-            isPushing = true;
-
-            VideoConfig.instance.videoPushState_1 = false;
-            VideoConfig.instance.videoPushState_2 = false;
-
-            if ( !isRecording && VideoConfig.instance.pushH5 == false)
-            {
-                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "CheckInitAudioRecorder");
-                CheckInitAudioRecorder();
-            }
-
-            Camera front_cam = GetCameraObj(FRONT);
-            Camera back_cam = GetCameraObj(BACK);
-            if( front_cam == null && back_cam == null)
-            {
-                isPushing = false;
-                ConfigControlEnable(true);
-                btnStartPush.setText("推送");
-                outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
-                Toast.makeText(getApplicationContext(), "都没摄像头。不推", Toast.LENGTH_SHORT).show();
-
-                return;
-            }
-
-            if (front_cam == null && VideoConfig.instance.curPushWay == 1)
-                VideoConfig.instance.curPushWay = 2;
-            if (back_cam == null && VideoConfig.instance.curPushWay == 2)
-                VideoConfig.instance.curPushWay = 1;
-
-            if (VideoConfig.instance.pushH5 == false) {
-                if (libPublisher.SmartPublisherSetURL(publisherHandleCurrent, VideoConfig.instance.url1) != 0) {
-                    isPushing = false;
-                    ConfigControlEnable(true);
-
-                    if (CameraPublishActivity.DEBUG)
-                        Log.e(TAG, "Failed to set publish stream URL..");
-                    outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
-
-                    btnStartPush.setText(" 推送");
-                    TextView tvFr = findViewById(R.id.cam1_url_tip);
-                    if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-                    return;
-                }
-
-                int startRet = libPublisher.SmartPublisherStartPublisher(publisherHandleCurrent);
-                if (startRet != 0) {
-                    isPushing = false;
-                    ConfigControlEnable(true);
-
-                    if (CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to start push stream..");
-                    outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
-
-                    btnStartPush.setText(" 推送");
-                    TextView tvFr = findViewById(R.id.cam1_url_tip);
-                    if (tvFr != null) tvFr.setTextColor(Color.rgb(255, 0, 0));
-                }
-            }else
-                {
-                    if(VideoConfig.instance.curPushWay == 1)
-                    {
-                        ffmpegH.close2();
-                        ffmpegH.initVideo1( VideoConfig.instance.url1);
-                    }
-                    else if(VideoConfig.instance.curPushWay == 2)
-                    {
-                        ffmpegH.close1();
-                        ffmpegH.initVideo2( VideoConfig.instance.url1);
-                    }
-                }
-
-            if (isPushing == true) {
-
-                TextView tv = findViewById(R.id.curWay);
-                tv.setText("当前:" + VideoConfig.instance.curPushWay);
-
-                ConfigControlEnable(false);
-                btnStartPush.setText(" 停止推送 ");
-            }
-        }
     }
 
     void UIClickStopPush() {
@@ -3601,7 +3331,6 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
             }
 
-            if (VideoConfig.instance.swtichToOne == false) {
                 if (libPublisher != null && publisherHandleFront != 0) {
                     libPublisher.SmartPublisherStopPublisher(publisherHandleFront);
                 }
@@ -3627,20 +3356,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         }
                     }
                 }
-            } else {
-                if (libPublisher != null && publisherHandleCurrent != 0) {
-                    libPublisher.SmartPublisherStopPublisher(publisherHandleCurrent);
-                }
 
-                if (!isRecording) {
-                    if (publisherHandleCurrent != 0) {
-                        if (libPublisher != null) {
-                            libPublisher.SmartPublisherClose(publisherHandleCurrent);
-                            publisherHandleCurrent = 0;
-                        }
-                    }
-                }
-            }
         }else {
             isPushing = false;
             if( ffmpegH != null) {
@@ -3678,9 +3394,6 @@ public class CameraPublishActivity extends FragmentActivity {
         if (!isPushing) {
             InitAndSetConfig();
         }
-
-        if( VideoConfig.instance.swtichToOne == false)
-        {
             if( mCameraFront != null && publisherHandleFront != 0)
             {
                 ConfigRecorderFuntion(sdCardPath + fronDirName, publisherHandleFront, true);
@@ -3719,20 +3432,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                 }
             }
-        }else
-            {
-                if(  publisherHandleCurrent != 0)
-                {
-                    ConfigRecorderFuntion(sdCardPath + fronDirName, publisherHandleCurrent, true);
-                   int  startRet = libPublisher.SmartPublisherStartRecorder(publisherHandleCurrent);
-                    if (startRet != 0) {
-                        isRecording = false;
 
-                        if(CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to start front cam recorder.");
-                        return;
-                    }
-                }
-            }
 
         if ( !isPushing )
         {
@@ -3761,8 +3461,6 @@ public class CameraPublishActivity extends FragmentActivity {
             }
         }
 
-        if( VideoConfig.instance.swtichToOne == false)
-        {
             if (libPublisher != null && publisherHandleFront != 0) {
                 libPublisher.SmartPublisherStopRecorder(publisherHandleFront);
             }
@@ -3788,21 +3486,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                 }
             }
-        }else
-            {
-                if (libPublisher != null && publisherHandleCurrent != 0) {
-                    libPublisher.SmartPublisherStopRecorder(publisherHandleCurrent);
-                }
 
-                if (!isPushing) {
-                    if (publisherHandleCurrent != 0) {
-                        if (libPublisher != null) {
-                            libPublisher.SmartPublisherClose(publisherHandleCurrent);
-                            publisherHandleCurrent = 0;
-                        }
-                    }
-                }
-            }
     }
 
     private void SetCameraFPS(Camera.Parameters parameters) {
@@ -4097,8 +3781,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
 
             } else {
-                if( VideoConfig.instance.swtichToOne == false)//双路推流
-                {
+
                         if (FRONT == type_ ) {
                             if(VideoConfig.instance.pushH5 == true)
                             {
@@ -4159,25 +3842,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                     libPublisher.SmartPublisherOnCaptureVideoData(publisherHandleBack, data, data.length, BACK, VideoConfig.instance.currentOrigentation);
                             }
                         }
-                } else { //只推一路
-                    if( VideoConfig.instance.pushH5 == false) {
-                        if( VideoConfig.instance.curPushWay ==1 )
-                        {
-                            if (FRONT == type_ && publisherHandleCurrent != 0) {
-                                if (libPublisher != null)
-                                    libPublisher.SmartPublisherOnCaptureVideoData(publisherHandleCurrent, data, data.length, BACK, VideoConfig.instance.currentOrigentation);
-                            }
-                        }
-                        else {
-                            if (BACK == type_ && publisherHandleCurrent != 0) {
-                                if (libPublisher != null)
-                                    libPublisher.SmartPublisherOnCaptureVideoData(publisherHandleCurrent, data, data.length, BACK, VideoConfig.instance.currentOrigentation);
-                            }
-                        }
-                    }else {
-                            //todo mpeg不打算支持只推一路
-                        }
-                }
+
 
                 camera.addCallbackBuffer(data);
             }

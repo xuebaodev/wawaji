@@ -29,9 +29,11 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20181110;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20181225;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20181225 去掉了只推一路的0x90及相关逻辑，以及修正收到游戏结束0x33时的崩溃问题(原因不明).下阶段准备去掉本地录像的逻辑
+    //20181219 修补了一下h5断流重推的问题。但不确定是否已解决
     //20181110 不使用录像的情况下，不检测本地sd文件.因为实测发现很多不使用。启用录像后，需要重启
     //20181102 在不使用声音的情况下，不执行CheckInitAudioRecorder.实测某些时候会导致闪退。autofocus添加了try。--未测试
     //20181026 修正一个bug。收到服务器的0x35现在不会再发往串口了。
@@ -277,9 +279,6 @@ public class VideoConfig
     public String machine_name;//给人看的 方便记住这台机器
     public String userID;////这台娃娃机所属的用户。 ----即 哪个老板买了它。挂到名下方便管理
 
-    public boolean swtichToOne = false;//2018.3.8 增加只推一路，然后根据收到的命令切换摄像头的模式
-    public int     curPushWay = 1;//1 前路 2 后路
-
     public boolean videoPushState_1 = false;
     public boolean videoPushState_2 = false;
 
@@ -355,8 +354,6 @@ public class VideoConfig
         userID = share.getString("userID", "xuebao");
 
         machine_name = share.getString("machine_name", "可爱小白兔");
-
-        swtichToOne = share.getBoolean("swtichToOne", false);
 
         containAudio = share.getBoolean("containAudio", containAudio);
 
@@ -448,7 +445,6 @@ public class VideoConfig
 
         editor.putString("machine_name", machine_name);
 
-        editor.putBoolean("swtichToOne", swtichToOne);
         editor.putBoolean("containAudio", containAudio);
 
         editor.putBoolean("usingCustomConfig", usingCustomConfig);
@@ -532,8 +528,6 @@ public class VideoConfig
             inf.put("mac", my_mac);
             inf.put("userID", userID);
 
-            inf.put("swtichToOne", swtichToOne);
-
             inf.put("videoPushState_1", videoPushState_1);
             inf.put("videoPushState_2", videoPushState_2);
             inf.put("containAudio", containAudio);
@@ -595,8 +589,6 @@ public class VideoConfig
             if(jsonOBJ.has("wifiPassword")) wifiPassword = jsonOBJ.getString("wifiPassword");
 
             if(jsonOBJ.has("userID")) userID = jsonOBJ.getString("userID");
-
-            if( jsonOBJ.has("swtichToOne")) swtichToOne = jsonOBJ.getBoolean("swtichToOne");
 
             if(jsonOBJ.has("dhcp")) using_dhcp = jsonOBJ.getBoolean("dhcp");
             if(jsonOBJ.has("containAudio")) containAudio = jsonOBJ.getBoolean("containAudio");
