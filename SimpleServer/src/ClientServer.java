@@ -377,7 +377,8 @@ public class ClientServer {
 								// check if free. if does ,send 0x31
 								
 								//下发开局指令
-								SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, make_com(0x31,60,0,0,0,0,0,0,0,0,0,0));//发送开局命令到娃娃机
+								//SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, make_com(0x31,60,0,0,0,0,0,0,0,0,0,0));//发送开局命令到娃娃机
+								SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, make_com(0x31,60,0,0,0,0,0,0x09,0x21,0,0,0));//发送开局命令到剪刀机
 
 							} else {//娃娃机非空闲，开局失败-busy. replay start game failed.
 								JSONObject inf = new JSONObject();
@@ -400,7 +401,7 @@ public class ClientServer {
 						else if(strCmd.equals( "operation" )) 
 						{
 							int optype =  jsCmd.getInt("type");
-							SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, make_com(0x32,optype,136,19));
+							SimpleApp.wserver.TranlsateToWawaji(pi.in_room_mac, make_com(0x32,optype,136,0x55));
 						}
 						else if(strCmd.equals( "exit_room" )) 
 						{
