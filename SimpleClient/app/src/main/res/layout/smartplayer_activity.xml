@@ -25,23 +25,16 @@
             android:layout_toRightOf="@+id/room_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="重启安卓板"
+            android:text="RestartAndroid"
             android:onClick="OnClickReboot"/>
 
-        <Button
-            android:id="@+id/btnSwitchCam"
-            android:layout_toRightOf="@+id/btnReboot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="模拟切流"
-            android:onClick="OnClickSwitchCam"/>
 
         <Button
             android:id="@+id/btnFakeEnd"
-            android:layout_toRightOf="@+id/btnSwitchCam"
+            android:layout_toRightOf="@+id/room_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="模拟结束"
+            android:text="FakeEnd"
             android:onClick="OnClickFakeEnd"/>
 
         <Button
@@ -49,7 +42,7 @@
             android:layout_toRightOf="@+id/btnFakeEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="发送0x93"
+            android:text="Send0x93"
             android:onClick="OnClickSend93"/>
 
         <!--ImageView

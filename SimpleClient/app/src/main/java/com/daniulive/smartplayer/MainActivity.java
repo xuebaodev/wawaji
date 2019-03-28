@@ -213,7 +213,7 @@ public class MainActivity extends Activity {
             switch ( msg.what) {
                 case 0: {
                     Log.e("===MainActivity==", "Connect succ.");
-                    Toast.makeText(getApplicationContext(), "连接成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "connect ok", Toast.LENGTH_SHORT).show();
                     //获取场地设备列表
                     String jsoncmd="{\"cmd\":\"req_roomlist\"}";
                     byte msg_content[] = new byte[3+jsoncmd.length()];
@@ -239,7 +239,7 @@ public class MainActivity extends Activity {
                         {
                             A05Result = jsRet.getJSONArray("rooms");
                         }
-                        Log.e(TAG, "房间个数" + A05Result.length());
+                        Log.e(TAG, "room count" + A05Result.length());
                         if( A05Result.length() ==0 )  Toast.makeText(getApplicationContext(), "room list is empty.", Toast.LENGTH_SHORT).show();
                         TableRow cur_row = null;
                         //动态生成界面控件

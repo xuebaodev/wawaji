@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="饱和度"
+            android:text="saturation"
             android:layout_marginLeft="15dp"
             android:textColor="#606060"
             android:textSize="14sp"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="对比度"
+            android:text="contrast"
             android:layout_marginLeft="15dp"
             android:textColor="#606060"
             android:textSize="14sp"
@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="亮度"
+            android:text="brightness"
             android:layout_marginLeft="15dp"
             android:textColor="#606060"
             android:textSize="14sp"
@@ -101,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:text="应用设置" />
+        android:text="Apply" />
 
         <Button
             android:id="@+id/button_restoreCam"
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/button_applyCam"
-            android:text="恢复默认" />
+            android:text="Reset" />
 
         </RelativeLayout>
 

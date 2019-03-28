@@ -213,7 +213,7 @@ public class CameraPublishActivity extends FragmentActivity {
     private boolean isPushing = false;
     private boolean isRecording = false;
 
-    private String txt = "当前状态";
+    private String txt = "CurState";
 
     private static final int FRONT = 1;        //前置摄像头标记
     private static final int BACK = 2;        //后置摄像头标记
@@ -258,7 +258,7 @@ public class CameraPublishActivity extends FragmentActivity {
     //int queryStateTimeoutTime = 0;//娃娃机状态查询超时的次数
     //新做的tab控件
     //列表控件相关
-    private String[] titles = new String[]{"日志", "色彩调整"};
+    private String[] titles = new String[]{"Log", "Color"};
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private FragmentAdapter adapter;
@@ -299,8 +299,8 @@ public class CameraPublishActivity extends FragmentActivity {
         public void onReceive(Context context, Intent intent) {
             String path = intent.getData().getPath();
             if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
-                Toast.makeText(context, "U盘插入:" + intent.getData().getPath(), Toast.LENGTH_SHORT).show();
-                if(CameraPublishActivity.DEBUG) Log.e(TAG, "U盘插入:" + intent.getData().getPath());
+                Toast.makeText(context, "UDisk Plugin:" + intent.getData().getPath(), Toast.LENGTH_SHORT).show();
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "UDisk Plugin:" + intent.getData().getPath());
                 Message message = Message.obtain();
                 message.what = MessageType.msgUDiskMount.ordinal();
                 message.obj = path;
@@ -313,7 +313,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 message.obj = path;
                 if (mHandler != null) mHandler.sendMessage(message);
 
-                if(CameraPublishActivity.DEBUG) Log.e(TAG, "U盘拔出:" + path);
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "UDisk unPlug:" + path);
             }
         }
     };
@@ -418,7 +418,7 @@ public class CameraPublishActivity extends FragmentActivity {
             }
         }
 
-        Log.e(TAG,"主板类型" + android_mainboard_type);
+        Log.e(TAG,"board type" + android_mainboard_type);
     }
 
     private int GetRecFileList(String recDirPath)
@@ -537,18 +537,18 @@ public class CameraPublishActivity extends FragmentActivity {
         if( uPath.equals("") == true)
         {
             TextView tviapptitle = findViewById(R.id.devSpace);
-            tviapptitle.setText("录像功能无法使用。原因:没有插入U盘或外置SD卡.或插入的U盘不满足存储临界条件");
+            tviapptitle.setText("video record can't use。you didn't plugin udisk or udisk not enough free space");
         }
         else {
                 StatFs sf = new StatFs(uPath);
                 long blockSize = sf.getBlockSize();
                 long blockCount = sf.getBlockCount();
                 long availCount = sf.getAvailableBlocks();
-            if(CameraPublishActivity.DEBUG) Log.d(TAG, "block大小:"+ blockSize+",block数目:"+ blockCount+",总大小:"+blockSize*blockCount/1024+"KB");
-            if(CameraPublishActivity.DEBUG) Log.d(TAG, "可用的block数目：:"+ availCount+",剩余空间:"+ (availCount*blockSize>>20)+"MB");
+            if(CameraPublishActivity.DEBUG) Log.d(TAG, "block size:"+ blockSize+",block:"+ blockCount+",total:"+blockSize*blockCount/1024+"KB");
+            if(CameraPublishActivity.DEBUG) Log.d(TAG, "vaild block：:"+ availCount+",free:"+ (availCount*blockSize>>20)+"MB");
 
                 TextView tviapptitle = findViewById(R.id.devSpace);
-                tviapptitle.setText( "已有录像个数:" + total + " 剩余可用空间: " +  (availCount*blockSize>>20)+" MB" + "盘符路径" + uPath);
+                tviapptitle.setText( "record count:" + total + " free space: " +  (availCount*blockSize>>20)+" MB" + "UPath" + uPath);
             }
     }
 
@@ -616,19 +616,19 @@ public class CameraPublishActivity extends FragmentActivity {
         }
 
         if (confiThread != null) {
-            if(CameraPublishActivity.DEBUG) Log.e("app退出", "配置线程终止");
+            if(CameraPublishActivity.DEBUG) Log.e("app exit", "config thread exit");
             confiThread.StopNow();
             confiThread = null;
         }
 
         if (sendThread != null) {
-            if(CameraPublishActivity.DEBUG) Log.e("app退出", "应用线程终止");
+            if(CameraPublishActivity.DEBUG) Log.e("app exit", "app tcp exit");
             sendThread.StopNow();
             sendThread = null;
         }
 
         if (lis_server != null) {
-            if(CameraPublishActivity.DEBUG) Log.e("app退出", "监听线程终止");
+            if(CameraPublishActivity.DEBUG) Log.e("app exit", "config port exit");
             lis_server.StopNow();
             lis_server = null;
         }
@@ -956,9 +956,9 @@ public class CameraPublishActivity extends FragmentActivity {
                 bPauseOutput = !bPauseOutput;
                 if( bPauseOutput == true )
                 {
-                    btnPauseOutput.setText("继续输出");
+                    btnPauseOutput.setText("continue print");
                 } else
-                    btnPauseOutput.setText("暂停输出");
+                    btnPauseOutput.setText("stop print");
             }
         });
 
@@ -1071,7 +1071,7 @@ public class CameraPublishActivity extends FragmentActivity {
             msg_content[msg_content.length - 1] = (byte) (total_c % 100);
             if(mComPort!=null) mComPort.SendData(msg_content, msg_content.length);
             String sss = SockAPP.bytesToHexString(msg_content);
-            outputInfo("MaC发往串口" + sss, false);
+            outputInfo("MAC send to com" + sss, false);
         }
 
         //ip
@@ -1228,13 +1228,13 @@ public class CameraPublishActivity extends FragmentActivity {
 
         //软硬编码按钮
         if (VideoConfig.instance.is_hardware_encoder) {
-            btnHWencoder.setText("当前硬编码");
+            btnHWencoder.setText("HW_ENC");
             //显示软编码选项
             findViewById(R.id.swVideoEncoderProfileSelector).setVisibility(View.INVISIBLE);
             findViewById(R.id.speed_tip).setVisibility(View.INVISIBLE);
             findViewById(R.id.sw_video_encoder_speed_selctor).setVisibility(View.INVISIBLE);
         } else {
-            btnHWencoder.setText("当前软编码");
+            btnHWencoder.setText("SW_ENC");
             //显示软编码选项
             findViewById(R.id.swVideoEncoderProfileSelector).setVisibility(View.VISIBLE);
             swVideoEncoderProfileSelector.setSelection(VideoConfig.instance.sw_video_encoder_profile - 1);
@@ -1481,8 +1481,8 @@ public class CameraPublishActivity extends FragmentActivity {
 
             if (is_applyok == false) {
                 RestoreConfigAndUpdateVideoUI();
-                Toast.makeText(getApplicationContext(), "无效的视频配置，已恢复原状!", Toast.LENGTH_SHORT).show();
-                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "无效的视频配置，已恢复原状");
+                Toast.makeText(getApplicationContext(), "Invalid video config，back to last config!", Toast.LENGTH_SHORT).show();
+                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "Invalid video config，back to last config");
                 //	return false;
             }
         }
@@ -1550,7 +1550,7 @@ public class CameraPublishActivity extends FragmentActivity {
         // 0x42 设置ip的通知。其中0x42不透传--20180529已废弃 0x3c 0x42 。因为部分的rom不支持3c
 
         //打印调试输出
-        String str_com_data ="串口数据" + ComPort.bytes2HexString(com_data, len);
+        String str_com_data ="COM DATA:" + ComPort.bytes2HexString(com_data, len);
         Message msgLog = Message.obtain();
         msgLog.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
         msgLog.obj = str_com_data;
@@ -1596,13 +1596,13 @@ public class CameraPublishActivity extends FragmentActivity {
                     {
                         Message me1 = Message.obtain();//心跳消息
                         me1.what = MessageType.msgOutputLog.ordinal();
-                        me1.obj = "发出心跳.";
+                        me1.obj = "heartbeat.";
                         if (mHandler != null) mHandler.sendMessage(me1);
                     }
                     else {
                             Message me1 = Message.obtain();//心跳消息
                             me1.what = MessageType.msgOutputLog.ordinal();
-                            me1.obj = "收到串口心跳，但发送不成功.";
+                            me1.obj = "recv com heartbeat，but send to internet failed..";
                             if (mHandler != null) mHandler.sendMessage(me1);
                         }
                 }
@@ -1620,7 +1620,7 @@ public class CameraPublishActivity extends FragmentActivity {
     public void ThreadHandleSockData(byte[] sock_data, int len)
     {
         //打印调试输出
-        String str_com_data ="网络数据" + ComPort.bytes2HexString(sock_data, len);
+        String str_com_data ="COM DATA:" + ComPort.bytes2HexString(sock_data, len);
         Message msgLog = Message.obtain();
         msgLog.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
         msgLog.obj = str_com_data;
@@ -1656,7 +1656,7 @@ public class CameraPublishActivity extends FragmentActivity {
             {
                 Message msgLog1 = Message.obtain();
                 msgLog1.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
-                msgLog1.obj = "检测到设备需要重启。不转发开局指令";
+                msgLog1.obj = "Detecded Andorid need to restart。Won't send start game to com.";
                 if (mHandler != null) mHandler.sendMessage(msgLog1);
             }
             else
@@ -1727,8 +1727,8 @@ public class CameraPublishActivity extends FragmentActivity {
                                 //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
                                 if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
                                 {
-                                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
-                                    Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
+                                    if(CameraPublishActivity.DEBUG)  Log.e(TAG, "UDisk do not have enough space.");
+                                    Toast.makeText(getApplicationContext(), "UDisk do not have enough space.", Toast.LENGTH_SHORT).show();
                                     sdCardPath= "";
                                     initRecordUI("",0);
                                 }
@@ -1737,7 +1737,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
 
                             if (checkSpaceThread == null) {
-                                outputInfo("开始空间检查", false);
+                                outputInfo("checking free space", false);
                                 checkSpaceThread = new CheckSpaceThread(mHandler, sdCardPath);//空循环等待 没事
                                 checkSpaceThread.start();
                             }else
@@ -1749,7 +1749,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     break;
                 case msgWaitIP: {
                     if (getLocalIpAddress().equals("")) {
-                        Toast.makeText(getApplicationContext(), "IP未就绪。等待IP", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "wait for IP ready", Toast.LENGTH_SHORT).show();
                         mHandler.sendEmptyMessageDelayed(MessageType.msgWaitIP.ordinal(), 3000);
                     } else {
                         mHandler.sendEmptyMessage(MessageType.msgIpGOT.ordinal());
@@ -1757,7 +1757,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
                 break;
                 case msgIpGOT: {
-                    outputInfo("IP已就绪。配置线程运行。开始检查时间", false);
+                    outputInfo("IP ready。config port begin。start check time", false);
                     //Ip已获取。更新界面
                     VideoConfig.instance.hostIP = getLocalIpAddress();
 
@@ -1787,7 +1787,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                         //连接应用服务器
                         if (sendThread == null) {
-                            outputInfo("时间就绪之-开始连接应用服务器.", false);
+                            outputInfo("time ready-connecting app server.", false);
                             sendThread = new SockAPP();//空循环等待 没事
                             sendThread.StartWokring(mHandler, VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
                         }
@@ -1806,7 +1806,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     if (year < 2018) {
                         isTimeReady = false;
                         timeWaitCount--;
-                        Toast.makeText(getApplicationContext(), "时间未就绪。等待.否则预览会卡死.剩余" + timeWaitCount + "次后强行推流", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "time not ready。wait.otherwise preview will be die. Left" + timeWaitCount + "count to force push", Toast.LENGTH_SHORT).show();
                         if (timeWaitCount <= 0) {
                             isTimeReady = true;
                             //延迟2秒后开始预览
@@ -1822,7 +1822,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 }
                 break;
                 case msgOnTimeOK: {
-                    outputInfo("时间已就绪.", false);
+                    outputInfo("time ready.", false);
 
                     //调用摄像头 初始化预览
                     Camera front_camera = GetCameraObj(FRONT);
@@ -1900,7 +1900,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 case msgCheckWawajiReady://每隔一秒给娃娃机发状态查询指令 看看它是否就绪
                 {
                     if (isWawajiReady == false) {
-                        outputInfo("正在发送0x34检查娃娃机是否就绪", false);
+                        outputInfo("sending 0x34 to check if claw ready", false);
                         //Log.e(TAG, "正在发送0x34检查娃娃机是否就绪");
                         send_com_data(0x34);
                         mHandler.sendEmptyMessageDelayed(MessageType.msgCheckWawajiReady.ordinal(), 1000);
@@ -1920,7 +1920,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             sendThread = null;
                         }
 
-                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到重启指令，立刻重启");
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG, "recv restart cmd，restart now");
 
                         Intent intent = new Intent();
                         intent.setAction("ACTION_RK_REBOOT");
@@ -1986,7 +1986,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         }
                     }
                     else if(net_cmd == 0x99) {//todo remove for debug use.不接娃娃机时的临时实现。用来模仿游戏结束的。此处用来停止录像。意思是接收到游戏结束后停止录像
-                        outputInfo("结束，停止录像", false);
+                        outputInfo("end，stop record", false);
                         stopRecorder();
                         isRecording = false;
 
@@ -2000,7 +2000,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                     else if( net_cmd == 0x31)//开局指令 检查是否需要录像
                     {
-                        outputInfo("开局，开始录像", false);
+                        outputInfo("begin，start record", false);
                         if( checkSpaceThread != null)
                         {
                             checkSpaceThread.Check( sdCardPath );
@@ -2025,7 +2025,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     break;
                 case msgConfigData: {
                     //收到配置口过来的数据
-                    outputInfo("应用更改.", false);
+                    outputInfo("Apply Change.", false);
                     UpdateConfigToUI();
                     UIClickStopPush();
 
@@ -2062,7 +2062,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     Socket ssa = (Socket) msg.obj;
                     if (is_applyok == false) {
                         RestoreConfigAndUpdateVideoUI();
-                        Toast.makeText(getApplicationContext(), "无效的视频配置，已恢复原状!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Invalid video config，Back to last config!", Toast.LENGTH_SHORT).show();
                         mHandler.sendEmptyMessageDelayed(MessageType.msgDelay2sPush.ordinal(), 2000);
 
                         try {
@@ -2074,7 +2074,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
-                            if(CameraPublishActivity.DEBUG)  Log.e("返回结果", "失败");
+                            if(CameraPublishActivity.DEBUG)  Log.e("return", "failed");
                         }
                     } else {
                         try {
@@ -2086,7 +2086,7 @@ public class CameraPublishActivity extends FragmentActivity {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
-                            if(CameraPublishActivity.DEBUG)   Log.e("返回结果", "失败");
+                            if(CameraPublishActivity.DEBUG)   Log.e("return", "failed");
                         }
                         mHandler.sendEmptyMessageDelayed(MessageType.msgDelay2sPush.ordinal(), 2000);
                     }
@@ -2103,7 +2103,7 @@ public class CameraPublishActivity extends FragmentActivity {
                         if (jsonObject.has("versionCode"))
                             versionCode = jsonObject.getInt("versionCode");
 
-                        if(CameraPublishActivity.DEBUG) Log.e("收到更新命令", "url" + url + " 当前版本:" + VideoConfig.instance.appVersion);
+                        if(CameraPublishActivity.DEBUG) Log.e("recv update cmd", "url" + url + " cur version:" + VideoConfig.instance.appVersion);
                         SilentInstall upobj = new SilentInstall(getApplicationContext());
                         upobj.startUpdate(url);
                     } catch (JSONException jse) {
@@ -2141,12 +2141,12 @@ public class CameraPublishActivity extends FragmentActivity {
                             msg_content[msg_content.length - 1] = (byte) (total_c % 100);
                             if(mComPort!=null) mComPort.SendData(msg_content, msg_content.length);
                             String sss = SockAPP.bytesToHexString(msg_content);
-                            outputInfo("收到0x17.MaC发往串口" + sss, false);
+                            outputInfo("recv 0x17.MAC send to claw board" + sss, false);
                         }
                     }
                     else if( cmd_value == 0x33)
                     {
-                        outputInfo("结束，停止录像", false);
+                        outputInfo("end，stop record", false);
                         stopRecorder();
                         isRecording = false;
 
@@ -2172,9 +2172,9 @@ public class CameraPublishActivity extends FragmentActivity {
                                     sendThread = null;
                                 }
 
-                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "娃娃机已满足重启要求。立刻重启");
+                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "need to be restart now。restart.");
 
-                                Log.e(TAG, "娃娃机已满足重启要求。立刻重启");
+                                Log.e(TAG, "need to be restart now。restart.");
                                 Intent intent = new Intent();
                                 intent.setAction("ACTION_RK_REBOOT");
                                 sendBroadcast(intent, null);
@@ -2184,11 +2184,11 @@ public class CameraPublishActivity extends FragmentActivity {
                         if (isWawajiReady == false)//娃娃机就绪。检查是否需要跟娃娃机获取应用服务器端口 如果不用。则直接生成连接应用服务器的对象
                         {
                             isWawajiReady = true;
-                            outputInfo("娃娃机已就绪.", false);
+                            outputInfo("claw board is ready.", false);
 
                             //连接应用服务器
                             if (sendThread == null) {
-                                outputInfo("娃机就绪之-开始连接应用服务器.", false);
+                                outputInfo("claw ready-connecting to app server.", false);
                                 sendThread = new SockAPP();//空循环等待 没事
                                 sendThread.StartWokring(mHandler, VideoConfig.instance.destHost, VideoConfig.instance.GetAppPort());
                             }
@@ -2224,8 +2224,8 @@ public class CameraPublishActivity extends FragmentActivity {
                         //检查可用空间 和已有文件大小是否满足要求。不满足，则置空。因为会频繁触发文件检查 这是不允许的
                         if( frontCount + backCount <200 && getSDFreesSpace(sdCardPath)<300)
                         {
-                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "U盘即使删除文件也无法满足临界要求。不存储");
-                            Toast.makeText(getApplicationContext(), "U盘即使删除文件也无法满足临界要求。不存储", Toast.LENGTH_SHORT).show();
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "UDisk not enought space.not store.");
+                            Toast.makeText(getApplicationContext(), "UDisk not enought space.not store.", Toast.LENGTH_SHORT).show();
                             sdCardPath= "";
                             initRecordUI("",0);
                         }
@@ -2267,7 +2267,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                     WifiAutoConnectManager.WifiCipherType ntr = wifiPassword.equals("") ?
                                             WifiAutoConnectManager.WifiCipherType.WIFICIPHER_NOPASS : WifiAutoConnectManager.WifiCipherType.WIFICIPHER_WPA;
 
-                                    if(CameraPublishActivity.DEBUG) Log.e("连接wifi", "ssid" + wifiSSID + " pwd " + wifiPassword + "type" + ntype);
+                                    if(CameraPublishActivity.DEBUG) Log.e("connect wifi", "ssid" + wifiSSID + " pwd " + wifiPassword + "type" + ntype);
                                     //WifiUtil.createWifiInfo(wifiSSID, wifiPassword, ntype, wifiManager);
 
                                     wifiauto.connect(wifiSSID, wifiPassword, ntr);
@@ -2277,7 +2277,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                if(CameraPublishActivity.DEBUG)  Log.e("u盘配置文件错误", "Json file Error.");
+                                if(CameraPublishActivity.DEBUG)  Log.e("udisk config error", "Json file Error.");
                             }
                         }
                     } catch (IOException e) {
@@ -2331,8 +2331,8 @@ public class CameraPublishActivity extends FragmentActivity {
                                     sendThread.sendMsg(abc);
                                 }
 
-                                outputInfo("前置摄像头有效性错误。设备需要重启。", false);
-                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "前置摄像头有效性错误。设备需要重启。");
+                                outputInfo("front cam preview error. need to restart.", false);
+                                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "front cam preview error. need to restart.");
                                 mHandler.sendEmptyMessage(MessageType.msgQueryWawajiState.ordinal());
                             }
                         }
@@ -2380,7 +2380,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 break;
                 case msgCheckWawaNowState: {
                     if (wawajiCurrentState != 1 && wawajiCurrentState != 2) {
-                        if(CameraPublishActivity.DEBUG) Log.e(TAG, "娃娃机状态已满足重启要求，立刻重启");
+                        if(CameraPublishActivity.DEBUG) Log.e(TAG, "claw machine need to restart.restart now.");
 
                         Intent intent = new Intent();
                         intent.setAction("ACTION_RK_REBOOT");
@@ -2435,7 +2435,7 @@ public class CameraPublishActivity extends FragmentActivity {
                                     network_query_issend = false;
                                     if( network_query_isrecv == false)
                                     {
-                                        Log.e(TAG, "网络检测超时。断网了。启用重连机制.");
+                                        Log.e(TAG, "network timeout。 internet has disconnect。reconnect now.");
                                         if(sendThread != null) sendThread.CloseFireRetry();
                                     }
                                     else
@@ -2454,7 +2454,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                             if( h5_video1_push_state != 0 || (h5_video2_push_state != 0 && VideoConfig.instance.url2.equals("")==false))
                             {
-                                Log.e(TAG,"断网了，全部都要重推流");
+                                Log.e(TAG,"internet has disconnect，restart streaming...");
 
                                 if( h5_video1_push_state!=0)
                                 {
@@ -2566,7 +2566,7 @@ public class CameraPublishActivity extends FragmentActivity {
             is_applyok = false;
 
         if (is_applyok == false) {
-            Toast.makeText(getApplicationContext(), "错误的配置,回退到正确的配置", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Invaild config,Back to last normal config", Toast.LENGTH_SHORT).show();
 
             RestoreConfigAndUpdateVideoUI();
         }
@@ -2641,13 +2641,13 @@ public class CameraPublishActivity extends FragmentActivity {
             VideoConfig.instance.is_hardware_encoder = !VideoConfig.instance.is_hardware_encoder;
 
             if (VideoConfig.instance.is_hardware_encoder) {
-                btnHWencoder.setText("当前硬编码");
+                btnHWencoder.setText("HW_ENC");
                 //显示软编码选项
                 findViewById(R.id.swVideoEncoderProfileSelector).setVisibility(View.INVISIBLE);
                 findViewById(R.id.speed_tip).setVisibility(View.INVISIBLE);
                 findViewById(R.id.sw_video_encoder_speed_selctor).setVisibility(View.INVISIBLE);
             } else {
-                btnHWencoder.setText("当前软编码");
+                btnHWencoder.setText("SW_ENC");
                 //显示软编码选项
                 findViewById(R.id.swVideoEncoderProfileSelector).setVisibility(View.VISIBLE);
                 findViewById(R.id.speed_tip).setVisibility(View.VISIBLE);
@@ -2713,13 +2713,13 @@ public class CameraPublishActivity extends FragmentActivity {
 
             switch (id) {
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_STARTED:
-                    txt = "开始。。";
+                    txt = "Start。。";
                     break;
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTING:
-                    txt = "连接中。。";
+                    txt = "Connecting。。";
                     break;
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTION_FAILED:
-                    txt = "连接失败。。";
+                    txt = "Connect Failed。。";
                     if (handle == publisherHandleFront) {
                         VideoConfig.instance.videoPushState_1 = false;
                         NotifyStreamResult(0, PushState.FAILED);
@@ -2746,7 +2746,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                     break;
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CONNECTED:
-                    txt = "连接成功。。";
+                    txt = "Connect OK。。";
                     if (handle == publisherHandleFront) {
                         NotifyStreamResult(0, PushState.OK);
                         VideoConfig.instance.videoPushState_1 = true;
@@ -2773,7 +2773,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                     break;
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_DISCONNECTED:
-                    txt = "连接断开。。";
+                    txt = "Connect Lost。。";
                     if (handle == publisherHandleFront) {
                         VideoConfig.instance.videoPushState_1 = false;
                         NotifyStreamResult(0, PushState.FAILED);
@@ -2800,7 +2800,7 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                     break;
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_STOP:
-                    txt = "关闭。。";
+                    txt = "Close。。";
                     if (handle == publisherHandleFront) {
                         NotifyStreamResult(0, PushState.CLOSE);
                         VideoConfig.instance.videoPushState_1 = false;
@@ -2827,31 +2827,31 @@ public class CameraPublishActivity extends FragmentActivity {
                     }
                     break;
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_RECORDER_START_NEW_FILE:
-                    Log.i(TAG, "开始一个新的录像文件 : " + param3);
-                    txt = "开始一个新的录像文件。。";
+                    Log.i(TAG, "begin new record : " + param3);
+                    txt = "begin new record。。";
                     break;
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_ONE_RECORDER_FILE_FINISHED:
-                    Log.i(TAG, "已生成一个录像文件 : " + param3);
-                    txt = "已生成一个录像文件。。";
+                    Log.i(TAG, "record hase saved: " + param3);
+                    txt = "record hase saved。。";
                     break;
 
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_SEND_DELAY:
-                    Log.i(TAG, "发送时延: " + param1 + " 帧数:" + param2);
-                    txt = "收到发送时延..";
+                    Log.i(TAG, "send delay: " + param1 + " framerate:" + param2);
+                    txt = "recv send delay..";
                     break;
 
                 case NTSmartEventID.EVENT_DANIULIVE_ERC_PUBLISHER_CAPTURE_IMAGE:
-                    Log.i(TAG, "快照: " + param1 + " 路径：" + param3);
+                    Log.i(TAG, "snapshot: " + param1 + " path：" + param3);
 
                     if (param1 == 0) {
-                        txt = "截取快照成功。.";
+                        txt = "snapshot ok。.";
                     } else {
-                        txt = "截取快照失败。.";
+                        txt = "snapshot failed。.";
                     }
                     break;
             }
 
-            String str = "当前回调状态：" + txt;
+            String str = "cur state：" + txt;
 
             Log.d(TAG, str);
         }
@@ -2991,7 +2991,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 if (publisherHandleFront != 0) {
                     SetConfig(publisherHandleFront);
-                    if(CameraPublishActivity.DEBUG) Log.e("前置摄像头", "ID" + publisherHandleFront);
+                    if(CameraPublishActivity.DEBUG) Log.e("Front Camera", "ID" + publisherHandleFront);
                 }
             }
 
@@ -3003,7 +3003,7 @@ public class CameraPublishActivity extends FragmentActivity {
 
                 if (publisherHandleBack != 0) {
                     SetConfig(publisherHandleBack);
-                    if(CameraPublishActivity.DEBUG)  Log.e("后置摄像头", "ID" + publisherHandleBack);
+                    if(CameraPublishActivity.DEBUG)  Log.e("Back Camera", "ID" + publisherHandleBack);
                 }
             }
 
@@ -3103,19 +3103,19 @@ public class CameraPublishActivity extends FragmentActivity {
     void UIClickStartPush() {
         if (getLocalIpAddress().equals(""))
         {
-            outputInfo("IP地址是空，不推。可能没插网线",false);
+            outputInfo("IP is null， won't push。 check your eth0 wire",false);
             return;
         }
 
         if(VideoConfig.instance.url1.equals("") && VideoConfig.instance.url2.equals(""))
         {
-            outputInfo("推流地址是空，不推。",false);
+            outputInfo("streaming url is empty，won't push。",false);
             return;
         }
 
         if(VideoConfig.instance.url2.equals(VideoConfig.instance.url1))
         {
-            outputInfo("两个推流地址一样，不推。",false);
+            outputInfo("same streaming url on both camera，won't push。",false);
             return;
         }
 
@@ -3147,8 +3147,8 @@ public class CameraPublishActivity extends FragmentActivity {
             StartH5CheckTimer();
         }
 
-        Log.e(TAG,"开推");
-        outputInfo("开推.", false);
+        Log.e(TAG,"Start Push");
+        outputInfo("Start Push.", false);
 
         VideoConfig.instance.SaveConfig(this);
 
@@ -3177,7 +3177,7 @@ public class CameraPublishActivity extends FragmentActivity {
                 {
                     if (libPublisher.SmartPublisherSetURL(publisherHandleFront, VideoConfig.instance.url1) != 0) {
                         if(CameraPublishActivity.DEBUG) Log.e(TAG, "Failed to set publish stream URL..");
-                        outputInfo("前置推流地址应用失败.", false);
+                        outputInfo("front camera streaming url apply failed.", false);
                     }
 
                     int startRet = libPublisher.SmartPublisherStartPublisher(publisherHandleFront);
@@ -3249,28 +3249,28 @@ public class CameraPublishActivity extends FragmentActivity {
             {
                 if (!isRecording && isPushing == true) {
                     ConfigControlEnable(false);
-                    btnStartPush.setText(" 停止推送 ");
+                    btnStartPush.setText("Stop Push");
                 } else if (isPushing == false) {
                     ConfigControlEnable(true);
-                    btnStartPush.setText(" 推送");
-                    outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
+                    btnStartPush.setText("Start Push");
+                    outputInfo("Push failed。check if URLand camera is ready", false);
                 }
             }else if(VideoConfig.instance.pushH5 == true){
 
                 if (  isPushing == true) {
                     ConfigControlEnable(false);
-                    btnStartPush.setText(" 停止推送 ");
+                    btnStartPush.setText("Stop Push");
                 } else if (isPushing == false) {
                     ConfigControlEnable(true);
-                    btnStartPush.setText(" 推送");
-                    outputInfo("推送失败。检查推流URL,或摄像头是否已插好", false);
+                    btnStartPush.setText("Start Push");
+                    outputInfo("Push failed。check if URLand camera is ready", false);
                 }
             }
     }
 
     void UIClickStopPush() {
-        outputInfo("停推.", false);
-        Log.e(TAG,"停推");
+        outputInfo("Stop Push.", false);
+        Log.e(TAG,"Stop Push");
         stopPush();
 
         if (!isRecording && VideoConfig.instance.pushH5 == false) {
@@ -3278,7 +3278,7 @@ public class CameraPublishActivity extends FragmentActivity {
         }else if(VideoConfig.instance.pushH5 == true)
             ConfigControlEnable(true);
 
-        btnStartPush.setText(" 推送");
+        btnStartPush.setText("Start Push");
         isPushing = false;
 
         return;

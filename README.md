@@ -92,7 +92,7 @@ playing url:http://mmz.csxtech.com.cn/web_wawa_h5/
 	* 包含了应用服务器基本的工作流程。比如列举房间列表，玩家进出，开始玩的命令中转到网络娃娃机的基本流程。
 	* 支持多个玩家，多个娃娃机。但同一时间，一台娃娃机只能由一个玩家操控。
 	* 您可以自行二次开发实现排队预约，支付等等功能。
-	* 应用服务器 （默认端口:娃娃机请连接到7770 端口。玩家手机客户端simpleClient.apk请连接到7771）
+	* 应用服务器 （默认端口:娃娃机请连接到7770 端口。玩家手机客户端SimpleClient.apk请连接到7771）
 	* 配置服务器[可选] （默认端口 对于安卓板xuebaoRtmpPush是7776，对于公网配置工具是7778）--如果不用配置功能。这个相关代码都可以忽略。
 	* this server is a simple server to handle claw machine message and player(not inlcude video).Something like player login ,start game, move ,claw down .You should config the claw machine to port 7770. and SimplePlayer to 7771.The config server is an option when you config them in the same LAN instead.
 
@@ -107,7 +107,7 @@ playing url:http://mmz.csxtech.com.cn/web_wawa_h5/
 
 * [**prebuild**] 包含了最新的安卓推流程序, 局域网配置工具 公网配置工具 预生成的安卓简单操作客户端.Prebuild Lasted Apks, tools.
 	* 安卓版电脑有线部署工具.电脑有线直连安装脚本。When using computer to install xuebaoRtmpPush.apk, you should use this.
-	* simpleClient.apk 手机玩家简单客户端.也可以自行从SimpleClient编译生成。Simple Player Client Demo. you can build it from SimpleClient by yourself.
+	* SimpleClient.apk 手机玩家简单客户端.也可以自行从SimpleClient编译生成。Simple Player Client Demo. you can build it from SimpleClient by yourself.
 	* xuebaoRtmpPush.apk 由源码编译出来的apk。您也可以自行从源码生成。 app running on android board. you can build it from xuebaoRtmpPush by yourslef.
 	* 雪暴安卓板局域网批量部署工具--局域网内批量安装xuebaoRtmpPush.apk工具. Install tool of xuebaoRtmpPush.apk. Using this when you need to upgreade your xuebaoRtmpPush.apk.
 	* 雪暴安卓推流应用局域网配置工具--搜索局域网内所有机器，并配置参数或更新推流程序。Config tool for xuebaoRtmpPush in LAN. It will search all the machine and list out to config.
@@ -116,7 +116,7 @@ playing url:http://mmz.csxtech.com.cn/web_wawa_h5/
 
 * [**安卓板与娃娃机指令交互说明**] 当您决定不使用xuebaoRtmpPush或者使用第三方私有协议实现推流，文件夹包含了对接娃娃机主板的核心代码。方便您自己实现推流程序.When you desdie to implement Streaming app by yourslef, this is a part sourcecode of serialport use to communicate with claw board.
 
-* [**SimpleServer.c**]	简单应用服务器c版本的源码。仅支持一娃娃机一玩家的简单转发，主要是为了演示核心逻辑。deprecate server written in c.Not support for the lasted simpleClient.apk.
+* [**SimpleServer.c**]	简单应用服务器c版本的源码。仅支持一娃娃机一玩家的简单转发，主要是为了演示核心逻辑。deprecate server written in c.Not support for the lasted SimpleClient.apk.
 
 * [**server.go**]	简单应用服务器go版本源码。支持websocket操作。A server to handle webclient player through Websocket and claw machine.
 
@@ -172,8 +172,8 @@ if you see the log print below picture,then the claw machine is ready.
 正常工作如图
 ![服务器运行示意图1](https://raw.githubusercontent.com/xuebaodev/wawaji/master/raw/server_0.png)
 
-4.将prebuild文件夹下的simpleClient.apk(安卓4.4以上)安装到您的手机上。 或者，您可以从simpleClient工程中自行编译出一个apk出来。请将该手机通过wifi连入娃娃机所在的一个局域网。
-4.install simpleClient.apk to your android phone. Or you can build it from sourcecode. If you are testing in LAN, before you start apk, please make sure your phone and claw machine are in the same LAN.
+4.将prebuild文件夹下的SimpleClient.apk(安卓4.4以上)安装到您的手机上。 或者，您可以从SimpleClient工程中自行编译出一个apk出来。请将该手机通过wifi连入娃娃机所在的一个局域网。
+4.install SimpleClient.apk to your android phone. Or you can build it from sourcecode. If you are testing in LAN, before you start apk, please make sure your phone and claw machine are in the same LAN.
 
 <br>然后点开配置按钮(右上角齿轮状图标)，输入应用服务器IP，端口默认为7771 。如您已架设流媒体服务器，请输入之前娃娃机配好的推流地址。点击OK，您就可以开始玩网络抓娃娃了。
 <br>In SimpleClient.apk .press config button in right top conner, enter the app server ip, and port 7771. if your video server is ready, you can input the view streamurl below. and press ok.Restart the app. When see a room, you can enter and free to play.
@@ -191,7 +191,7 @@ Note: You should run a quick test in LAN.Because the internet server need to buy
 常见问题：Common Question:
 娃娃机是动了，为什么看不到视频？Claw machine can move when press button on SimpleClient, But why the video is blank?
 <br>因为您的娃娃机需要配置推流地址。 您需要您的技术人员部署一个流媒体服务器，并设置推流参数为您的流媒体服务器所需要的格式。simpleClinet也需要设置相应的视频推流地址。
-<br>Because your xuebaoRtmpPush's streaming url is not pushing video to your streaming server. Or your simpleClient isn't input the right url to watch.
+<br>Because your xuebaoRtmpPush's streaming url is not pushing video to your streaming server. Or your SimpleClient isn't input the right url to watch.
 <br>And, properly, your free version of daniu play sdk is out of date.
 
 版权声明.License<br>
@@ -201,7 +201,7 @@ Note: You should run a quick test in LAN.Because the internet server need to buy
 <br>源码工程SimpleClient SimpleServer可以免费使用，修改及二次开发。雪暴公司对此源码不提供技术支持。
 <br>SimpleClient SimpleServer is MIT.
 <br>SimpleClient中的视频播放器由大牛直播sdk提供。如果要商用，请联系它给予正式版的授权。您也可以根据自身团队情况去选择其他播放器端。比如腾讯SDK，开源的IJKPLAYER等等支持解码RTMP视频流的sdk都可以。例子中的播放器授权可能会过期。请自行去大牛的github获取更新。
-<br>the rtmp player moudle in simpleClient is provide from daniu SDK.it will be unavailable when out of date,so you can choose other player, but ,for now ,it's much quicker than other player.If you have enought technique, you can optimize other opensource player to make the same effect.
+<br>the rtmp player moudle in SimpleClient is provide from daniu SDK.it will be unavailable when out of date,so you can choose other player, but ,for now ,it's much quicker than other player.If you have enought technique, you can optimize other opensource player to make the same effect.
 
 <br>注意事项 Note:
 <br>**指令不能太频繁。不建议一秒往娃娃机发送10个以上的指令。**
@@ -250,7 +250,7 @@ However ,when the claw is manage to connect to the sever ,you can aslo see the d
 <br>
 <br>3.The video stream is black.
 <br>
-<br>Hmmm.....Make sure your camera stream is push to the stream server(on Internet or same LAN with app) and your app is input the right stream url.Require restart simpleClient after change the video url.
+<br>Hmmm.....Make sure your camera stream is push to the stream server(on Internet or same LAN with app) and your app is input the right stream url.Require restart SimpleClient after change the video url.
 <br>(How to setup a stream server? https://github.com/ossrs/srs/wiki/v1_CN_SampleRTMP here is an opensource server Called SRS. Just google it!)
 <br>
 <br>4.OK,now everything works. but the video is in highly delay?

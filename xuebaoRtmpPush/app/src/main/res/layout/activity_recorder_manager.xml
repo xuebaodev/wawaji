@@ -8,7 +8,7 @@
                 android:id="@+id/button_delete_all_rec_files"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" 删除所有录像文件 " />
+                android:text=" delete all record " />
 
    
   <ListView  android:id="@+id/rec_file_list"   

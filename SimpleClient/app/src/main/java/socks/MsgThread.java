@@ -57,7 +57,7 @@ public class MsgThread extends Thread {
                 }
             }
 
-            Log.e("MsgThread", "发送线程退出");
+            Log.e("MsgThread", "send thread exit.");
         }
     }
 }

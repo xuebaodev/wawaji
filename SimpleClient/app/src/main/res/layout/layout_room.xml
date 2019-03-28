@@ -35,7 +35,7 @@
             android:layout_marginBottom="16dp"
             android:textColor="#000"
             android:textSize="12sp"
-            android:text="雪暴测试间"/>
+            android:text="TestRoom"/>
 
         <ImageView
             android:id="@+id/imgRoomState"
@@ -55,7 +55,7 @@
             android:layout_marginLeft="5dp"
             android:textColor="#646464"
             android:textSize="12sp"
-            android:text="1000人在线"/>
+            android:text="1000 online"/>
 
         <TextView android:id="@+id/txtRoomRight"
             android:layout_alignParentRight="true"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:textColor="#646464"
             android:textSize="12sp"
-            android:text="机器数"/>
+            android:text="machine"/>
     </RelativeLayout>
 
 

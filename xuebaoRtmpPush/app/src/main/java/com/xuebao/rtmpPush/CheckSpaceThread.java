@@ -63,7 +63,7 @@ public class CheckSpaceThread extends Thread {
                     long availCount = sf.getAvailableBlocks();
 
                     //Log.d(TAG, "block大小:"+ blockSize+",block数目:"+ blockCount+",总大小:"+blockSize*blockCount/1024+"KB");
-                    if(CameraPublishActivity.DEBUG) Log.e("CheckSpaceThread", "可用的block数目：:"+ availCount+",剩余空间:"+ (availCount*blockSize>>20)+"MB");
+                    if(CameraPublishActivity.DEBUG) Log.e("CheckSpaceThread", "valid block：:"+ availCount+",Free space:"+ (availCount*blockSize>>20)+"MB");
 
                     long leftSpace = (availCount*blockSize>>20); //MB
                     if ( leftSpace < 300) //300
@@ -87,13 +87,13 @@ public class CheckSpaceThread extends Thread {
                 }
             }
 
-            if(CameraPublishActivity.DEBUG) Log.e("CheckSpaceThread", "检查线程退出");
+            if(CameraPublishActivity.DEBUG) Log.e("CheckSpaceThread", "Check thread exit");
         }
     }
 
     private void DelAllRecFiles( String recDirPath )
     {
-        if(CameraPublishActivity.DEBUG)  Log.i("CheckFileThread", "触发文件删除逻辑");
+        if(CameraPublishActivity.DEBUG)  Log.i("CheckFileThread", "delete file...");
 
         if ( recDirPath == null )
         {
@@ -156,7 +156,7 @@ public class CheckSpaceThread extends Thread {
        // }
 
         int delCount = files.length > 200 ?200 : files.length -2;
-        if(CameraPublishActivity.DEBUG) Log.e("文件检查线程", "即将删除" +delCount +"个文件");
+        if(CameraPublishActivity.DEBUG) Log.e("file check thread", "deleting" +delCount +"files");
 
         if( delCount <= 0)
             return;

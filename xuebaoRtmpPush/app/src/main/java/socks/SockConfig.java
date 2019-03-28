@@ -80,7 +80,7 @@ public class SockConfig {
 
                         if( socket != null)
                         {
-                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "心跳.");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "heartbeat.");
 
                             String strHeadBeat = String.format("{\"userID\":\"%s\",\"mac\":\"%s\",\"cmd\":\"heartbeat\",\"name\":\"%s\"}",
                                     VideoConfig.instance.userID, VideoConfig.instance.my_mac,VideoConfig.instance.machine_name);
@@ -98,7 +98,7 @@ public class SockConfig {
                         }
                     }
 
-                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "心跳线程退出");
+                if(CameraPublishActivity.DEBUG)  Log.e(TAG, "heartbeat thread exit.");
             }
         });
         thHearbeatTimer.start();
@@ -186,7 +186,7 @@ public class SockConfig {
                         int r_len = input.read(jj);
                         if (r_len <= 0)
                         {
-                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到数据<=0.断开");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "recv len<=0.disconnect");
                            if(socket!= null) {socket.close(); socket = null;}
                             break;
                         }
@@ -196,11 +196,11 @@ public class SockConfig {
                         if( aa.indexOf('\u0000') != -1 )
                             aa = aa.substring(0,aa.indexOf('\u0000'));
 
-                        if(CameraPublishActivity.DEBUG)  Log.e(TAG,"收到:"+ aa);
+                        if(CameraPublishActivity.DEBUG)  Log.e(TAG,"recv:"+ aa);
                         JSONObject jsonObject = new JSONObject(aa);
                         if(jsonObject.has("cmd") == false)
                         {
-                            if(CameraPublishActivity.DEBUG)  Log.e("没有CMD","关闭此连接");
+                            if(CameraPublishActivity.DEBUG)  Log.e("no CMD","close socket.");
                             if(socket!= null){socket.close(); socket = null;}
                             break;
                         }
@@ -209,7 +209,7 @@ public class SockConfig {
 
                         if( cmd.equals("heartbeat") == false)
                             if(CameraPublishActivity.DEBUG)
-                                Log.e("jsonfrom公网", aa);
+                                Log.e("json from internet", aa);
 
                         if(cmd.equals("getconfig"))
                         {
@@ -218,13 +218,13 @@ public class SockConfig {
                                 String req_mac = jsonObject.getString("mac");
                                 if( req_mac.equals( VideoConfig.instance.my_mac) == false)
                                 {
-                                    Log.e(TAG,"mac不是本机。不响应获取配置命令");
+                                    Log.e(TAG,"mac is not me。not handle get config");
                                     if( socket!= null){socket.close(); socket = null;}
                                     break;
                                 }
                             }
 
-                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "返回");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "return");
                             String s = VideoConfig.instance.makeJson();
                             out.write(s.getBytes(), 0, s.getBytes().length);
                             out.flush();
@@ -235,7 +235,7 @@ public class SockConfig {
                                 String req_mac = jsonObject.getString("mac");
                                 if( req_mac.equals( VideoConfig.instance.my_mac) == false)
                                 {
-                                    if(CameraPublishActivity.DEBUG)  Log.e(TAG,"MAC不是本机。不响应应用配置命令");
+                                    if(CameraPublishActivity.DEBUG)  Log.e(TAG,"mac is not me。not handle get config");
                                     if(socket!= null){socket.close(); socket = null;}
                                     break;
                                 }
@@ -294,7 +294,7 @@ public class SockConfig {
                 }
             }
 
-            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "接收线程退出.");
+            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "recv thread exit.");
         }
     }
 
@@ -303,7 +303,7 @@ public class SockConfig {
         {
             if(socket == null)
             {
-                if(CameraPublishActivity.DEBUG) Log.e(TAG, "发送失败socket是空");
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "send failed.socket is null.");
                 return;
             }
 
@@ -314,7 +314,7 @@ public class SockConfig {
                     outputStream.flush();
                 }
                 else {
-                    if(CameraPublishActivity.DEBUG)  Log.e(TAG,  "发送失败socket没有连接");
+                    if(CameraPublishActivity.DEBUG)  Log.e(TAG,  "send failed. socket is not connect.");
                     }
             } catch (IOException e) {
                // FireReconnect();

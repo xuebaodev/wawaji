@@ -29,9 +29,10 @@ public class VideoConfig
 
     public Handler msgHandler = null;
 
-    public int appVersion = 20181225;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
+    public int appVersion = 20190327;//本app的版本号。用于描述本版本是哪个版本。//不用APKversion是因为不方便回退版本 所以gradle里面的versionCode已经被弃用--modify at 20180202
 
     //=================changelog
+    //20190327 修改成英文版
     //20181225 去掉了只推一路的0x90及相关逻辑，以及修正收到游戏结束0x33时的崩溃问题(原因不明).下阶段准备去掉本地录像的逻辑
     //20181219 修补了一下h5断流重推的问题。但不确定是否已解决
     //20181110 不使用录像的情况下，不检测本地sd文件.因为实测发现很多不使用。启用录像后，需要重启
@@ -353,7 +354,7 @@ public class VideoConfig
 
         userID = share.getString("userID", "xuebao");
 
-        machine_name = share.getString("machine_name", "可爱小白兔");
+        machine_name = share.getString("machine_name", "lovlycat");
 
         containAudio = share.getBoolean("containAudio", containAudio);
 

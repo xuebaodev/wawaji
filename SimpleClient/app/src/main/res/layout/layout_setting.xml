@@ -22,7 +22,7 @@
             android:id="@+id/serverip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="70dp"
             android:hint="192.168.x.x"/>
 
         </RelativeLayout>
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:text="sprot:"
+            android:text="server port:"
             android:gravity="center"
             android:textColor="@android:color/black"
             />
@@ -45,7 +45,7 @@
             android:id="@+id/serverport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="70dp"
             android:inputType="number"
             android:hint="xxxx"/>
 
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:text="video 1:"
+            android:text="video url1:"
             android:gravity="center"
             android:textColor="@android:color/black"
             />
@@ -70,7 +70,7 @@
             android:id="@+id/video_url1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="70dp"
             android:hint="rtmp://xxxxxx"/>
 
     </RelativeLayout>
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:text="video 2:"
+            android:text="video url2:"
             android:gravity="center"
             android:textColor="@android:color/black"
             />
@@ -94,7 +94,7 @@
             android:id="@+id/video_url2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="70dp"
             android:hint="rtmp://xxxxxx"/>
 
     </RelativeLayout>

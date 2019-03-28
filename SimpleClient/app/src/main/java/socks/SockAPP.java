@@ -142,7 +142,7 @@ public class SockAPP {
                         int recv_len = reader.read(head, 0, 3);
                         if( recv_len<=0)
                         {
-                            Log.e(TAG, "收到数据<=0.断开");
+                            Log.e(TAG, "recv len<=0.disconnect");
                             if( socket != null) {
                                 socket.close();
                                 socket = null;
@@ -158,7 +158,7 @@ public class SockAPP {
                             recv_len = reader.read(data_body, 0, data_len);
                             if( recv_len < data_len )//继续接收
                             {
-                                Log.e(TAG, "接收不完整 继续接收");
+                                Log.e(TAG, "recv not complete.continue.");
                                 int total_recv_ren = recv_len;
                                 int left_data_len = data_len - recv_len;
                                 while(total_recv_ren <data_len)
@@ -166,7 +166,7 @@ public class SockAPP {
                                     recv_len = reader.read(data_body, total_recv_ren, left_data_len);
                                     if( recv_len<=0)
                                     {
-                                        Log.e(TAG, "收到数据<=0.断开");
+                                        Log.e(TAG, "recv len<=0.disconnect");
                                         if( socket != null) {
                                             socket.close();
                                             socket = null;
@@ -197,7 +197,7 @@ public class SockAPP {
                 }
             }
 
-            Log.e(TAG, "接收线程退出.");
+            Log.e(TAG, "recv thread exit..");
         }
     }
 
@@ -211,7 +211,7 @@ public class SockAPP {
 
     void sendMsg(byte[] msg) {
             if (socket == null) {
-                Log.e(TAG, "socket是空,不发送");
+                Log.e(TAG, "socket is empty, not send");
                 return;
             }
 
@@ -221,7 +221,7 @@ public class SockAPP {
                     outputStream.write(msg);
                     outputStream.flush();
                 } else {
-                    Log.e(TAG, "socket没有连接.不发送");
+                    Log.e(TAG, "socket is not connect.not send");
                 }
             } catch (IOException e) {
                 // FireReconnect();

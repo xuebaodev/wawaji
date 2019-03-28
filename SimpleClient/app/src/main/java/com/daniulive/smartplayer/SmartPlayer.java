@@ -58,7 +58,7 @@ import org.json.JSONObject;
 
 public class SmartPlayer extends Activity {
 
-	public static String switchURL = "rtmp://your video stream server url";
+	public static String switchURL = "rtmp://your video stream url";
 
     private SurfaceView sSurfaceView = null;   
 	
@@ -107,42 +107,42 @@ public class SmartPlayer extends Activity {
 		public void onCallback(int code, long param1, long param2, String param3, String param4, Object param5){
 			switch (code) {
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_STARTED:
-					Log.i(TAG, "开始。。");
+					Log.i(TAG, "start.");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTING:
-					Log.i(TAG, "连接中。。");
+					Log.i(TAG, "connecting...");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTION_FAILED:
-					Log.i(TAG, "连接失败。。");
+					Log.i(TAG, "connect failed.");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTED:
-					Log.i(TAG, "连接成功。。");
+					Log.i(TAG, "connect ok.");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_DISCONNECTED:
-					Log.i(TAG, "连接断开。。");
+					Log.i(TAG, "connect lose.");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_STOP:
-					Log.i(TAG, "关闭。。");
+					Log.i(TAG, "close.");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_RESOLUTION_INFO:
-					Log.i(TAG, "分辨率信息: width: " + param1 + ", height: " + param2);
+					Log.i(TAG, "resolution: width: " + param1 + ", height: " + param2);
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_NO_MEDIADATA_RECEIVED:
-					Log.i(TAG, "收不到媒体数据，可能是url错误。。");
+					Log.i(TAG, "not recv media data， maybe url wrong.");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_SWITCH_URL:
-					Log.i(TAG, "切换播放URL。。");
+					Log.i(TAG, "swtich URL");
 					break;
 				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CAPTURE_IMAGE:
-					Log.i(TAG, "快照: " + param1 + " 路径：" + param3);
+					Log.i(TAG, "snapshot: " + param1 + " path：" + param3);
 
 					if(param1 == 0)
 					{
-						Log.i(TAG, "截取快照成功。.");
+						Log.i(TAG, "snapshot ok.");
 					}
 					else
 					{
-						Log.i(TAG, "截取快照失败。.");
+						Log.i(TAG, "snapshot failed.");
 					}
 					break;
 			}
@@ -164,7 +164,7 @@ public class SmartPlayer extends Activity {
 
 		if(sSurfaceView == null)
 		{
-			Log.i(TAG, "Create render failed..");
+			Log.i(TAG, "Create render failed.");
 			return false;
 		}
 
@@ -179,7 +179,7 @@ public class SmartPlayer extends Activity {
 
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
 		{
-			Log.i(TAG, "onConfigurationChanged, with LANDSCAPE。。");
+			Log.i(TAG, "onConfigurationChanged, with LANDSCAPE.");
 
 			inflateLayout(LinearLayout.HORIZONTAL);
 
@@ -187,7 +187,7 @@ public class SmartPlayer extends Activity {
 		}
 		else
 		{
-			Log.i(TAG, "onConfigurationChanged, with PORTRAIT。。");
+			Log.i(TAG, "onConfigurationChanged, with PORTRAIT.");
 
 			inflateLayout(LinearLayout.VERTICAL);
 
@@ -352,11 +352,6 @@ json
 		}
     }
 
-    //安卓板特有协议，当推流出于双路单推 模式时，按此按钮发送切流命令
-	public void OnClickSwitchCam(View v)
-	{
-
-	}
 
 	//安卓板特有协议。模拟游戏结束。以便可以在不接娃娃机时测试录像逻辑
 	public void OnClickFakeEnd(View v)

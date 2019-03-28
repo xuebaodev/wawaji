@@ -44,7 +44,7 @@
             android:layout_height="fill_parent"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text="雪暴娃娃机测试程序"
+            android:text="SimpleClient"
             android:textColor="#FFF"
             android:textSize="18sp"
             android:textStyle="bold" />

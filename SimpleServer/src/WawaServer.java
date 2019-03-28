@@ -467,27 +467,27 @@ public class WawaServer {
 						//error happend..do your code.change machine state and etc.
 						//todo 收到故障。通知房间里所有玩家。同时置娃娃机状态为故障-维护中。此时就不能再接受玩家的开局了。我这里没做处理。但正式是必须要做的。
 						me.recvCount --;
-						System.out.println("收到娃娃机故障");
+						System.out.println("recv claw machine error");
 					}else if( data_cmd == 0x89 ) {
 						//摄像头预览故障-推流故障 通知后台人员查看 具体命令值请看github.com/xuebaodev wiki
 						me.recvCount --;
 						int frontCamstate  = total_data[8]&0xff;
 						int backCamstate = total_data[9]&0xff;
-						String st_txt = "收到即将重启命令.";
+						String st_txt = "recv claw machine restart now.";
 						
 						if(frontCamstate == 0 )
-							st_txt += "前置正常.";
+							st_txt += "front camera ok.";
 						else if (frontCamstate == 1)
-							st_txt += "前置推流故障.";
+							st_txt += "front streaming failed.";
 						else if(frontCamstate == 2)
-							st_txt += "前置缺失.";
+							st_txt += "front camera missing.";
 						
 						if(backCamstate == 0 )
-							st_txt += "后置正常.";
+							st_txt += "back camera ok.";
 						else if (backCamstate == 1)
-							st_txt += "后置推流故障.";
+							st_txt += "back streaming failed.";
 						else if(backCamstate == 2)
-							st_txt += "后置缺失.";
+							st_txt += "back camera missing.";
 						
 						System.out.println(st_txt);
 					}else if(data_cmd == 0x92) {//0x92照原样返回
@@ -504,17 +504,17 @@ public class WawaServer {
 						me.recvCount --;
 						String strMAC = new String(total_data, 8, 12);
 						if((total_data[20]&0xff)== 0x00 )
-							System.out.println("娃娃机:" + strMAC +"前置推流失败.");
+							System.out.println("calw machine:" + strMAC +"front cam streaming failed.");
 						else if((total_data[20]&0xff)== 0x01 )
-							System.out.println("娃娃机:" + strMAC +"前置推流成功.");
+							System.out.println("calw machine:" + strMAC +"front cam streaming ok.");
 						else if((total_data[20]&0xff)== 0x02 )
-							System.out.println("娃娃机:" + strMAC +"前置推流关闭.");
+							System.out.println("calw machine:" + strMAC +"front cam streaming close.");
 						else if((total_data[20]&0xff)== 0x10 )
-							System.out.println("娃娃机:" + strMAC +"后置推流失败.");
+							System.out.println("calw machine:" + strMAC +"back cam streaming failed.");
 						else if((total_data[20]&0xff)== 0x11 )
-							System.out.println("娃娃机:" + strMAC +"后置推流成功.");
+							System.out.println("calw machine:" + strMAC +"back cam streaming ok.");
 						else if((total_data[20]&0xff)== 0x12 )
-							System.out.println("娃娃机:" + strMAC +"后置推流关闭.");
+							System.out.println("calw machine:" + strMAC +"back cam streaming close.");
 					}
 					else{
 						//其他消息，视情况进行处理

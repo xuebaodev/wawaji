@@ -25,7 +25,7 @@
             android:gravity="center"
             android:textColor="#FFFF0000"
             android:textSize="18sp"
-            android:text="机器MAC"
+            android:text="MAC"
             android:layout_centerVertical="true"/>
 
 
@@ -63,7 +63,7 @@
                 android:id="@+id/id_my_name_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="本机名称:"
+                android:text="roomname:"
                 android:textColor="@android:color/black" />
 
             <EditText
@@ -71,7 +71,7 @@
                 android:layout_toRightOf="@+id/id_my_name_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="娃娃名称方便管理"
+                android:text="lovlycat"
                 android:textColor="@android:color/black" />
 
             <CheckBox
@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="本机IP:"
+            android:text="MYIP:"
             android:textColor="@android:color/black" />
 
             <EditText
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
-                android:text="所属用户:"
+                android:text="belong:"
                 android:textColor="@android:color/black" />
 
             <EditText
@@ -166,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="分辨率" />
+                android:text="resolution" />
 
             <CheckBox
                 android:id="@+id/checkUsePrefence"
@@ -175,7 +175,7 @@
                 android:layout_toRightOf="@id/video_size_tip"
                 android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
-                android:text="使用预设"
+                android:text="UseTemplate"
                 />
 
             <Spinner
@@ -193,7 +193,7 @@
                 android:layout_toRightOf="@id/checkUsePrefence"
                 android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
-                android:text="宽:" />
+                android:text="W:" />
 
             <EditText
                 android:id="@+id/custum_wideo_w"
@@ -212,7 +212,7 @@
                 android:layout_toRightOf="@id/custum_wideo_w"
                 android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
-                android:text="高:" />
+                android:text="H:" />
 
             <EditText
                 android:id="@+id/custum_wideo_h"
@@ -230,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="350dp"
                 android:layout_centerVertical="true"
-                android:text="推流方式" />
+                android:text="PushType" />
 
             <RadioGroup
                 android:layout_width="wrap_content"
@@ -264,7 +264,7 @@
                 android:id="@+id/button_hwencoder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="当前软编码" />
+                android:text="SW_ENC" />
 
             <Spinner
                 android:id="@+id/swVideoEncoderProfileSelector"
@@ -275,7 +275,7 @@
                 android:id="@+id/speed_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="编码速度" />
+                android:text="ENC_SPEED" />
 
             <Spinner
                 android:id="@+id/sw_video_encoder_speed_selctor"
@@ -285,7 +285,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="帧率:" />
+                android:text="Rate:" />
 
             <EditText
                 android:id="@+id/push_rate"
@@ -299,23 +299,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="码率:" />
+                android:text="fps BitRate:" />
 
             <EditText
                 android:id="@+id/push_bitrate"
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:hint="5000"
+                android:hint="500"
                 android:inputType="number"
                 />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kpbs" />
             <CheckBox
             android:id="@+id/cbIncludeAudio"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="包含声音"
+            android:text="Audio"
             />
 
             <Button
@@ -323,7 +326,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="详细日志"
+                android:text="DetailLog"
                 android:onClick="OnClickViewLogDetail"/>
         </LinearLayout>
 
@@ -341,7 +344,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="前置摄像头推流地址:"
+                android:text="Front Cam Url:"
                 android:textColor="@android:color/black" />
 
             <EditText
@@ -368,7 +371,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="后置摄像头推流地址:"
+                android:text="Back Cam Url:"
                 android:textColor="@android:color/black" />
 
             <EditText
@@ -394,7 +397,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="应用服务器:"
+                android:text="app server:"
                 android:textColor="@android:color/black" />
 
             <EditText
@@ -403,7 +406,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/server_ip_tip"
-                android:hint="域名或IP" />
+                android:hint="domain or ip" />
 
             <TextView
                 android:id="@+id/server_port_tip"
@@ -412,7 +415,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/server_ip"
                 android:layout_marginLeft="10dp"
-                android:text="端口:"
+                android:text="Port:"
                 android:textColor="@android:color/black" />
 
             <EditText
@@ -428,7 +431,7 @@
                 android:id="@+id/enableConfServer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="启用远程配置功能"
+                android:text="Enable Remote Config"
                 android:layout_toRightOf="@id/server_port"
                 />
 
@@ -439,7 +442,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@id/enableConfServer"
-                android:text="配置服务器:"
+                android:text="Config server:"
                 android:textColor="@android:color/black" />
 
             <EditText
@@ -448,7 +451,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/configserver_ip_tip"
-                android:hint="域名或IP" />
+                android:hint="Domain or ip" />
 
             <TextView
                 android:id="@+id/config_server_port_tip"
@@ -457,7 +460,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/config_server_ip"
                 android:layout_marginLeft="10dp"
-                android:text="端口:"
+                android:text="Port:"
                 android:inputType="number"
                 android:textColor="@android:color/black" />
 
@@ -485,13 +488,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="保存并推送" />
+                android:text="StartPush" />
 
             <CheckBox
                 android:id="@+id/checkRecord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="启用录像"
+                android:text="Record"
                 />
 
             <TextView
@@ -499,7 +502,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="已有录像数: 存储空间剩余:"
+                android:text="Do not use local record."
                 android:textColor="@android:color/black" />
 
         </LinearLayout>
@@ -518,7 +521,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="前置摄像头:"
+                android:text="FrontCamera:"
                 android:textColor="@android:color/black"
                 android:layout_centerVertical="true"
                 />
@@ -528,7 +531,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="220dp"
-                android:text="后置摄像头:"
+                android:text="BackCamera:"
                 android:textColor="@android:color/black"
                 android:layout_centerVertical="true"
                 />

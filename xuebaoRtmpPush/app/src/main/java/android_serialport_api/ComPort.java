@@ -63,7 +63,7 @@ public  class ComPort {
 					return;
 				}
 			}
-			Log.e("Comport", "串口读线程退出");
+			Log.e("Comport", "Com read thread exit.");
 		}//end of run
 	}//end of class ReadThread
 
@@ -162,11 +162,11 @@ public  class ComPort {
 			readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
 		} else {
 			readBuffer = "";
-			if(CameraPublishActivity.DEBUG)  Log.e("~~~~","开头可能就不正确 readBuffer = kong ");
+			if(CameraPublishActivity.DEBUG)  Log.e("~~~~","data begin error. readBuffer = kong ");
 
 			Message message = Message.obtain();
 			message.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-			message.obj = "开头可能就不正确 readBuffer = kong";
+			message.obj = "data begin error readBuffer = kong";
 			mHandler.sendMessage(message);
 		}
 
@@ -179,10 +179,10 @@ public  class ComPort {
 			if (len > 50)
 			{
 				//包长度出错 应该是数据干扰
-				if(CameraPublishActivity.DEBUG)  Log.e("~~~","包长度出错");
+				if(CameraPublishActivity.DEBUG)  Log.e("~~~","packet len error");
 				Message message = Message.obtain();
 				message.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-				message.obj = "包长度出错";
+				message.obj = "packet len error";
 				mHandler.sendMessage(message);
 
 				//丢弃这条指令
@@ -192,10 +192,10 @@ public  class ComPort {
 				} else
 				{
 					readBuffer = "";
-					if(CameraPublishActivity.DEBUG)  Log.e("~~~~","包长度出错 readBuffer = kong ");
+					if(CameraPublishActivity.DEBUG)  Log.e("~~~~","packet len error readBuffer = kong ");
 					Message message1 = Message.obtain();
 					message1.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-					message1.obj = "包长度出错 readBuffer = kong";
+					message1.obj = "packet len error readBuffer = kong";
 					mHandler.sendMessage(message1);
 				}
 				continue;
@@ -214,11 +214,11 @@ public  class ComPort {
 						//指令正确
 						if (mOutputStream != null) {
 							if (mHandler != null) {
-								if(CameraPublishActivity.DEBUG) Log.e("com收到", msgContent);
+								if(CameraPublishActivity.DEBUG) Log.e("com recv", msgContent);
 
 								Message message1 = Message.obtain();
 								message1.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-								message1.obj = "数据合法";
+								message1.obj = "data ok";
 								mHandler.sendMessage(message1);
 
 								if( CameraPublishActivity.mainInstance != null)
@@ -227,10 +227,10 @@ public  class ComPort {
 						}
 					} else {
 						//指令不正确
-						if(CameraPublishActivity.DEBUG)  Log.e("指令不正确", msgContent + "***" + readBuffer);
+						if(CameraPublishActivity.DEBUG)  Log.e("cmd error", msgContent + "***" + readBuffer);
 						Message message2 = Message.obtain();
 						message2.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-						message2.obj = "指令不正确"+ msgContent + readBuffer;
+						message2.obj = "cmd error"+ msgContent + readBuffer;
 						mHandler.sendMessage(message2);
 
 						readBuffer = readBuffer.substring(2);
@@ -238,31 +238,31 @@ public  class ComPort {
 							readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
 						} else {
 							readBuffer = "";
-							if(CameraPublishActivity.DEBUG)  Log.e("~~~~","指令不正确 不包含FE readBuffer = kong ");
+							if(CameraPublishActivity.DEBUG)  Log.e("~~~~","cmd error. can't find FE readBuffer = kong ");
 							Message message3 = Message.obtain();
 							message3.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-							message3.obj = "指令不正确 不包含FE readBuffer = kong";
+							message3.obj = "cmd error. can't find FE readBuffer = kong";
 							mHandler.sendMessage(message3);
 						}
 					}
 				} else
 				{
 					//开头不正确
-					if(CameraPublishActivity.DEBUG)  Log.e("开头不正确", readBuffer);
+					if(CameraPublishActivity.DEBUG)  Log.e("packet head error", readBuffer);
 					Message message4 = Message.obtain();
 					message4.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-					message4.obj = "开头不正确...";
+					message4.obj = "packet head error...";
 					mHandler.sendMessage(message4);
 
 					if (readBuffer.contains("FE")) {
 						readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
 					} else {
 						readBuffer = "";
-						if(CameraPublishActivity.DEBUG)  Log.e("~~~~","开头不正确 目前不包含FE readBuffer = kong ");
+						if(CameraPublishActivity.DEBUG)  Log.e("~~~~","packet head error. can't find FE readBuffer = kong ");
 
 						Message message5 = Message.obtain();
 						message5.what = CameraPublishActivity.MessageType.msgOutputDetialLog.ordinal();
-						message5.obj = "开头不正确 目前不包含FE readBuffer = kong...";
+						message5.obj = "packet head error. can't find FE readBuffer = kong...";
 						mHandler.sendMessage(message5);
 					}
 				}

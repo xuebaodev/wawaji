@@ -77,12 +77,12 @@ public class SerialPort {
 				mFileOutputStream = new FileOutputStream(mFd);
 			}catch (IOException iio)
 			{
-				Log.e(TAG, "串口打开引发异常");
+				Log.e(TAG, "com open excetion");
 				iio.printStackTrace();
 			}
 		}
 		else
-			Log.e(TAG, "串口打开失败");
+			Log.e(TAG, "com open failed");
 	}
 
 	// Getters and setters

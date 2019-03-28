@@ -71,24 +71,24 @@ public class SilentInstall {
             int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
             switch (status) {
                 case DownloadManager.STATUS_PAUSED:
-                    log(">>>下载暂停");
+                    log(">>>download pause");
                 case DownloadManager.STATUS_PENDING:
-                    log(">>>下载延迟");
+                    log(">>>download pending");
                 case DownloadManager.STATUS_RUNNING:
                     {
                         int bytes_downloaded = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
                         int bytes_total = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
                         int progress = (int) ((bytes_downloaded * 100) / bytes_total);
-                        log(">>>正在下载");
+                        log(">>>downloading..");
                     }
                     break;
                 case DownloadManager.STATUS_SUCCESSFUL:
-                    log(">>>下载完成");
+                    log(">>>download ok.");
                     //下载完成安装APK
                     onSilentInstall(APK_FULL_PATH);
                     break;
                 case DownloadManager.STATUS_FAILED:
-                    log(">>>下载失败");
+                    log(">>>download failed");
                     break;
             }
         }

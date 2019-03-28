@@ -44,7 +44,7 @@ public class MyTCServer {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Log.e("MyTCServer", "局域网配置监听线程退出");
+                Log.e("MyTCServer", "config listen thread exit");
             }
         });
         newThread.start(); //启动线程
@@ -91,7 +91,7 @@ public class MyTCServer {
                     JSONObject jsonObject = new JSONObject(aa);
                     if(jsonObject.has("cmd") == false)
                     {
-                        if(CameraPublishActivity.DEBUG) Log.e("没有CMD","关闭此连接");
+                        if(CameraPublishActivity.DEBUG) Log.e("no CMD","Close this socket");
                         break;
                     }
 
@@ -113,7 +113,7 @@ public class MyTCServer {
                     }else if(cmd.equals("applyconfig"))
                     {
                         boolean apply_ret = VideoConfig.instance.ApplyConfig(aa, socket);
-                        if(CameraPublishActivity.DEBUG)  Log.e("收到配置数据", aa);
+                        if(CameraPublishActivity.DEBUG)  Log.e("recv config", aa);
                         /*if(apply_ret)
                         {
                             String s = "{\"result\":\"ok\"}";
@@ -160,12 +160,12 @@ public class MyTCServer {
                         socket.close();
                     } catch (Exception e) {
                         socket = null;
-                        System.out.println("数据异常.close.:" + e.getMessage());
+                        System.out.println("data error.close.:" + e.getMessage());
                     }
                 }
 
             } catch (Exception e) {
-                System.out.println("数据异常。close。: " + e.getMessage());
+                System.out.println("data error 。close。: " + e.getMessage());
 
             } finally {
                 if (socket != null) {
@@ -173,7 +173,7 @@ public class MyTCServer {
                         socket.close();
                     } catch (Exception e) {
                         socket = null;
-                        System.out.println("服务端 finally 异常:" + e.getMessage());
+                        System.out.println("server finally exception:" + e.getMessage());
                     }
                 }
             }

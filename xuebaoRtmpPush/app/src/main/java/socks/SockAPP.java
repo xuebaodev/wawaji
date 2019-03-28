@@ -175,7 +175,7 @@ public class SockAPP {
                 readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
             } else {
                 readBuffer = "";
-                if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "开头可能就不正确 readBuffer = kong ");
+                if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "data begin error. readBuffer = kong ");
             }
 
             //指令 至少是9位 包长度在第 7位
@@ -186,14 +186,14 @@ public class SockAPP {
                 //包长度最大50
                 if (len > 50) {
                     //包长度出错 应该是数据干扰
-                    if(CameraPublishActivity.DEBUG)  Log.e("~~~", "包长度出错");
+                    if(CameraPublishActivity.DEBUG)  Log.e("~~~", "packet len error");
                     //丢弃这条指令
                     readBuffer = readBuffer.substring(2);
                     if (readBuffer.contains("FE")) {
                         readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
                     } else {
                         readBuffer = "";
-                        if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "包长度出错 readBuffer = kong ");
+                        if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "packet len error readBuffer = kong ");
                     }
                     continue;
                 }
@@ -205,7 +205,7 @@ public class SockAPP {
                         String msgContent = readBuffer.substring(0, len * 2);
                         //校验指令
                         if (ComPort.check_com_data_string(msgContent, len * 2)) {
-                            if(CameraPublishActivity.DEBUG)  Log.e("网络收到",  msgContent);
+                            if(CameraPublishActivity.DEBUG)  Log.e("net recv",  msgContent);
                             readBuffer = readBuffer.substring(len * 2);
 
                             if( CameraPublishActivity.mainInstance != null)
@@ -213,23 +213,23 @@ public class SockAPP {
 
                         } else {
                             //指令不正确
-                            if(CameraPublishActivity.DEBUG)  Log.e("指令不正确", msgContent + "***" + readBuffer);
+                            if(CameraPublishActivity.DEBUG)  Log.e("cmd error", msgContent + "***" + readBuffer);
                             readBuffer = readBuffer.substring(2);
                             if (readBuffer.contains("FE")) {
                                 readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
                             } else {
                                 readBuffer = "";
-                                if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "指令不正确 不包含FE readBuffer = kong ");
+                                if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "cmd error. can't find FE readBuffer = kong ");
                             }
                         }
                     } else {
                         //开头不正确
-                        if(CameraPublishActivity.DEBUG)  Log.e("开头不正确", readBuffer);
+                        if(CameraPublishActivity.DEBUG)  Log.e("data begin error.", readBuffer);
                         if (readBuffer.contains("FE")) {
                             readBuffer = readBuffer.substring(readBuffer.indexOf("FE"));
                         } else {
                             readBuffer = "";
-                            if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "开头不正确 目前不包含FE readBuffer = kong ");
+                            if(CameraPublishActivity.DEBUG)  Log.e("~~~~", "data begin error,can't find FE readBuffer = kong ");
                         }
                     }
                 } else {
@@ -255,7 +255,7 @@ public class SockAPP {
                     try {
                         if(CameraPublishActivity.DEBUG)  Log.e(TAG, "try connect====IP:" + hostName + "Port:" + Integer.toString(port));
 
-                        String strdb = String.format("在尝试连接:%s Port:%d",hostName,  port);
+                        String strdb = String.format("Connecting :%s Port:%d",hostName,  port);
                         Message mdb = Message.obtain();
                         mdb.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
                         mdb.obj = strdb;
@@ -291,7 +291,7 @@ public class SockAPP {
                         if (recv_len > 0) {
                             onDataReceived(data_buff, recv_len);
                         } else {
-                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "收到数据<=0.断开");
+                            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "recv len<=0.disconnect");
                             if( socket != null)
                             { socket.close();
                             socket = null;}
@@ -299,8 +299,8 @@ public class SockAPP {
                         }
                     }
                     catch(SocketTimeoutException s) {
-                        Log.e(TAG,"读超时.发包确认");
-                        String strdb = String.format("读超时.发包确认");
+                        Log.e(TAG,"read timeout.send packet to confirm");
+                        String strdb = String.format("read timeout.send packet to confirm");
                         Message mdb = Message.obtain();
                         mdb.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
                         mdb.obj = strdb;
@@ -321,8 +321,8 @@ public class SockAPP {
                     }
                     catch (IOException ea) {
                        // ea.printStackTrace();
-                        Log.e(TAG, "读异常.断开.尝试重连。");
-                        String strdb = String.format("读异常.断开.尝试重连。");
+                        Log.e(TAG, "read exception.disconnect.retry。");
+                        String strdb = String.format("read exception.disconnect.retry。");
                         Message mdb = Message.obtain();
                         mdb.what = CameraPublishActivity.MessageType.msgOutputLog.ordinal();
                         mdb.obj = strdb;
@@ -339,7 +339,7 @@ public class SockAPP {
                 }
             }
 
-            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "接收线程退出.");
+            if(CameraPublishActivity.DEBUG)  Log.e(TAG, "recv thread exit.");
         }
     }
 
@@ -351,7 +351,7 @@ public class SockAPP {
     public boolean sendMsg(byte[] msg) {
         synchronized (this) {
             if (socket == null) {
-                if(CameraPublishActivity.DEBUG) Log.e(TAG, "socket是空,不发送");
+                if(CameraPublishActivity.DEBUG) Log.e(TAG, "socket is null,not send");
                 return false;
             }
 
@@ -363,12 +363,12 @@ public class SockAPP {
 
                     return true;
                 } else {
-                    if(CameraPublishActivity.DEBUG)   Log.e(TAG, "socket没有连接.不发送");
+                    if(CameraPublishActivity.DEBUG)   Log.e(TAG, "socket is not connected.not send");
                     return false;
                 }
             } catch (IOException e) {
                 // FireReconnect();
-                Log.e(TAG,"发送有异常.");
+                Log.e(TAG,"send exception.");
             }
         }
 

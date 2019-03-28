@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="80dp"
-        android:text="暂停输出"
+        android:text="PausePrint"
         android:textColor="#000"
         android:clickable="true"
         />
@@ -25,7 +25,7 @@
         android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:text="关闭"
+        android:text="Close"
         android:textColor="#000"
         android:clickable="true"
         />
