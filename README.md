@@ -106,11 +106,11 @@ playing url:http://mmz.csxtech.com.cn/web_wawa_h5/
 	* The sourcecode of xuebaoRtmpPush.apk config param tool using in same LAN.
 
 * [**prebuild**] 包含了最新的安卓推流程序, 局域网配置工具 公网配置工具 预生成的安卓简单操作客户端.Prebuild Lasted Apks, tools.
-	* 安卓版电脑有线部署工具.电脑有线直连安装脚本。When using computer to install xuebaoRtmpPush.apk, you should use this.
+	* PC Install Tool.电脑有线直连安装脚本。When using computer to install xuebaoRtmpPush.apk, you should use this.
 	* SimpleClient.apk 手机玩家简单客户端.也可以自行从SimpleClient编译生成。Simple Player Client Demo. you can build it from SimpleClient by yourself.
 	* xuebaoRtmpPush.apk 由源码编译出来的apk。您也可以自行从源码生成。 app running on android board. you can build it from xuebaoRtmpPush by yourslef.
-	* 雪暴安卓板局域网批量部署工具--局域网内批量安装xuebaoRtmpPush.apk工具. Install tool of xuebaoRtmpPush.apk. Using this when you need to upgreade your xuebaoRtmpPush.apk.
-	* 雪暴安卓推流应用局域网配置工具--搜索局域网内所有机器，并配置参数或更新推流程序。Config tool for xuebaoRtmpPush in LAN. It will search all the machine and list out to config.
+	* APKInstallTool--局域网内批量安装xuebaoRtmpPush.apk工具. Install tool of xuebaoRtmpPush.apk. Using this when you need to upgreade your xuebaoRtmpPush.apk.
+	* LANConfigTool--搜索局域网内所有机器，并配置参数或更新推流程序。Config tool for xuebaoRtmpPush in LAN. It will search all  machines in LAN and list out to config.
 	* 雪暴安卓推流应用外网配置工具--配合服务器端的协议，将可以实现远程配置参数和执行推流程序的更新。Config tool by remote. When you are far away from the claw machine(not in the same place), you can config it's param by remote.However ,you must config the config-server in the first time. and ,a config-server is required. SimpleServer is also immplement a demo for that.
 
 
@@ -120,7 +120,7 @@ playing url:http://mmz.csxtech.com.cn/web_wawa_h5/
 
 * [**server.go**]	简单应用服务器go版本源码。支持websocket操作。A server to handle webclient player through Websocket and claw machine.
 
-* [**网络娃娃机主板对接协议.docx**]	网络娃娃机相关的命令文档。 A document for the claw board command.But we are highly suggest you to watch WIKI.
+* [**claw machine document.docx**]	网络娃娃机相关的命令文档。 A document for the claw board command.But we are highly suggest you to watch WIKI.
 <br><a href="https://github.com/xuebaodev/wawaji/wiki" target="_blank">**更加详细请看WIKI**</a>
 
 以下是雪暴网络娃娃机安卓版部署流程: <br>
