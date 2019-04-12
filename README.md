@@ -11,7 +11,7 @@ We supply:
 * an android board ,cameras[option, but if you deside to use your own cameras, make sure they can work by xuebaoRtmpPush.apk]
 * streaming application use for streaming videos from cameras. Support RTMP,MPEGTS（for html）
 
-您需要:
+您需要
 * 自己开发一个应用服务器来将控制命令下发到娃娃机来实现娃娃机的天车爪子左右前后及下抓。以及支付,房间，玩家信息，库存，邮寄等功能。
 * 架设一个流媒体服务器。如果是RTMP视频，可以是nginx,SRS，或直接阿里云腾讯云流媒体服务.如果是H5视频，则自行修改jsmpeg的简单服务器或使用七牛提供的服务。这个服务器用来接收安卓板上面摄像头的视频并分发给进入房间的用户.
 * 自己开发一个玩家客户端，包括并不限于app，或者网页版,微信小程序形式(小程序只能播放mpegts格式的视频)。
