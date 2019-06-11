@@ -49,6 +49,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eventhandle.NTSmartEventCallbackV2;
+import com.eventhandle.NTSmartEventID;
 import com.eventhandle.SmartEventCallback;
 import com.videoengine.*;
 
@@ -68,7 +70,7 @@ public class SmartPlayer extends Activity {
 	private static final int LANDSCAPE = 2;
 	private static final String TAG = "SmartPlayer";
 	
-	private SmartPlayerJni libPlayer = null;
+	private SmartPlayerJniV2 libPlayer = null;
 	
 	private int currentOrigentation = PORTRAIT;
 	private boolean isPlaybackViewStarted = false;
@@ -101,39 +103,39 @@ public class SmartPlayer extends Activity {
 		finish();
 	}
 
-	class EventHande implements SmartEventCallback
+	class EventHande implements NTSmartEventCallbackV2
 	{
-		@Override
-		public void onCallback(int code, long param1, long param2, String param3, String param4, Object param5){
-			switch (code) {
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_STARTED:
+		public void onNTSmartEventCallbackV2(long handle, int id, long param1,
+											 long param2, String param3, String param4, Object param5) {
+			switch (id) {
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_STARTED:
 					Log.i(TAG, "start.");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTING:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTING:
 					Log.i(TAG, "connecting...");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTION_FAILED:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTION_FAILED:
 					Log.i(TAG, "connect failed.");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTED:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTED:
 					Log.i(TAG, "connect ok.");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_DISCONNECTED:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_DISCONNECTED:
 					Log.i(TAG, "connect lose.");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_STOP:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_STOP:
 					Log.i(TAG, "close.");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_RESOLUTION_INFO:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_RESOLUTION_INFO:
 					Log.i(TAG, "resolution: width: " + param1 + ", height: " + param2);
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_NO_MEDIADATA_RECEIVED:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_NO_MEDIADATA_RECEIVED:
 					Log.i(TAG, "not recv media data， maybe url wrong.");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_SWITCH_URL:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_SWITCH_URL:
 					Log.i(TAG, "swtich URL");
 					break;
-				case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CAPTURE_IMAGE:
+				case NTSmartEventID.EVENT_DANIULIVE_ERC_PLAYER_CAPTURE_IMAGE:
 					Log.i(TAG, "snapshot: " + param1 + " path：" + param3);
 
 					if(param1 == 0)
@@ -221,6 +223,7 @@ json
 
 		if(playerHandle!=0)
 		{
+			libPlayer.SmartPlayerStopPlay(playerHandle);
 			libPlayer.SmartPlayerClose(playerHandle);
 			playerHandle = 0;
 		}
@@ -247,7 +250,7 @@ json
 
 		Log.i(TAG, "Run into OnCreate++");
 
-		libPlayer = new SmartPlayerJni();
+		libPlayer = new SmartPlayerJniV2();
 
 		myContext = this.getApplicationContext();
 
@@ -261,7 +264,7 @@ json
 
 		Log.i(TAG, "Start playback stream++");
 
-		playerHandle = libPlayer.SmartPlayerInit(myContext);
+		playerHandle = libPlayer.SmartPlayerOpen(myContext);
 
 		if(playerHandle == 0)
 		{
@@ -269,7 +272,7 @@ json
 			//return;
 		}
 
-		libPlayer.SetSmartPlayerEventCallback(playerHandle, new EventHande());
+		libPlayer.SetSmartPlayerEventCallbackV2(playerHandle, new EventHande());
 		libPlayer.SmartPlayerSetSurface(playerHandle, sSurfaceView); 	//if set the second param with null, it means it will playback audio only..
 		libPlayer.SmartPlayerSetAudioOutputType(playerHandle, 0);
 		libPlayer.SmartPlayerSetBuffer(playerHandle, playBuffer);
@@ -293,7 +296,9 @@ json
 			//return;
 		}
 
-		int iPlaybackRet = libPlayer.SmartPlayerStartPlayback(playerHandle, MainActivity.playbackUrl);
+		libPlayer.SmartPlayerSetUrl(playerHandle, MainActivity.playbackUrl);
+
+		int iPlaybackRet = libPlayer.SmartPlayerStartPlay(playerHandle);
 
 		if(iPlaybackRet != 0)
 		{

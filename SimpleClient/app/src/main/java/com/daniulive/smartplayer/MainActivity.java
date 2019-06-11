@@ -108,6 +108,7 @@ public class MainActivity extends Activity {
 
         serverip.setText(ServerHost);
         serverport.setText(Integer.toString(ServerPort));
+
         video_url1.setText(playbackUrl);
         video_url2.setText(playbackUrl2);
 
