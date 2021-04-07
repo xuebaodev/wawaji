@@ -211,7 +211,7 @@ Note: You should run a quick test in LAN.Because the internet server need to buy
 **<a href="http://www.xuebao-game.com/" target="_blank">Vist web site to know more:http://www.xuebao-game.com/</a>**
 **<a href="http://www.xuebao-game.com/" target="_blank">广州雪暴电子科技官方网站:http://www.xuebao-game.com/</a>**
 
-<br>**如感兴趣欢迎来厂洽谈合作了解详情。联系人：李生 13926265855**
+<br>**如感兴趣欢迎来厂洽谈合作了解详情。联系人：何生 13380085941**
 
 微信连接
 https://mp.weixin.qq.com/s/UlOTFWT5IfIxEI3h_PaRNQ
